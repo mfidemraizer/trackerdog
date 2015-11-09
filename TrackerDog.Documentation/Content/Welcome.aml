@@ -47,7 +47,7 @@
         </para>
         <para>
           Most enterprise applications work with <newTerm>object-relational mappers (OR/M)</newTerm> like <newTerm>Entity Framework</newTerm> and
-          <newTerm>NHibernate</newTerm> which, as full <newTerm>OR/M</newTerm> frameworks, they can track persistent object changes and generate
+          <newTerm>NHibernate</newTerm> which, as full <newTerm>OR/M</newTerm> frameworks, can track persistent object changes and generate
           an underlying SQL <codeInline>INSERT</codeInline>, <codeInline>UPDATE</codeInline> or <codeInline>DELETE</codeInline> under the hoods thanks
           to their built-in change tracking.
         </para>
