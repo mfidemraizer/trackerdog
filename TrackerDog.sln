@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerDog", "TrackerDog\TrackerDog.csproj", "{2600FECF-EF1A-4156-9108-D6C713F704F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerDog.Test", "TrackerDog.Test\TrackerDog.Test.csproj", "{EB8B12CC-777D-4205-9B00-46C96E5080B7}"
+EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "TrackerDog.Documentation", "TrackerDog.Documentation\TrackerDog.Documentation.shfbproj", "{744376C5-CDDE-4502-8092-A284E2A7C774}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2600FECF-EF1A-4156-9108-D6C713F704F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2600FECF-EF1A-4156-9108-D6C713F704F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2600FECF-EF1A-4156-9108-D6C713F704F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2600FECF-EF1A-4156-9108-D6C713F704F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB8B12CC-777D-4205-9B00-46C96E5080B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB8B12CC-777D-4205-9B00-46C96E5080B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB8B12CC-777D-4205-9B00-46C96E5080B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB8B12CC-777D-4205-9B00-46C96E5080B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{744376C5-CDDE-4502-8092-A284E2A7C774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{744376C5-CDDE-4502-8092-A284E2A7C774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{744376C5-CDDE-4502-8092-A284E2A7C774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{744376C5-CDDE-4502-8092-A284E2A7C774}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
