@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="95cc6530-e365-4045-951e-4ab992610c1f" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        Discover how <token>projectName</token> works.
+      </para>
+    </introduction>
+
+    <!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+    <section>
+      <title>
+        Inside <token>projectName</token>
+      </title>
+      <content>
+        <para>
+          <token>projectName</token> produces proxies of your POCO class instances to intercept its properties
+          and detect changes. Actually, when you turn a POCO instance into a change-trackable object, you don't get
+          the same instance but a proxy that derives from your POCO class as a new instance.
+        </para>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>

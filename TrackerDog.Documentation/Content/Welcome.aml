@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="0e46d6ac-6f64-4d54-98fd-3813df42cb8e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <section>
+      <title>
+        What is <token>projectName</token>?
+      </title>
+      <content>
+        <para>
+          <token>projectName</token> works on turning your POCOs into change-tracked objects. It can track a full
+          object graph, including collection properties.
+        </para>
+      </content>
+    </section>
+
+    <section>
+      <title>
+        How to install it?
+      </title>
+      <content>
+        <para>
+          <token>projectName</token> is distributed as a NuGet package called <literal>TrackerDog</literal>. Follow
+          <externalLink>
+            <linkText>this link to get installation instructions</linkText>
+            <linkUri>https://nuget.org/TrackerDog</linkUri>
+          </externalLink>.
+        </para>
+      </content>
+    </section>
+
+    <section>
+      <title>Getting started</title>
+      <content>
+        <link xlink:href="52e40f26-3dfe-47e0-adf1-09233e98f42e">Follow up this tutorial</link> to become object change tracking expert!
+      </content>
+    </section>
+
+    <section>
+      <title>
+        Why <token>projectName</token>?
+      </title>
+      <content>
+        <para>
+          When implementing some design patterns like <newTerm>Unit of Work</newTerm> in a very seamless way, it is required
+          that the whole <newTerm>Unit of Work</newTerm> could track object changes and produce <phrase>new</phrase> or <phrase>updated</phrase>
+          object persistence actions in order to let a given peristence layer work on the so-called operations.
+        </para>
+        <para>
+          Most enterprise applications work with <newTerm>object-relational mappers (OR/M)</newTerm> like <newTerm>Entity Framework</newTerm> and
+          <newTerm>NHibernate</newTerm> which, as full <newTerm>OR/M</newTerm> frameworks, they can track persistent object changes and generate
+          an underlying SQL <codeInline>INSERT</codeInline>, <codeInline>UPDATE</codeInline> or <codeInline>DELETE</codeInline> under the hoods thanks
+          to their built-in change tracking.
+        </para>
+        <para>
+          At the end of the day, these <newTerm>OR/M</newTerm> frameworks implement change tracking turning your POCO class instances into
+          <newTerm>proxies</newTerm> that intercept your POCO property changes and once you call the <newTerm>commit</newTerm>-specific method of
+          their built-in <newTerm>unit of work</newTerm> they can persist changes to the database without your intervention.
+        </para>
+        <para>
+          So, what happens when you don't use an <newTerm>OR/M</newTerm> or, even worse: <legacyBold>
+            what happens when you don't use an <newTerm>OR/M</newTerm>
+            but you want to implement an <newTerm>unit of work</newTerm> capable of tracking your POCO changes?
+          </legacyBold>
+        </para>
+        <para>
+          A good example of implementing a change tracking can be an <newTerm>unit of work</newTerm> to provide an
+          abstraction layer over a NoSQL driver like Mongo, Couch, Cassandra, Redis... Even when some of them have some kind
+          of atomically-executed set of commands, they will not track changes in your application layer. Actually there should be
+          more possible use cases, but one of most important use cases is implementing a true <newTerm>domain-driven design</newTerm>
+          architecture ensuring that a domain unit of work can track changes either when you use a regular <newTerm>data mapper</newTerm>
+          (for which you won't use <token>projectName</token>) or you want to implement <newTerm>repositories</newTerm> that return
+          change-trackable domain objects!
+        </para>
+        <para>
+          In summary, <token>projectName</token> turns your object graphs into interceptable object proxies that share
+          a common <newTerm>change tracker</newTerm> which let you check what has changed in your objects or even accept
+          or undo changes to a given object graph.
+        </para>
+      </content>
+    </section>
+
+    <relatedTopics>
+      <link xlink:href="172bcf6b-d432-4f32-a218-c71651691c21" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

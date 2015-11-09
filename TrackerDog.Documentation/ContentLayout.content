@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Topics>
+  <Topic id="0e46d6ac-6f64-4d54-98fd-3813df42cb8e" visible="True" isDefault="true" title="Welcome to TrackerDog!" tocTitle="Welcome to TrackerDog!" linkText="Welcome to TrackerDog!">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="Welcome" />
+    </HelpKeywords>
+  </Topic>
+  <Topic id="95cc6530-e365-4045-951e-4ab992610c1f" visible="True" isSelected="true" title="How does it work?" tocTitle="How does it work?" linkText="How does it work?" />
+  <Topic id="52e40f26-3dfe-47e0-adf1-09233e98f42e" visible="True" title="How-to: Working with TrackerDog" tocTitle="How-to: Working with TrackerDog" linkText="How-to: Working with TrackerDog" />
+  <Topic id="172bcf6b-d432-4f32-a218-c71651691c21" visible="True" isExpanded="true" title="Version History">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="version, history" />
+    </HelpKeywords>
+    <Topic id="faea32e1-2034-42dd-9e1a-3a8b082602dc" visible="True" title="Version 1.0.0.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 1.0.0.0" />
+      </HelpKeywords>
+    </Topic>
+  </Topic>
+</Topics>

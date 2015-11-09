@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="52e40f26-3dfe-47e0-adf1-09233e98f42e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>
+        This is a quick tutorial to learn how to use <token>projectName</token>
+      </para>
+    </introduction>
+
+    <section>
+      <title>How to turn objects into change-trackable ones</title>
+      <content>
+        <para>
+          First of all, you need to design a regular class. <legacyBold>
+            Note that the class must not be sealed and
+            its properties must be <newTerm>virtual</newTerm> to let the proxy generator override them to intercept both
+            sets and gets:
+          </legacyBold>
+        </para>
+        <code language="c#">
+          <![CDATA[
+              public class User
+              {
+                public virtual string Name { get; set; }
+                public virtual byte Age { get; set; }
+              }
+              ]]>
+        </code>
+        <para>
+          Now, to track an instance of <codeInline>User</codeInline> you need to
+          use <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.AsTrackable{TObject}(TObject)</codeEntityReference> extension method:
+        </para>
+        <code language="c#">
+          <![CDATA[
+              User user = new User().AsTrackable();
+              
+              // or...
+              User user = new User();
+              user = user.AsTrackable();
+              ]]>
+        </code>
+        <para>Now you can produce changes to the trackable object:</para>
+        <code language="c#">
+          <![CDATA[
+            user.Name = "Matías";
+            user.Age = 30;
+            ]]>
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>Checking which properties have been changed</title>
+      <content>
+        <para>
+          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.GetChangeTracker(System.Object)</codeEntityReference> extension method:
+        </para>
+        <code language="c#">
+          <![CDATA[
+            IObjectChangeTracker changeTracker = user.GetChangeTracker();
+            
+            IImmutableSet<IObjectPropertyChangeTracking> changedProperties = changeTracker.ChangedProperties;
+            
+            // Also you can get unchanged properties
+            IImmutableSet<IObjectPropertyChangeTracking> unchangedProperties = changeTracker.UnchangedProperties;
+            ]]>
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>Getting the value of some property before it was changed</title>
+      <content>
+        <para>
+          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.OldPropertyValue{T, TReturn}(T, Expression{Func{T, TReturn}})</codeEntityReference> extension method:
+        </para>
+        <code language="c#">
+          <![CDATA[
+            string oldUserName = user.OldPropertyValue(u => u.Name);
+            
+            // You can also get a property tracking object
+            IObjectChangeTracking userNameChangeTracking = user.GetPropertyTracking(u => u.Name);
+            
+            oldUserName = userNameChangeTracking.OldValue;
+            ]]>
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>Getting current property value</title>
+      <content>
+        <para>
+          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.CurrentPropertyValue{T, TReturn}(T, Expression{Func{T, TReturn}})</codeEntityReference> extension method:
+        </para>
+        <code language="c#">
+          <![CDATA[
+            string currentUserName = user.CurrentPropertyValue(u => u.Name);
+            
+            // Ok, you would also be able to achieve the same result doing so:
+            currentUserName = user.Name;
+            
+            // But having this method lets you build an expression tree to select some tracked property "current value"...
+            
+            // You can also get a property tracking object
+            IObjectChangeTracking userNameChangeTracking = user.GetPropertyTracking(u => u.Name);
+            
+            currentUserName = userNameChangeTracking.CurrentValue;
+            ]]>
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>Checking if a property changed its value since it was started to be tracked</title>
+      <content>
+        <para>
+          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.PropertyHasChanged{T, TReturn}(T, Expression{Func{T, TReturn}})</codeEntityReference> extension method:
+        </para>
+        <code language="c#">
+          <![CDATA[
+            if(user.PropertyHasChanged(u => u.Name))
+            {
+                // It has changed!
+            }
+            
+            // You can also get a property tracking object
+            IObjectChangeTracking userNameChangeTracking = user.GetPropertyTracking(u => u.Name);
+            
+            if(userNameChangeTracking.HasChanged)
+            {
+                // It has changed!
+            }
+            ]]>
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>How do I accept or undo changes</title>
+      <content>
+        <para>
+          Call
+          <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.AcceptChanges(System.Object)</codeEntityReference> or
+          <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.UndoChanges(System.Object)</codeEntityReference> extension methods:
+        </para>
+        <code language="c#">
+          <![CDATA[
+            user.AcceptChanges();
+            
+            // or...
+            user.UndoChanges();
+            ]]>
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>Tracking collection changes</title>
+      <content>
+        <code language="c#">
+          <![CDATA[
+          public class App 
+          {
+              public virtual List<User> Users { get; } = new List<User>();
+          }
+          
+          public class User 
+          {
+              public string Name { get; set; }
+              public byte Age { get; set; }
+          }
+          
+          App app = new App().AsTrackable();
+          app.Users.Add(new User { Name = "Matías", Age = 30 });
+          
+          IReadOnlyChangeTrackableCollection trackableCollection =
+                        (IReadOnlyChangeTrackableCollection)app.CurrentPropertyValue(app => app.Users);
+                        
+          IImmutableSet<object> addedItems = trackableCollection.AddedItems;
+          IImmutableSet<object> removedItems = trackableCollection.RemovedItems;
+          
+          // If you need typed items...
+          IEnumerable<User> typedAddedUsers = addedItems.Cast<User>();
+          IEnumerable<User> typedRemovedUsers = removedItems.Cast<User>();
+          ]]>
+        </code>
+      </content>
+    </section>
+
+
+
+    <section>
+      <title>Object graph changes</title>
+      <content>
+        <para>
+          When an aggregate root has many associations like 1-n, 1-1 or even M-N, <token>projectName</token>
+          works the same way as a POCO with no associations with other objects:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          public class A
+          {
+              public virtual string Text { get; set; }
+              public virtual B B { get; set; }
+          }
+
+          public class B
+          {
+              public virtual string Text { get; set; }
+              public virtual C C { get; set; }
+          }
+
+          public class C
+          {
+              public virtual string Text { get; set; }
+              public virtual IList<D> ListOfD { get; set; }
+          }
+
+          public class D
+          {
+              public virtual string Text { get; set; }
+          }
+          
+          // It will track the full object graph changes!
+          A a = new A
+          {
+            Text = initialValue,
+            B = new B
+            {
+                Text = initialValue,
+                C = new C
+                {
+                    Text = initialValue,
+                    ListOfD = new List<D> { new D { Text = "initialValue" } }
+                }
+            }
+          }.AsTrackable();
+          ]]>
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>Observe property and collection changes</title>
+      <para>
+        All change-tracked objects implement <entityCodeReference>T:System.ComponentModel.INotifyPropertyChanged</entityCodeReference> and
+        change-tracked collection properties implement <entityCodeReference>T:System.Collections.Specialized.INotifyCollectionChanged</entityCodeReference>.
+        <para>
+          Note that collection changes will also trigger a <entityCodeReference>E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged</entityCodeReference> event on the
+          object in the other side of the 1-n association.
+        </para>
+      </para>
+      <content>
+        <code language="c#">
+          <![CDATA[
+          public class App 
+          {
+              public virtual string Name { get; set; }
+              public List<User> Users { get; } = new List<User>();
+          }
+          
+          public class User 
+          {
+              public virtual string Name { get; set; }
+              public virtual byte Age { get; set; }
+          }
+          
+          App app = new App().AsTrackable();
+          
+          ((INotifyPropertyChanged)app).PropertyChanged += (sender, e) =>
+          {
+              string propertyName = e.PropertyName;
+          };
+          
+          ((INotifyCollectionChanged)app.Users).CollectionChanged += (sender, e) =>
+          {
+              IEnumerable<object> changedItems = e.ChangedItems;
+          };
+          
+          app.Name = "MyApp"; // This will trigger a PropertyChanged event on app
+          
+           // This will both trigger a CollectionChanged event on app.Users and a PropertyChanged event on
+           // app.
+          app.Users.Add(new User { Name = "Matías" });
+          ]]>
+        </code>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>
