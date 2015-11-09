@@ -14,7 +14,7 @@ TrackerDog is distributed as a NuGet package called _TrackerDog_. Follow <a href
 
 
 ## Getting started
-<a href="52e40f26-3dfe-47e0-adf1-09233e98f42e">Follow up this tutorial</a> to become object change tracking expert!
+<a href="https://github.com/mfidemraizer/trackerdog/wiki/52e40f26-3dfe-47e0-adf1-09233e98f42e">Follow up this tutorial</a> to become object change tracking expert!
 
 ## Why TrackerDog?
 
