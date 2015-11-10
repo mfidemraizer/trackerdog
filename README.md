@@ -9,12 +9,12 @@ TrackerDog works on turning your POCOs into change-tracked objects. It can track
 
 ## How to install it?
 
-TrackerDog is distributed as a NuGet package called _TrackerDog_. Follow <a href="https://nuget.org/TrackerDog">this link to get installation instructions</a>.
-
-
+TrackerDog is distributed as a NuGet package called _TrackerDog_. Follow <a href="https://www.nuget.org/packages/TrackerDog/">this link to get installation instructions</a>.
 
 ## Getting started
-<a href="https://github.com/mfidemraizer/trackerdog/wiki/52e40f26-3dfe-47e0-adf1-09233e98f42e">Follow up this tutorial</a> to become object change tracking expert!
+<a href="http://mfidemraizer.github.io/trackerdog/html/52e40f26-3dfe-47e0-adf1-09233e98f42e.htm">Follow up this tutorial</a> to become object change tracking expert!
+
+If you're looking for API reference, [follow this link](http://mfidemraizer.github.io/trackerdog/html/0e46d6ac-6f64-4d54-98fd-3813df42cb8e.htm).
 
 ## Why TrackerDog?
 
