@@ -15,7 +15,7 @@
     /// Represents an in-memory object property change tracker.
     /// </summary>
     [DebuggerDisplay("Changed properties: {ChangedProperties.Count}")]
-    internal class ObjectChangeTracker : IUnitOfWork, IObjectChangeTracker, IEnumerable<IObjectPropertyChangeTracking>
+    internal class ObjectChangeTracker : IObjectChangeUnitOfWork, IObjectChangeTracker, IEnumerable<IObjectPropertyChangeTracking>
     {
         private readonly Guid _id = Guid.NewGuid();
         private const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance;
