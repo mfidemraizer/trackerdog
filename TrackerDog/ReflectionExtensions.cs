@@ -36,6 +36,18 @@
         }
 
         /// <summary>
+        /// Determines if the given property is an indexer.
+        /// </summary>
+        /// <param name="property">The whole property to check</param>
+        /// <returns><literal>true</literal> if it's an indexer, <literal>false</literal> if it's not an indexer</returns>
+        public static bool IsIndexer(this PropertyInfo property)
+        {
+            Contract.Requires(property != null);
+
+            return property.GetIndexParameters().Length > 0;
+        }
+
+        /// <summary>
         /// Determines if current member is a property setter.
         /// </summary>
         /// <param name="member">The member to determine if it's a property setter</param>

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="52e40f26-3dfe-47e0-adf1-09233e98f42e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-
     <introduction>
       <para>
         This is a quick tutorial to learn how to use <token>projectName</token>
@@ -28,8 +27,15 @@
               ]]>
         </code>
         <para>
+          Before being able to turn an object into a change-trackable one, you will need to tell <token>projectName</token> that
+          your class (i.e. <phrase>the type</phrase>) can be trackable:
+        </para>
+        <code language="c#">
+          <![CDATA[TrackerDogConfiguration.TrackTheseTypes(typeof(User));]]>
+        </code>
+        <para>
           Now, to track an instance of <codeInline>User</codeInline> you need to
-          use <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.AsTrackable{TObject}(TObject)</codeEntityReference> extension method:
+          use <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.AsTrackable``1(``0)</codeEntityReference> extension method:
         </para>
         <code language="c#">
           <![CDATA[
@@ -73,7 +79,7 @@
       <title>Getting the value of some property before it was changed</title>
       <content>
         <para>
-          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.OldPropertyValue{T, TReturn}(T, Expression{Func{T, TReturn}})</codeEntityReference> extension method:
+          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.OldPropertyValue``2(``0,System.Linq.Expressions.Expression{System.Func{``0,``1}})</codeEntityReference> extension method:
         </para>
         <code language="c#">
           <![CDATA[
@@ -92,7 +98,7 @@
       <title>Getting current property value</title>
       <content>
         <para>
-          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.CurrentPropertyValue{T, TReturn}(T, Expression{Func{T, TReturn}})</codeEntityReference> extension method:
+          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.CurrentPropertyValue``2(``0,System.Linq.Expressions.Expression{System.Func{``0,``1}})</codeEntityReference> extension method:
         </para>
         <code language="c#">
           <![CDATA[
@@ -116,7 +122,7 @@
       <title>Checking if a property changed its value since it was started to be tracked</title>
       <content>
         <para>
-          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.PropertyHasChanged{T, TReturn}(T, Expression{Func{T, TReturn}})</codeEntityReference> extension method:
+          Call <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.PropertyHasChanged``1(``0,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})</codeEntityReference> extension method:
         </para>
         <code language="c#">
           <![CDATA[
@@ -186,6 +192,15 @@
           IEnumerable<User> typedRemovedUsers = removedItems.Cast<User>();
           ]]>
         </code>
+        <para>
+          Don't forget to add both <codeInline>App</codeInline> and <codeInline>User</codeInline> class as
+          trackable types:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          TrackerDogConfiguration.TrackTheseTypes(typeof(App), typeof(User));
+          ]]>
+        </code>
       </content>
     </section>
 
@@ -239,20 +254,33 @@
           }.AsTrackable();
           ]]>
         </code>
+        <para>
+          Don't forget to add all types as trackable types:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          TrackerDogConfiguration.TrackTheseTypes
+          (
+              typeof(A), typeof(B), typeof(C), typeof(D)
+          );
+          ]]>
+        </code>
       </content>
     </section>
 
     <section>
       <title>Observe property and collection changes</title>
-      <para>
-        All change-tracked objects implement <entityCodeReference>T:System.ComponentModel.INotifyPropertyChanged</entityCodeReference> and
-        change-tracked collection properties implement <entityCodeReference>T:System.Collections.Specialized.INotifyCollectionChanged</entityCodeReference>.
-        <para>
-          Note that collection changes will also trigger a <entityCodeReference>E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged</entityCodeReference> event on the
-          object in the other side of the 1-n association.
-        </para>
-      </para>
       <content>
+        <para>
+          All change-tracked objects implement <codeEntityReference>T:System.ComponentModel.INotifyPropertyChanged</codeEntityReference> and
+          change-tracked collection properties implement <codeEntityReference>T:System.Collections.Specialized.INotifyCollectionChanged</codeEntityReference>.
+
+        </para>
+        <para>
+          Note that collection changes will also trigger a <codeEntityReference>E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged</codeEntityReference> event on the
+          object in the other side of the 1-n association.
+
+        </para>
         <code language="c#">
           <![CDATA[
           public class App 
@@ -288,5 +316,8 @@
         </code>
       </content>
     </section>
+    <relatedTopics>
+      <link xlink:href="1e03762d-b9f5-44af-a4b0-c23c36064c24" />
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

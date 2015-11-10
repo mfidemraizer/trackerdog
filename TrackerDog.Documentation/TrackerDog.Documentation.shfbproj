@@ -30,7 +30,7 @@
       <DocumentationSource sourceFile="..\TrackerDog\TrackerDog.csproj" xmlns="" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
-    <HelpFileFormat>Markdown</HelpFileFormat>
+    <HelpFileFormat>Website</HelpFileFormat>
     <IndentHtml>True</IndentHtml>
     <KeepLogFile>True</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
@@ -41,12 +41,12 @@
     <SyntaxFilters>C#, Visual Basic</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>False</RootNamespaceContainer>
-    <PresentationStyle>Markdown</PresentationStyle>
+    <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
     <HelpTitle>TrackerDog</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
-    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, Protected, SealedProtected, ProtectedInternalAsProtected</VisibleItems>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected, ProtectedInternalAsProtected</VisibleItems>
     <MissingTags>AutoDocumentCtors, AutoDocumentDispose</MissingTags>
     <ComponentConfigurations>
       <ComponentConfig id="Code Block Component" enabled="False">
@@ -58,9 +58,32 @@
           <colorizer syntaxFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.xml" styleFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.xsl" stylesheet="{@SHFBFolder}PresentationStyles\Colorizer\highlight.css" scriptFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.js" disabled="{@DisableCodeBlockComponent}" language="cs" tabSize="0" numberLines="false" outlining="false" keepSeeTags="false" defaultTitle="true" />
         </component>
       </ComponentConfig>
-<ComponentConfig id="Syntax Component" enabled="True"><component id="Syntax Component"><syntax input="/document/reference" output="/document/syntax" renderReferenceLinks="false" /><generators>
+      <ComponentConfig id="Syntax Component" enabled="True">
+        <component id="Syntax Component">
+          <syntax input="/document/reference" output="/document/syntax" renderReferenceLinks="false" />
+          <generators>
     {@SyntaxFilters}
-</generators><containerElement name="codeSnippetGroup" addNoExampleTabs="false" includeOnSingleSnippets="false" groupingEnabled="{@CodeSnippetGrouping}" /><configurations><generator id="C#" /><generator id="Visual Basic"><includeLineContinuation value="false" /></generator><generator id="Visual Basic Usage"><includeLineContinuation value="false" /></generator><generator id="Managed C++" /><generator id="F#" /><generator id="J#" /><generator id="JScript" /><generator id="JavaScript" /><generator id="XAML Usage" /><generator id="ASP.NET" /></configurations></component></ComponentConfig></ComponentConfigurations>
+</generators>
+          <containerElement name="codeSnippetGroup" addNoExampleTabs="false" includeOnSingleSnippets="false" groupingEnabled="{@CodeSnippetGrouping}" />
+          <configurations>
+            <generator id="C#" />
+            <generator id="Visual Basic">
+              <includeLineContinuation value="false" />
+            </generator>
+            <generator id="Visual Basic Usage">
+              <includeLineContinuation value="false" />
+            </generator>
+            <generator id="Managed C++" />
+            <generator id="F#" />
+            <generator id="J#" />
+            <generator id="JScript" />
+            <generator id="JavaScript" />
+            <generator id="XAML Usage" />
+            <generator id="ASP.NET" />
+          </configurations>
+        </component>
+      </ComponentConfig>
+    </ComponentConfigurations>
     <PlugInConfigurations>
       <PlugInConfig id="Additional Content Only" enabled="False">
         <configuration />
@@ -93,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Abstract.aml" />
+    <None Include="Content\Collections.aml" />
     <None Include="Content\Tutorial.aml" />
     <None Include="Content\VersionHistory\v1.0.0.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />

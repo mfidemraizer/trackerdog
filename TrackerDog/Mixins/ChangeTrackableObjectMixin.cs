@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Reflection;
     using TrackerDog.Interceptors;
 
@@ -20,7 +21,7 @@
             ChangeTracker = currentTracker ?? new ObjectChangeTracker(trackableObject);
 
             foreach (PropertyInfo property in trackableObject.GetType().GetProperties(DefaultBindingFlags))
-                if (!PropertyInterceptor.ChangeTrackingMembers.Contains(property.Name))
+                if (!property.IsIndexer() && !PropertyInterceptor.ChangeTrackingMembers.Contains(property.Name))
                 {
                     PropertyChanged += (sender, e) => TrackProperty(trackableObject, e.PropertyName);
 

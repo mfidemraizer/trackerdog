@@ -10,7 +10,7 @@
     {
         private readonly static HashSet<string> _changeTrackingMembers;
         private const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance;
-
+        
         static PropertyInterceptor()
         {
             _changeTrackingMembers =

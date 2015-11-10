@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="1e03762d-b9f5-44af-a4b0-c23c36064c24" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <para>
+        <token>projectName</token> can also seamlessly track collection properties (1-n, m-n associations). Discover
+        the quircks of collection change tracking on this document.
+      </para>
+    </introduction>
+
+    <section>
+      <title>How does it work</title>
+      <content>
+        <para>
+          Actually, <token>projectName</token> doesn't track any type of collection, but you must tell it to track
+          certain collection types. <codeEntityReference>P:TrackerDog.Configuration.TrackerDogConfiguration.CollectionConfiguration</codeEntityReference> let's you
+          customize which collection interfaces can be tracked on and what implementations should be instantiated and proxied to
+          track their changes.
+        </para>
+
+        <para>These are the default implementations provided out-of-the-box:</para>
+        <list class="bullet">
+          <listItem>
+            <codeEntityReference>T:System.Collections.Generic.ISet`1</codeEntityReference>
+            <phrase>implemented by</phrase>
+            <codeEntityReference>T:System.Collections.Generic.HashSet`1</codeEntityReference>
+          </listItem>
+          <listItem>
+            <codeEntityReference>T:System.Collections.Generic.IList`1</codeEntityReference>
+            <phrase>implemented by</phrase>
+            <codeEntityReference>T:System.Collections.Generic.List`1</codeEntityReference>
+          </listItem>
+          <listItem>
+            <codeEntityReference>T:System.Collections.Generic.ICollection`1</codeEntityReference>
+            <phrase>implemented by</phrase>
+            <codeEntityReference>T:System.Collections.Generic.List`1</codeEntityReference>
+          </listItem>
+        </list>
+
+        <para>
+          You can either add new collection interfaces or replace default implementations to already configured
+          collection interfaces using the following methods:
+        </para>
+        <list class="bullet">
+          <listItem>
+            <codeEntityReference>M:TrackerDog.Configuration.TrackableCollectionConfiguration.AddImplementation(System.Type,System.Type)</codeEntityReference>
+          </listItem>
+          <listItem>
+
+            <codeEntityReference>M:TrackerDog.Configuration.TrackableCollectionConfiguration.ReplaceImplementation(System.Type,System.Type)</codeEntityReference>
+          </listItem>
+        </list>
+
+        <para>
+          <legacyBold>
+            Note that both method arguments should be generic type definitions and you mustn't provide a collection interface and implementation
+            giving their type:
+          </legacyBold>
+
+          <list class="bullet">
+            <listItem>
+              <legacyBold>WRONG:</legacyBold> <codeInline>typeof(IList&lt;User&gt;)</codeInline>, <codeInline>typeof(HashSet&lt;User&gt;)</codeInline>
+            </listItem>
+            <listItem>
+              <legacyBold>OK:</legacyBold> <codeInline>typeof(IList&lt;&gt;)</codeInline>, <codeInline>typeof(HashSet&lt;&gt;)</codeInline>
+            </listItem>
+          </list>
+        </para>
+
+        <para>
+          When <token>projectName</token> starts to track a collection property, it turns it into an instance of configured implementation to some
+          collection interface and it turns the so-called property into a proxy that already implements <codeEntityReference>T:System.Collections.Specialized.INotifyCollectionChanged</codeEntityReference> and
+          implements on it the required members to track collection changes automatically.
+        </para>
+        <para>
+          The issue here is that, if your collection property is a different implementation of some configured collection interface, <token>projectName</token>
+          will be still able to proxy the whole collection, but it will instantiate the configured implementation. For that reason, in order to avoid further issues,
+          it's advisable that collection properties should be typed using interface types:
+        </para>
+        <code language="c#">
+          <![CDATA[public ISet<User> Users { get; set; }]]>
+        </code>
+        <para>
+          But if your collection property is typed using any custom <codeEntityReference>T:System.Collections.Generic.ISet`1</codeEntityReference> implementation, it'll produce
+          no issue because <token>projectName</token> will detect that implements the whole interface and it will create a proxy based on its
+          configured implementation.
+        </para>
+        <para>
+          If you want to let <token>projectName</token> instantiate a proxy of a concrete collection interface, you'll add or replace an implementation:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          TrackerDogConfiguration.CollectionConfiguration.ReplaceImplementation
+          (
+              typeof(IList<>),
+              typeof(MyIListImplementation<>)
+          );
+          ]]>
+        </code>
+      </content>
+    </section>
+
+    <relatedTopics>
+      <link xlink:href="52e40f26-3dfe-47e0-adf1-09233e98f42e" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

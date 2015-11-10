@@ -50,7 +50,7 @@
     <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
     <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
     <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
     <CodeContractsCustomRewriterAssembly />
     <CodeContractsCustomRewriterClass />
     <CodeContractsLibPaths />
@@ -121,7 +121,7 @@
     <Compile Include="ObjectChangeTracker.cs" />
     <Compile Include="ObjectPropertyChangeTracking.cs" />
     <Compile Include="ObjectChangeTrackingExtensions.cs" />
-    <Compile Include="Patterns\IUnitOfWork.cs" />
+    <Compile Include="Patterns\IObjectChangeUnitOfWork.cs" />
     <Compile Include="Interceptors\PropertyInterceptor.cs" />
     <Compile Include="Interceptors\SimplePropertyInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

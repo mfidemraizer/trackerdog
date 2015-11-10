@@ -116,10 +116,13 @@
                 foreach (PropertyInfo property in
                     trackableObject.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
                 {
-                    object propertyValue = property.GetValue(trackableObject);
+                    if (!property.IsIndexer())
+                    {
+                        object propertyValue = property.GetValue(trackableObject);
 
-                    if (propertyValue != null)
-                        Create(propertyValue, trackableObject.ChangeTracker, proxy, property);
+                        if (propertyValue != null)
+                            Create(propertyValue, trackableObject.ChangeTracker, proxy, property);
+                    }
                 }
 
                 if (propertyToSet != null)
