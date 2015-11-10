@@ -18,13 +18,15 @@
     <HtmlHelpName>TrackerDog.Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <TransformComponentArguments>
-      <Argument Key="logoFile" Value="Help.png" xmlns="" />
-      <Argument Key="logoHeight" Value="" xmlns="" />
-      <Argument Key="logoWidth" Value="" xmlns="" />
-      <Argument Key="logoAltText" Value="" xmlns="" />
-      <Argument Key="logoPlacement" Value="left" xmlns="" />
-      <Argument Key="logoAlignment" Value="left" xmlns="" />
-      <Argument Key="maxVersionParts" Value="" xmlns="" />
+      <Argument Key="logoFile" Value="dogtracker.png" />
+      <Argument Key="logoHeight" Value="40px" />
+      <Argument Key="logoWidth" Value="50px" />
+      <Argument Key="logoAltText" Value="" />
+      <Argument Key="logoPlacement" Value="left" />
+      <Argument Key="logoAlignment" Value="left" />
+      <Argument Key="maxVersionParts" Value="" />
+      <Argument Key="defaultLanguage" Value="cs" />
+      <Argument Key="includeEnumValues" Value="true" />
     </TransformComponentArguments>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\TrackerDog\TrackerDog.csproj" xmlns="" />
@@ -37,7 +39,7 @@
     <CleanIntermediates>True</CleanIntermediates>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <MaximumGroupParts>2</MaximumGroupParts>
-    <NamespaceGrouping>False</NamespaceGrouping>
+    <NamespaceGrouping>True</NamespaceGrouping>
     <SyntaxFilters>C#, Visual Basic</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>False</RootNamespaceContainer>
@@ -117,6 +119,7 @@
   <ItemGroup>
     <None Include="Content\Abstract.aml" />
     <None Include="Content\Collections.aml" />
+    <None Include="Content\WhatIsTracked.aml" />
     <None Include="Content\Tutorial.aml" />
     <None Include="Content\VersionHistory\v1.0.0.0.aml" />
     <None Include="Content\VersionHistory\VersionHistory.aml" />
@@ -124,9 +127,6 @@
   </ItemGroup>
   <ItemGroup>
     <ContentLayout Include="ContentLayout.content" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="icons\Help.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TrackerDog\TrackerDog.csproj">
@@ -137,6 +137,18 @@
   </ItemGroup>
   <ItemGroup>
     <Tokens Include="Common.tokens" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icons\dogtracker.png">
+      <ImageId>dogtracker</ImageId>
+      <AlternateText>dogtracker</AlternateText>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="media\dogtracker.png">
+      <ImageId>trackerdog</ImageId>
+      <AlternateText>dogtracker</AlternateText>
+    </Image>
   </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />

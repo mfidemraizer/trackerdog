@@ -7,7 +7,8 @@
   </Topic>
   <Topic id="95cc6530-e365-4045-951e-4ab992610c1f" visible="True" title="How does it work?" tocTitle="How does it work?" linkText="How does it work?" />
   <Topic id="52e40f26-3dfe-47e0-adf1-09233e98f42e" visible="True" title="How-to: Working with TrackerDog" tocTitle="How-to: Working with TrackerDog" linkText="How-to: Working with TrackerDog" />
-  <Topic id="1e03762d-b9f5-44af-a4b0-c23c36064c24" visible="True" isSelected="true" title="Understanding and configuring collection change tracking" tocTitle="Collection change tracking" linkText="Understanding and configuring collection change tracking" />
+  <Topic id="1941dd31-d46f-472f-9589-7ef6e721bb5b" visible="True" isSelected="true" title="What changes are tracked?" tocTitle="What changes are tracked?" linkText="What changes are tracked?" />
+  <Topic id="1e03762d-b9f5-44af-a4b0-c23c36064c24" visible="True" title="Understanding and configuring collection change tracking" tocTitle="Collection change tracking" linkText="Understanding and configuring collection change tracking" />
   <Topic id="172bcf6b-d432-4f32-a218-c71651691c21" visible="True" isExpanded="true" title="Version History">
     <HelpKeywords>
       <HelpKeyword index="K" term="version, history" />
