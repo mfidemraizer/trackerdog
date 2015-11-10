@@ -1,11 +1,10 @@
 # Welcome to TrackerDog!
 
+![project logo](http://mfidemraizer.github.io/trackerdog/media/dogtracker.png)
 
 ## What is TrackerDog?
 
-TrackerDog works on turning your POCOs into change-tracked objects. It can track a full object graph, including collection properties.
-
-
+TrackerDog works on seamlessly turning your .NET objects into change-tracked objects. It can track a full object graph, including collection properties.
 
 ## How to install it?
 
@@ -14,7 +13,7 @@ TrackerDog is distributed as a NuGet package called _TrackerDog_. Follow <a href
 ## Getting started
 <a href="http://mfidemraizer.github.io/trackerdog/html/52e40f26-3dfe-47e0-adf1-09233e98f42e.htm">Follow up this tutorial</a> to become object change tracking expert!
 
-If you're looking for API reference, [follow this link](http://mfidemraizer.github.io/trackerdog/html/0e46d6ac-6f64-4d54-98fd-3813df42cb8e.htm).
+If you're looking for API reference, [follow this link](http://mfidemraizer.github.io/trackerdog).
 
 ## Why TrackerDog?
 
