@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="1941dd31-d46f-472f-9589-7ef6e721bb5b" revisionNumber="1">
+  <developerConceptualDocument
+    xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+
+      <para>
+        Discover what can track <token>projectNaame</token>
+      </para>
+    </introduction>
+
+    <!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+    <section>
+      <title>What changes are tracked?</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            <para>
+              Changing any property on the tracked object either if you're setting its default value (for example <literal>null</literal> or an instance of a reference or value type).
+            </para>
+          </listItem>
+          <listItem>
+            <para>Adding, removing or updating an item in a collection property on some tracked object.</para>
+          </listItem>
+          <listItem>
+            <para>
+              As above case, with <phrase>sets</phrase>, an intersection or exception will also be tracked as adding or removing items to the collection.
+            </para>
+          </listItem>
+          <listItem>
+            <para>Any of above cases on any level of associated objects with the one that was turned into a change-trackable object.</para>
+          </listItem>
+        </list>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>

@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <topic id="0e46d6ac-6f64-4d54-98fd-3813df42cb8e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <mediaLink>
+      <image placement="center" xlink:href="trackerdog"/>
+    </mediaLink>
     <section>
       <title>
         What is <token>projectName</token>?
       </title>
       <content>
         <para>
-          <token>projectName</token> works on turning your POCOs into change-tracked objects. It can track a full
+          <token>projectName</token> works on seamlessly turning your .NET objects into change-tracked objects. It can track a full
           object graph, including collection properties.
         </para>
+      </content>
+    </section>
+
+    <section>
+      <title>Quick links</title>
+      <content>
+        <list class="bullet">
+          <listItem>
+            <externalLink>
+              <linkText>GitHub repository</linkText>
+              <linkUri>https://github.com/mfidemraizer/trackerdog</linkUri>
+            </externalLink>.
+          </listItem>
+          <listItem>
+            <externalLink>
+              <linkText>Issue tracker</linkText>
+              <linkUri>https://github.com/mfidemraizer/trackerdog/issues</linkUri>
+            </externalLink>.
+          </listItem>
+          <listItem>
+            <externalLink>
+              <linkText>License declaration</linkText>
+              <linkUri>https://raw.githubusercontent.com/mfidemraizer/trackerdog/master/LICENSE</linkUri>
+            </externalLink>.
+          </listItem>
+        </list>
       </content>
     </section>
 
@@ -22,7 +51,7 @@
           <token>projectName</token> is distributed as a NuGet package called <literal>TrackerDog</literal>. Follow
           <externalLink>
             <linkText>this link to get installation instructions</linkText>
-            <linkUri>https://nuget.org/TrackerDog</linkUri>
+            <linkUri>https://nuget.org/packages/TrackerDog</linkUri>
           </externalLink>.
         </para>
       </content>
@@ -31,7 +60,7 @@
     <section>
       <title>Getting started</title>
       <content>
-        <link xlink:href="52e40f26-3dfe-47e0-adf1-09233e98f42e">Follow up this tutorial</link> to become object change tracking expert!
+        <link xlink:href="52e40f26-3dfe-47e0-adf1-09233e98f42e">Follow up this tutorial</link> to become an object change tracking expert!
       </content>
     </section>
 
