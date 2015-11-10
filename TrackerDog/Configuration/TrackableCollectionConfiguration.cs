@@ -34,7 +34,7 @@
         /// <returns>A pair, where the key is the collection interface and value is the collection implementation</returns>
         public KeyValuePair<Type, Type> GetImplementation(Type some)
         {
-            Type someGenericTypeDefinition = some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
+            Type someGenericTypeDefinition =  some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
             IEnumerable<Type> someInterfaces = some.GetInterfaces();
 
             KeyValuePair<Type, Type> result = Implementations.FirstOrDefault
