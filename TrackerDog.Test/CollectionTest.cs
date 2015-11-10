@@ -13,10 +13,10 @@
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            TrackerDogConfiguration.TrackableTypes.Add(typeof(A));
-            TrackerDogConfiguration.TrackableTypes.Add(typeof(B));
-            TrackerDogConfiguration.TrackableTypes.Add(typeof(C));
-            TrackerDogConfiguration.TrackableTypes.Add(typeof(Dog));
+            TrackerDogConfiguration.TrackTheseTypes
+            (
+                typeof(A), typeof(B), typeof(C), typeof(Dog)
+            );
         }
 
         [DebuggerDisplay("{Name}")]

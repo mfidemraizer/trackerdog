@@ -39,6 +39,16 @@
         }
 
         /// <summary>
+        /// Determines if a given object is a change-trackable object already
+        /// </summary>
+        /// <param name="some">The object to check</param>
+        /// <returns><literal>true</literal> if it's change-trackable, <literal>false</literal> if it's not change-trackable</returns>
+        public static bool IsTrackable(this object some)
+        {
+            return some is IChangeTrackableObject;
+        }
+
+        /// <summary>
         /// Gets current tracked object change tracker.
         /// </summary>
         /// <param name="some">The change-tracked object</param>
