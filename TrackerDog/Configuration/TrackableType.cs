@@ -31,6 +31,15 @@
             Contract.Ensures(Contract.Result<TrackableType<T>>() != null);
 
             MemberExpression propertyAccessExpr = propertySelector.Body as MemberExpression;
+
+            if(propertyAccessExpr == null)
+            {
+                UnaryExpression convertExpr = propertySelector.Body as UnaryExpression;
+
+                if (convertExpr != null)
+                    propertyAccessExpr = convertExpr.Operand as MemberExpression;
+            }
+
             Contract.Assert(propertyAccessExpr != null);
 
             PropertyInfo property = propertyAccessExpr.Member as PropertyInfo;

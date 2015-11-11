@@ -1,6 +1,7 @@
 ﻿namespace TrackerDog.Test
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using TrackerDog.Configuration;
@@ -16,7 +17,8 @@
                 Track.ThisType<A>().IncludeProperties(a => a.Text, a => a.B),
                 Track.ThisType<B>().IncludeProperties(b => b.Text, b => b.C),
                 Track.ThisType<C>().IncludeProperties(c => c.Text, c => c.ListOfD),
-                Track.ThisType<D>().IncludeProperties(d => d.Text)
+                Track.ThisType<D>().IncludeProperty(d => d.Text),
+                Track.ThisType<E>().IncludeProperties(e => e.Text, e => e.Number)
             );
         }
 
@@ -43,6 +45,12 @@
             public string Text { get; set; }
         }
 
+        public class E
+        {
+            public string Text { get; set; }
+            public int Number { get; set; }
+        }
+
         [TestMethod]
         public void CanTrackSimplePropertyChanges()
         {
@@ -65,6 +73,13 @@
             Assert.AreEqual("Text", tracking.Property.Name);
             Assert.AreEqual(initialValue, tracking.OldValue);
             Assert.AreEqual(changedValue, tracking.CurrentValue);
+        }
+
+        [TestMethod]
+        public void CanTrackBothReferenceAndValueTypeProperties()
+        {
+            // It should not throw an exception ;)
+            E e = new E().AsTrackable();
         }
 
         [TestMethod]
