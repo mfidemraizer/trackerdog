@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Configuration;
 
     internal sealed class SimplePropertyInterceptionHook : IProxyGenerationHook
     {
@@ -31,6 +32,13 @@
         }
 
         public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
-            => !SkippedMethods.Contains(methodInfo) && methodInfo.IsPropertyGetterOrSetter();
+        {
+            ITrackableType trackableType = TrackerDogConfiguration.TrackableTypes.SingleOrDefault(t => t.Type == type);
+
+            if (trackableType == null || trackableType.IncludedProperties.Count == 0)
+                return false;
+
+            return trackableType.IncludedProperties.Any(p => p.GetMethod == methodInfo || p.SetMethod == methodInfo);
+        }
     }
 }

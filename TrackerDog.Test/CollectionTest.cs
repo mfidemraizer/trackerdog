@@ -15,7 +15,10 @@
         {
             TrackerDogConfiguration.TrackTheseTypes
             (
-                typeof(A), typeof(B), typeof(C), typeof(Dog)
+                Track.ThisType<A>().IncludeProperty(a => a.Items),
+                Track.ThisType<B>().IncludeProperty(b => b.Dogs),
+                Track.ThisType<C>().IncludeProperty(c => c.Dogs),
+                Track.ThisType<Dog>().IncludeProperty(d => d.Name)
             );
         }
 
@@ -116,7 +119,7 @@
             c.Dogs.Add(new Dog { Name = "Rex" });
 
             IReadOnlyChangeTrackableCollection trackableCollection = (IReadOnlyChangeTrackableCollection)c.Dogs;
-            
+
             c.Dogs.IntersectWith(new[] { new Dog { Name = "Rex" } });
             Assert.AreEqual(1, c.Dogs.Count);
             Assert.AreEqual(2, trackableCollection.RemovedItems.Count);

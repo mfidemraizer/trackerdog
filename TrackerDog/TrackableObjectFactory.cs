@@ -44,7 +44,7 @@
 
             Type genericCollectionType = some.GetType().GetGenericArguments()[0];
 
-            if (TrackerDogConfiguration.TrackableTypes.Contains(genericCollectionType))
+            if (TrackerDogConfiguration.CanTrackType(genericCollectionType))
             {
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new CollectionterceptionHook());
                 options.AddMixinInstance(new ChangeTrackableCollectionMixin());
@@ -96,7 +96,7 @@
         {
             Contract.Requires(some != null);
 
-            if (TrackerDogConfiguration.TrackableTypes.Contains(some.GetType()) && !(some is IChangeTrackableObject))
+            if (TrackerDogConfiguration.CanTrackType(some.GetType()) && !(some is IChangeTrackableObject))
             {
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new SimplePropertyInterceptionHook());
                 options.AddMixinInstance(new ChangeTrackableObjectMixin());

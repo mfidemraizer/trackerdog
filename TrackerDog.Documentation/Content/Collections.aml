@@ -38,7 +38,17 @@
             <phrase>implemented by</phrase>
             <codeEntityReference>T:System.Collections.Generic.List`1</codeEntityReference>
           </listItem>
+          <listItem>
+            <codeEntityReference>T:System.Collections.Generic.IEnumerable`1</codeEntityReference>
+            <phrase>implemented by</phrase>
+            <codeEntityReference>T:System.Collections.Generic.List`1</codeEntityReference>
+          </listItem>
         </list>
+
+        <para>
+          Right collection implementation is evaluated using a FIFO (<phrase>first-in, first-out</phrase>) criteria. That is,
+          <tokenName>projectName</tokenName> will look for the most specific implementation for a given collection type.
+        </para>
 
         <para>
           You can either add new collection interfaces or replace default implementations to already configured
