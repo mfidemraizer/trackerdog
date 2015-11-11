@@ -19,13 +19,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TrackerDog</Id>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <Title>TrackerDog: A generic object change tracker</Title>
     <Authors>Matías Fidemraizer</Authors>
     <Owners>Matías Fidemraizer</Owners>
     <Summary>Track changes of any object and full object graphs</Summary>
     <Description>TrackerDog turns any object or full object graph into a change-trackable object</Description>
-    <ReleaseNotes>This release adds a better configuration model to configure what types to track its changes and what properties of these types should be tracked for changes.</ReleaseNotes>
+    <ReleaseNotes>Bugfix to enable tracking value-typed properties.</ReleaseNotes>
     <ProjectUrl>http://mfidemraizer.github.io/trackerdog/</ProjectUrl>
     <LicenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © Matías Fidemraizer</Copyright>

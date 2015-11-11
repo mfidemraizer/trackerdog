@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Represents the object change tracking configuration.
@@ -41,7 +42,15 @@
         {
             Contract.Requires(someType != null);
 
-            return TrackableTypes.Any(t => someType == t.Type);
+            return TrackableTypes.Any(t => someType == t.Type || (someType.IsTrackable() && someType.BaseType == t.Type));
+        }
+
+        public static bool CanTrackProperty(PropertyInfo property)
+        {
+            Contract.Requires(property != null);
+            Contract.Requires(CanTrackType(property.DeclaringType));
+
+            return TrackableTypes.Any(t => t.IncludedProperties.Contains(property.GetBaseProperty()));
         }
     }
 }

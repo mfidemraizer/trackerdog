@@ -83,6 +83,22 @@
         }
 
         /// <summary>
+        /// Gets base property implementation of a trackable object
+        /// </summary>
+        /// <param name="property">The derived property</param>
+        /// <returns>The base property implementation</returns>
+        public static PropertyInfo GetBaseProperty(this PropertyInfo property)
+        {
+            Contract.Requires(property != null);
+            Contract.Requires(property.DeclaringType.BaseType != null);
+
+            if (property.DeclaringType.IsTrackable())
+                return property.DeclaringType.BaseType.GetProperty(property.Name);
+            else
+                return property;
+        }
+
+        /// <summary>
         /// Determines if a given property is an implementation of <see cref="System.Collections.Generic.IList{T}"/>
         /// </summary>
         /// <param name="property">The property to check</param>
@@ -147,7 +163,7 @@
             Type enumerableInterface = some.GetType().GetInterfaces()
                                            .SingleOrDefault
                                            (
-                                                i => i.IsGenericType 
+                                                i => i.IsGenericType
                                                 && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
                                             );
 

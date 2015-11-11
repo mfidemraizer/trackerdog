@@ -49,6 +49,18 @@
         }
 
         /// <summary>
+        /// Determines if a given type is already change-trackable
+        /// </summary>
+        /// <param name="some">The type to check</param>
+        /// <returns><literal>true</literal> if it's change-trackable, <literal>false</literal> if it's not change-trackable</returns>
+        public static bool IsTrackable(this Type some)
+        {
+            Contract.Requires(some != null);
+
+            return typeof(IChangeTrackableObject).IsAssignableFrom(some);
+        }
+
+        /// <summary>
         /// Gets current tracked object change tracker.
         /// </summary>
         /// <param name="some">The change-tracked object</param>

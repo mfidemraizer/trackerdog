@@ -53,12 +53,13 @@
                 {
                     IChangeTrackableObject trackableObject = item as IChangeTrackableObject;
 
-                    Contract.Assert(trackableObject == null);
+                    if (trackableObject == null)
+                    {
+                        trackableObject = (IChangeTrackableObject)item.AsTrackable();
 
-                    trackableObject = (IChangeTrackableObject)item.AsTrackable();
-
-                    trackableObject.PropertyChanged += (sender, e) =>
-                        parentObject.RaisePropertyChanged(parentObject, parentObjectProperty.Name);
+                        trackableObject.PropertyChanged += (sender, e) =>
+                            parentObject.RaisePropertyChanged(parentObject, parentObjectProperty.Name);
+                    }
 
                     result.Add((T)trackableObject);
                 }

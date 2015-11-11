@@ -1,5 +1,6 @@
 ﻿namespace TrackerDog
 {
+    using Configuration;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -101,17 +102,17 @@
             object currentValue = targetObject.GetType().GetProperty(property.Name, DefaultBindingFlags)
                                             .GetValue(targetObject);
 
-            ObjectPropertyChangeTracking existingTracking;
+            ObjectPropertyChangeTracking existingTracking = null;
 
             Contract.Assert(PropertyTrackings != null);
 
-            if (!PropertyTrackings.TryGetValue(property, out existingTracking))
+            if (TrackerDogConfiguration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(property, out existingTracking))
                 PropertyTrackings.Add
                 (
                     property,
                     new ObjectPropertyChangeTracking(this, targetObject, property, currentValue)
                 );
-            else
+            else if(existingTracking != null)
                 existingTracking.CurrentValue = currentValue;
         }
 
