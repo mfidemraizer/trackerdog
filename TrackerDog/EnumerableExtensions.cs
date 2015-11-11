@@ -45,7 +45,7 @@
             Contract.Requires(parentObjectProperty.DeclaringType == parentObject.GetType());
 
             if (enumerable.Count() > 0 &&
-                TrackerDogConfiguration.TrackableTypes.Contains(enumerable.First().GetType()))
+                TrackerDogConfiguration.CanTrackType(enumerable.First().GetType()))
             {
                 List<T> result = new List<T>();
 

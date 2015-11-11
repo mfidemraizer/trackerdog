@@ -3,6 +3,7 @@
     using Castle.DynamicProxy;
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Linq;
     using System.Reflection;
 
@@ -16,7 +17,8 @@
             _skippedMethods = new HashSet<MethodInfo>
             (
                 typeof(IHasParent).GetMethods(DefaultBindingFlags)
-                .Concat(typeof(IChangeTrackableObject).GetMethods(DefaultBindingFlags))
+                .Concat(typeof(IChangeTrackableCollection).GetMethods(DefaultBindingFlags))
+                .Concat(typeof(INotifyCollectionChanged).GetMethods(DefaultBindingFlags))
             );
         }
 

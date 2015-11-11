@@ -97,7 +97,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ITrackableType.cs" />
+    <Compile Include="Configuration\Track.cs" />
     <Compile Include="Configuration\TrackableCollectionConfiguration.cs" />
+    <Compile Include="Configuration\TrackableType.cs" />
+    <Compile Include="Configuration\ITrackableTypeEqualityComparer.cs" />
     <Compile Include="Configuration\TrackerDogConfiguration.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Hooks\SimplePropertyInterceptionHook.cs" />

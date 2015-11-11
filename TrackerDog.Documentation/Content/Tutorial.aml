@@ -31,7 +31,23 @@
           your class (i.e. <phrase>the type</phrase>) can be trackable:
         </para>
         <code language="c#">
-          <![CDATA[TrackerDogConfiguration.TrackTheseTypes(typeof(User));]]>
+          <![CDATA[TrackerDogConfiguration.TrackTheseTypes(Track.ThisType<User>());]]>
+        </code>
+        <para>
+          Above configuration will tell <tokenName>TrackerDog</tokenName> to track all property changes for the given type. <legacyBold>
+            This can
+            be harmful and it's advisable that you tell <tokenName>TrackerDog</tokenName> which properties you want to track for the given type:
+          </legacyBold>
+        </para>
+        <code language="c#">
+          <![CDATA[
+          // This will avoid some overhead since TrackerDog won't need to intercept absolutely all
+          // property changes
+          TrackerDogConfiguration.TrackTheseTypes
+          (
+              Track.ThisType<User>().TrackProperties(u => u.Name, u => u.Age)
+          );
+          ]]>
         </code>
         <para>
           Now, to track an instance of <codeInline>User</codeInline> you need to
@@ -198,7 +214,11 @@
         </para>
         <code language="c#">
           <![CDATA[
-          TrackerDogConfiguration.TrackTheseTypes(typeof(App), typeof(User));
+          TrackerDogConfiguration.TrackTheseTypes
+          (
+              Track.ThisType<App>().IncludeProperty(app => app.Users),
+              Track.ThisType<User>().IncludeProperties(user => user.Name, user => user.Age)
+          );
           ]]>
         </code>
       </content>
@@ -261,7 +281,10 @@
           <![CDATA[
           TrackerDogConfiguration.TrackTheseTypes
           (
-              typeof(A), typeof(B), typeof(C), typeof(D)
+              Track.ThisType<A>().IncludeProperties(a => a.Text, a => a.B),
+              Track.ThisType<B>().IncludeProperties(b => b.Text, b => b.C),
+              Track.ThisType<C>().IncludeProperties(c => c.Text, c => c.ListOfD),
+              Track.ThisType<D>().IncludeProperty(d => d.Text)
           );
           ]]>
         </code>
@@ -314,6 +337,43 @@
           app.Users.Add(new User { Name = "Matías" });
           ]]>
         </code>
+        <para>
+          Don't forget to add all types as trackable types:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          TrackerDogConfiguration.TrackTheseTypes
+          (
+              Track.ThisType<App>().IncludeProperty(app => app.Name, app => app.Users),
+              Track.ThisType<User>().IncludeProperties(user => user.Name, user => user.Age)
+          );
+          ]]>
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>Read the tests too</title>
+      <content>
+        <para>
+          In addition to this tutorial, you might learn more reading the unit/integration tests provided as part
+          of project's source code. You can also clone the repository in your own computer and run the whole tests using
+          the Visual Studio debugger to check how <token>projectName</token> works step by step!
+        </para>
+        <list class="bullet">
+          <listItem>
+            <externalLink>
+              <linkText>GitHub repository</linkText>
+              <linkUri>https://github.com/mfidemraizer/trackerdog</linkUri>
+            </externalLink>.
+          </listItem>
+          <listItem>
+            <externalLink>
+              <linkText>Tests source code</linkText>
+              <linkUri>https://github.com/mfidemraizer/trackerdog/tree/master/TrackerDog.Test</linkUri>
+            </externalLink>.
+          </listItem>
+        </list>
       </content>
     </section>
     <relatedTopics>

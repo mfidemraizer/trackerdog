@@ -18,6 +18,7 @@
             AddImplementation(typeof(ISet<>), typeof(HashSet<>));
             AddImplementation(typeof(IList<>), typeof(List<>));
             AddImplementation(typeof(ICollection<>), typeof(List<>));
+            AddImplementation(typeof(IEnumerable<>), typeof(List<>));
         }
 
         /// <summary>

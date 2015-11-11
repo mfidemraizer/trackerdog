@@ -13,7 +13,10 @@
         {
             TrackerDogConfiguration.TrackTheseTypes
             (
-                typeof(A), typeof(B), typeof(C), typeof(D)
+                Track.ThisType<A>().IncludeProperties(a => a.Text, a => a.B),
+                Track.ThisType<B>().IncludeProperties(b => b.Text, b => b.C),
+                Track.ThisType<C>().IncludeProperties(c => c.Text, c => c.ListOfD),
+                Track.ThisType<D>().IncludeProperties(d => d.Text)
             );
         }
 
