@@ -1,24 +1,18 @@
 ﻿namespace TrackerDog
 {
     using System;
-    using System.Diagnostics.Contracts;
-    using System.Reflection;
 
-    /// <summary>
-    /// Defines the state of some trackable object property
-    /// </summary>
-    [ContractClass(typeof(IObjectPropertyChangeTrackingContract))]
     public interface IObjectPropertyChangeTracking : IEquatable<IObjectPropertyChangeTracking>
-    {
+    {      
         /// <summary>
         /// Gets the associated tracker
         /// </summary>
         IObjectChangeTracker Tracker { get; }
 
         /// <summary>
-        /// Gets the tracked property
+        /// Gets the tracked property name
         /// </summary>
-        PropertyInfo Property { get; }
+        string PropertyName{ get; }
 
         /// <summary>
         /// Gets the value that had the whole tracked property when the tracking was started

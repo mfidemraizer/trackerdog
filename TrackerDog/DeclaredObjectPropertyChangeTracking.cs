@@ -4,9 +4,10 @@
     using System.Collections;
     using System.Diagnostics;
     using System.Linq;
+    using System.Reflection;
 
-    [DebuggerDisplay("{PropertyName} = {CurrentValue} (Has changed? {HasChanged})")]
-    internal sealed class ObjectPropertyChangeTracking : IObjectPropertyChangeTracking
+    [DebuggerDisplay("{Property.DeclaringType.Name}.{Property.Name} = {CurrentValue} (Has changed? {HasChanged})")]
+    internal sealed class DeclaredObjectPropertyChangeTracking : IDeclaredObjectPropertyChangeTracking
     {
         private readonly ObjectChangeTracker _tracker;
         private readonly object _targetObject;
@@ -15,11 +16,11 @@
         private IEnumerable _oldCollectionValue;
         private IEnumerable _currentCollectionValue;
 
-        public ObjectPropertyChangeTracking(ObjectChangeTracker tracker, object targetObject, string propertyName, object currentValue)
+        public DeclaredObjectPropertyChangeTracking(ObjectChangeTracker tracker, object targetObject, PropertyInfo property, object currentValue)
         {
             _tracker = tracker;
             _targetObject = targetObject;
-            PropertyName = propertyName;
+            Property = property;
             OldValue = currentValue;
             CurrentValue = currentValue;
         }
@@ -27,7 +28,8 @@
         public ObjectChangeTracker Tracker => _tracker;
         IObjectChangeTracker IObjectPropertyChangeTracking.Tracker => Tracker;
         public object TargetObject => _targetObject;
-        public string PropertyName { get; private set; }
+        public PropertyInfo Property { get; private set; }
+        public string PropertyName => Property.Name;
 
         public object OldValue
         {
@@ -47,7 +49,7 @@
                         if (_oldValue is IProxyTargetAccessor)
                             _oldCollectionValue = (IEnumerable)TrackableObjectFactory.CreateForCollection
                             (
-                                _oldCollectionValue, (IChangeTrackableObject)TargetObject, null
+                                _oldCollectionValue, (IChangeTrackableObject)TargetObject, Property
                             );
 
                         _oldValue = _oldCollectionValue;
@@ -87,12 +89,21 @@
                     })
                 );
 
-        public override bool Equals(object obj) => Equals(obj as IDeclaredObjectPropertyChangeTracking);
+        public override bool Equals(object obj)
+        {
+            IDeclaredObjectPropertyChangeTracking declared = obj as IDeclaredObjectPropertyChangeTracking;
+
+            if (declared != null) return Equals(declared);
+            else return Equals(obj as IObjectChangeTracker);
+        }
+
+        public bool Equals(IDeclaredObjectPropertyChangeTracking other) =>
+            other != null && other.Property == Property;
 
         public bool Equals(IObjectPropertyChangeTracking other) =>
             other != null && other.PropertyName == PropertyName;
 
-        public override int GetHashCode() => PropertyName.GetHashCode();
-
+        public override int GetHashCode() =>
+            Property.Name.GetHashCode() + Property.DeclaringType.AssemblyQualifiedName.GetHashCode();
     }
 }

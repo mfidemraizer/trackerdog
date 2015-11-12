@@ -1,14 +1,17 @@
 ﻿namespace TrackerDog.Mixins
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
-    using System.Linq;
+    using System.Dynamic;
     using System.Reflection;
+    using TrackerDog.Configuration;
     using TrackerDog.Interceptors;
 
     internal class ChangeTrackableObjectMixin : IChangeTrackableObject
     {
+        private readonly static Guid _id = Guid.NewGuid();
         private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
         private readonly Dictionary<string, PropertyInfo> _cachedProperties = new Dictionary<string, PropertyInfo>();
 
@@ -16,15 +19,27 @@
         public virtual ObjectChangeTracker ChangeTracker { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
+        internal Guid Id => _id;
+
         public void StartTracking(IChangeTrackableObject trackableObject, ObjectChangeTracker currentTracker = null)
         {
             ChangeTracker = currentTracker ?? new ObjectChangeTracker(trackableObject);
+            PropertyChanged += (sender, e) => TrackProperty(trackableObject, e.PropertyName);
 
-            foreach (PropertyInfo property in trackableObject.GetType().GetProperties(DefaultBindingFlags))
+            ITrackableType trackableType = TrackerDogConfiguration.GetTrackableType
+            (
+                trackableObject.GetActualTypeIfTrackable()
+            );
+            IEnumerable<PropertyInfo> trackableProperties;
+
+            if (trackableType != null && trackableType.IncludedProperties.Count > 0)
+                trackableProperties = trackableType.IncludedProperties;
+            else
+                trackableProperties = trackableObject.GetType().GetProperties(DefaultBindingFlags);
+
+            foreach (PropertyInfo property in trackableProperties)
                 if (!property.IsIndexer() && !PropertyInterceptor.ChangeTrackingMembers.Contains(property.Name))
                 {
-                    PropertyChanged += (sender, e) => TrackProperty(trackableObject, e.PropertyName);
-
                     if (property.IsList() || property.IsSet())
                         property.MakeTrackable(trackableObject);
 
@@ -36,21 +51,41 @@
         {
             Contract.Assert(ChangeTracker != null);
 
-            PropertyInfo property;
+            DynamicObject dynamicObject = trackableObject as DynamicObject;
 
-            if (!CachedProperties.TryGetValue(propertyName, out property))
-                CachedProperties.Add
-                (
-                    propertyName,
-                    (property = trackableObject.GetType().GetProperty(propertyName, DefaultBindingFlags))
-                );
+            if (dynamicObject == null)
+            {
+                PropertyInfo property;
 
-            ChangeTracker.AddOrUpdateTracking(property, trackableObject);
+                if (!CachedProperties.TryGetValue(propertyName, out property))
+                    CachedProperties.Add
+                    (
+                        propertyName,
+                        (property = trackableObject.GetType().GetProperty(propertyName, DefaultBindingFlags))
+                    );
+
+                ChangeTracker.AddOrUpdateTracking(property, trackableObject);
+            }
+            else
+                ChangeTracker.AddOrUpdateTracking(propertyName, dynamicObject);
         }
 
         public void RaisePropertyChanged(IChangeTrackableObject trackableObject, string propertyName)
         {
             PropertyChanged(trackableObject, new PropertyChangedEventArgs(propertyName));
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            ChangeTrackableObjectMixin mixin = obj as ChangeTrackableObjectMixin;
+
+            if (mixin == null) return false;
+
+            return mixin.Id == Id;
+        }
+
+        public override int GetHashCode() => Id.GetHashCode();
     }
 }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
+    using System.Dynamic;
     using System.Linq;
     using System.Reflection;
 
@@ -183,6 +184,29 @@
             Contract.Requires(parentObject != null);
 
             property.SetValue(parentObject, TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property));
+        }
+
+        /// <summary>
+        /// Determines if given type is a <see cref="System.Dynamic.DynamicObject"/> derived class
+        /// </summary>
+        /// <param name="some">The whole type of the possible dynamic object</param>
+        /// <returns><literal>true</literal> if it's a dynamic object, <literal>false</literal> if it's not a dynamic object</returns>
+        public static bool IsDynamicObject(this Type some)
+        {
+            Contract.Requires(some != null);
+
+            return typeof(DynamicObject).IsAssignableFrom(some);
+        }
+        /// <summary>
+        /// Determines if given object type is a <see cref="System.Dynamic.DynamicObject"/> derived class
+        /// </summary>
+        /// <param name="some">The whole possible dynamic object</param>
+        /// <returns><literal>true</literal> if it's a dynamic object, <literal>false</literal> if it's not a dynamic object</returns>
+        public static bool IsDynamicObject(this object some)
+        {
+            Contract.Requires(some != null);
+
+            return IsDynamicObject(some.GetType());
         }
     }
 }

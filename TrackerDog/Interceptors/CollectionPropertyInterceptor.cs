@@ -8,6 +8,9 @@
 
     internal sealed class CollectionPropertyInterceptor : MethodInterceptor
     {
+        private readonly static Guid _id = Guid.NewGuid();
+        internal Guid Id => _id;
+
         protected override void InterceptMethod(IInvocation invocation, IHasParent withParent)
         {
             Type collectionType = invocation.Method.DeclaringType;
@@ -51,9 +54,9 @@
 
         private void InterceptSetSpecificMethod(IInvocation invocation, IEnumerable<object> currentItems, IChangeTrackableCollection trackableCollection)
         {
-            IObjectPropertyChangeTracking tracking = trackableCollection.GetChangeTracker()
+            IDeclaredObjectPropertyChangeTracking tracking = trackableCollection.GetChangeTracker()
                                                 .ChangedProperties
-                                                .Single(t => t.Property == trackableCollection.ParentObjectProperty);
+                                                .Single(t => t.Property.GetBaseProperty() == trackableCollection.ParentObjectProperty.GetBaseProperty());
 
             IEnumerable<object> oldItems = (IEnumerable<object>)tracking.OldValue;
 
@@ -89,5 +92,18 @@
             foreach (object item in itemsToRemove.Intersect(currentItems))
                 trackableCollection.RemovedItems.Add(item);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            CollectionPropertyInterceptor interceptor = obj as CollectionPropertyInterceptor;
+
+            if (interceptor == null) return false;
+
+            return interceptor.Id == Id;
+        }
+
+        public override int GetHashCode() => Id.GetHashCode();
     }
 }

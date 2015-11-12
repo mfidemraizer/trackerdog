@@ -30,7 +30,14 @@
             Contract.Requires(types != null && types.Length > 0 && types.All(t => t != null));
 
             foreach (ITrackableType type in types)
-                TrackableTypes.Add(type);
+                Contract.Assert(TrackableTypes.Add(type), "Type can only be configured to be tracked once");
+        }
+
+        internal static ITrackableType GetTrackableType(Type type)
+        {
+            Contract.Requires(type != null);
+
+            return TrackableTypes.SingleOrDefault(t => t.Type == type);
         }
 
         /// <summary>
@@ -42,13 +49,13 @@
         {
             Contract.Requires(someType != null);
 
-            return TrackableTypes.Any(t => someType == t.Type || (someType.IsTrackable() && someType.BaseType == t.Type));
+            return TrackableTypes.Any(t => t.Type == someType.GetActualTypeIfTrackable());
         }
 
         public static bool CanTrackProperty(PropertyInfo property)
         {
             Contract.Requires(property != null);
-            Contract.Requires(CanTrackType(property.DeclaringType));
+            Contract.Requires(CanTrackType(property.ReflectedType));
 
             return TrackableTypes.Any(t => t.IncludedProperties.Contains(property.GetBaseProperty()));
         }

@@ -48,6 +48,25 @@
             return some is IChangeTrackableObject;
         }
 
+        public static Type GetActualTypeIfTrackable(this object some)
+        {
+            Contract.Requires(some != null);
+            Contract.Ensures(Contract.Result<Type>() != null);
+
+            return GetActualTypeIfTrackable(some.GetType());
+        }
+
+        public static Type GetActualTypeIfTrackable(this Type some)
+        {
+            Contract.Requires(some != null);
+            Contract.Ensures(Contract.Result<Type>() != null);
+
+            if (some.IsTrackable())
+                return some.BaseType;
+            else
+                return some;
+        }
+
         /// <summary>
         /// Determines if a given type is already change-trackable
         /// </summary>
@@ -93,7 +112,7 @@
         /// <param name="some">The tracked object</param>
         /// <param name="propertySelector">A property selector</param>
         /// <returns>The property tracking</returns>
-        public static IObjectPropertyChangeTracking GetPropertyTracking<TObject, TReturn>(this TObject some, Expression<Func<TObject, TReturn>> propertySelector)
+        public static IDeclaredObjectPropertyChangeTracking GetPropertyTracking<TObject, TReturn>(this TObject some, Expression<Func<TObject, TReturn>> propertySelector)
         {
             Contract.Requires(some != null);
             Contract.Requires(propertySelector != null);

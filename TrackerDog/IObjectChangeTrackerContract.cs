@@ -11,14 +11,14 @@
     [ContractClassFor(typeof(IObjectChangeTracker))]
     public abstract class IObjectChangeTrackerContract : IObjectChangeTracker
     {
-        public IImmutableSet<IObjectPropertyChangeTracking> ChangedProperties { get; set; }
+        public IImmutableSet<IDeclaredObjectPropertyChangeTracking> ChangedProperties { get; set; }
 
-        public IImmutableSet<IObjectPropertyChangeTracking> UnchangedProperties { get; set; }
+        public IImmutableSet<IDeclaredObjectPropertyChangeTracking> UnchangedProperties { get; set; }
 
-        public IObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
+        public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
         {
             Contract.Requires(propertySelector != null);
-            Contract.Ensures(Contract.Result<IObjectPropertyChangeTracking>() != null);
+            Contract.Ensures(Contract.Result<IDeclaredObjectPropertyChangeTracking>() != null);
 
             throw new NotImplementedException();
         }
@@ -31,7 +31,7 @@
             Contract.Invariant(ChangedProperties.Intersect(UnchangedProperties).Count == 0);
         }
 
-        public IEnumerator<IObjectPropertyChangeTracking> GetEnumerator()
+        public IEnumerator<IDeclaredObjectPropertyChangeTracking> GetEnumerator()
         {
             throw new NotImplementedException();
         }

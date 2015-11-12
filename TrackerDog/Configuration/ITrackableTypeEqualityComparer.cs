@@ -8,7 +8,7 @@
     /// </summary>
     internal sealed class ITrackableTypeEqualityComparer : IEqualityComparer<ITrackableType>
     {
-        public bool Equals(ITrackableType x, ITrackableType y) => x.Type == y.Type;
+        public bool Equals(ITrackableType x, ITrackableType y) => x != null && y != null && x.Type == y.Type;
         public int GetHashCode(ITrackableType obj) => obj.Type.AssemblyQualifiedName.GetHashCode();
     }
 }

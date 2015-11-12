@@ -7,6 +7,7 @@
     using System.Collections.Immutable;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
+    using System.Dynamic;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -16,7 +17,7 @@
     /// Represents an in-memory object property change tracker.
     /// </summary>
     [DebuggerDisplay("Changed properties: {ChangedProperties.Count}")]
-    internal class ObjectChangeTracker : IObjectChangeUnitOfWork, IObjectChangeTracker, IEnumerable<IObjectPropertyChangeTracking>
+    internal class ObjectChangeTracker : IObjectChangeUnitOfWork, IObjectChangeTracker, IEnumerable<IDeclaredObjectPropertyChangeTracking>
     {
         private readonly Guid _id = Guid.NewGuid();
         private const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance;
@@ -46,18 +47,21 @@
 
         /// <summary>
         /// Gets a dictionary of tracked property states, where the keys are instances of <see cref="System.Reflection.PropertyInfo"/> and
-        /// the values are <see cref="ObjectPropertyChangeTracking"/>.
+        /// the values are <see cref="DeclaredObjectPropertyChangeTracking"/>.
         /// </summary>
-        private Dictionary<PropertyInfo, ObjectPropertyChangeTracking> PropertyTrackings { get; }
-            = new Dictionary<PropertyInfo, ObjectPropertyChangeTracking>();
+        private Dictionary<PropertyInfo, DeclaredObjectPropertyChangeTracking> PropertyTrackings { get; }
+            = new Dictionary<PropertyInfo, DeclaredObjectPropertyChangeTracking>();
 
-        public IImmutableSet<IObjectPropertyChangeTracking> ChangedProperties =>
+        private Dictionary<string, ObjectPropertyChangeTracking> DynamicPropertyTrackings { get; }
+            = new Dictionary<string, ObjectPropertyChangeTracking>();
+
+        public IImmutableSet<IDeclaredObjectPropertyChangeTracking> ChangedProperties =>
             PropertyTrackings.Where(t => t.Value.HasChanged)
-                        .Select(t => (IObjectPropertyChangeTracking)t.Value)
+                        .Select(t => (IDeclaredObjectPropertyChangeTracking)t.Value)
                         .ToImmutableHashSet();
-        public IImmutableSet<IObjectPropertyChangeTracking> UnchangedProperties =>
+        public IImmutableSet<IDeclaredObjectPropertyChangeTracking> UnchangedProperties =>
             PropertyTrackings.Where(t => !t.Value.HasChanged)
-                        .Select(t => (IObjectPropertyChangeTracking)t.Value)
+                        .Select(t => (IDeclaredObjectPropertyChangeTracking)t.Value)
                         .ToImmutableHashSet();
 
         public void Complete()
@@ -65,7 +69,7 @@
             Contract.Assert(PropertyTrackings != null);
 
             if (PropertyTrackings.Count > 0)
-                foreach (KeyValuePair<PropertyInfo, ObjectPropertyChangeTracking> tracking in PropertyTrackings)
+                foreach (KeyValuePair<PropertyInfo, DeclaredObjectPropertyChangeTracking> tracking in PropertyTrackings)
                 {
                     Contract.Assert(ReferenceEquals(tracking.Value.Tracker, this));
 
@@ -79,7 +83,7 @@
             Contract.Assert(PropertyTrackings != null);
 
             if (PropertyTrackings.Count > 0)
-                foreach (KeyValuePair<PropertyInfo, ObjectPropertyChangeTracking> tracking in PropertyTrackings)
+                foreach (KeyValuePair<PropertyInfo, DeclaredObjectPropertyChangeTracking> tracking in PropertyTrackings)
                 {
                     Contract.Assert(ReferenceEquals(tracking.Value.Tracker, this));
 
@@ -102,24 +106,55 @@
             object currentValue = targetObject.GetType().GetProperty(property.Name, DefaultBindingFlags)
                                             .GetValue(targetObject);
 
-            ObjectPropertyChangeTracking existingTracking = null;
+            DeclaredObjectPropertyChangeTracking existingTracking = null;
 
             Contract.Assert(PropertyTrackings != null);
 
-            if (TrackerDogConfiguration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(property, out existingTracking))
+            PropertyInfo baseProperty = property.GetBaseProperty();
+            
+            if (TrackerDogConfiguration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(baseProperty, out existingTracking))
                 PropertyTrackings.Add
                 (
-                    property,
-                    new ObjectPropertyChangeTracking(this, targetObject, property, currentValue)
+                    baseProperty,
+                    new DeclaredObjectPropertyChangeTracking(this, targetObject, property, currentValue)
                 );
             else if(existingTracking != null)
                 existingTracking.CurrentValue = currentValue;
         }
 
-        public IEnumerator<IObjectPropertyChangeTracking> GetEnumerator() => PropertyTrackings.Values.GetEnumerator();
+        /// <summary>
+        /// Adds or updates a tracked property state.
+        /// </summary>
+        /// <param name="propertyName">The tracked property name</param>
+        /// <param name="targetObject">The object owning the tracked property</param>
+        public void AddOrUpdateTracking(string propertyName, DynamicObject targetObject = null)
+        {
+            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+
+            targetObject = targetObject ?? TargetObject as DynamicObject;
+
+            Contract.Assert(targetObject != null);
+
+            object currentValue = targetObject.GetDynamicMember(propertyName);
+
+            ObjectPropertyChangeTracking existingTracking = null;
+
+            Contract.Assert(DynamicPropertyTrackings != null);
+
+            if (!DynamicPropertyTrackings.TryGetValue(propertyName, out existingTracking))
+                DynamicPropertyTrackings.Add
+                (
+                    propertyName,
+                    new ObjectPropertyChangeTracking(this, targetObject, propertyName, currentValue)
+                );
+            else if (existingTracking != null)
+                existingTracking.CurrentValue = currentValue;
+        }
+
+        public IEnumerator<IDeclaredObjectPropertyChangeTracking> GetEnumerator() => PropertyTrackings.Values.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public IObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
+        public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
         {
             MemberExpression memberExpr = propertySelector.Body as MemberExpression;
             Contract.Assert(memberExpr != null);
@@ -128,7 +163,7 @@
             Contract.Assert(property != null);
             Contract.Assert(PropertyTrackings != null);
 
-            return PropertyTrackings.Single(t => t.Key.DeclaringType.BaseType.GetProperty(t.Key.Name) == property)
+            return PropertyTrackings.Single(t => t.Key.DeclaringType.GetActualTypeIfTrackable().GetProperty(t.Key.Name) == property)
                             .Value;
         }
     }

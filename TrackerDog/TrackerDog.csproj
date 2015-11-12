@@ -98,11 +98,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ITrackableType.cs" />
+    <Compile Include="Configuration\ITrackableTypeContract.cs" />
     <Compile Include="Configuration\Track.cs" />
     <Compile Include="Configuration\TrackableCollectionConfiguration.cs" />
     <Compile Include="Configuration\TrackableType.cs" />
     <Compile Include="Configuration\ITrackableTypeEqualityComparer.cs" />
     <Compile Include="Configuration\TrackerDogConfiguration.cs" />
+    <Compile Include="DynamicObjectExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Hooks\SimplePropertyInterceptionHook.cs" />
     <Compile Include="Hooks\CollectionterceptionHook.cs" />
@@ -110,8 +112,10 @@
     <Compile Include="IChangeTrackableCollectionContract.cs" />
     <Compile Include="IChangeTrackableObjectContract.cs" />
     <Compile Include="IHasParentContract.cs" />
+    <Compile Include="Interceptors\DynamicObjectInterceptor.cs" />
     <Compile Include="IObjectChangeTrackerContract.cs" />
-    <Compile Include="IObjectPropertyChangeTrackingContract.cs" />
+    <Compile Include="IDeclaredObjectPropertyChangeTrackingContract.cs" />
+    <Compile Include="IObjectPropertyChangeTracking.cs" />
     <Compile Include="IReadOnlyChangeTrackableCollection.cs" />
     <Compile Include="IHasParent.cs" />
     <Compile Include="Interceptors\MethodInterceptor.cs" />
@@ -121,9 +125,10 @@
     <Compile Include="IChangeTrackableObject.cs" />
     <Compile Include="Interceptors\CollectionPropertyInterceptor.cs" />
     <Compile Include="IObjectChangeTracker.cs" />
-    <Compile Include="IObjectPropertyChangeTracking.cs" />
+    <Compile Include="IDeclaredObjectPropertyChangeTracking.cs" />
     <Compile Include="ObjectChangeTracker.cs" />
     <Compile Include="ObjectPropertyChangeTracking.cs" />
+    <Compile Include="DeclaredObjectPropertyChangeTracking.cs" />
     <Compile Include="ObjectChangeTrackingExtensions.cs" />
     <Compile Include="Patterns\IObjectChangeUnitOfWork.cs" />
     <Compile Include="Interceptors\PropertyInterceptor.cs" />

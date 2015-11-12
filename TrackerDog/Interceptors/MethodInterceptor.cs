@@ -12,12 +12,20 @@
         {
             Contract.Assume(invocation != null);
 
-            if (invocation.Method.IsPublic && !invocation.Method.IsPropertyGetterOrSetter())
-            {
-                InterceptMethod(invocation, (IHasParent)invocation.Proxy);
-            }
+            IHasParent withParent = invocation.Proxy as IHasParent;
+
+            if (withParent != null && invocation.Method.IsPublic && !invocation.Method.IsPropertyGetterOrSetter())
+                InterceptMethod(invocation, withParent);
+            else
+                InterceptMethod(invocation);
         }
 
-        protected abstract void InterceptMethod(IInvocation invocation, IHasParent withParent);
+        protected virtual void InterceptMethod(IInvocation invocation, IHasParent withParent)
+        {
+        }
+
+        protected virtual void InterceptMethod(IInvocation invocation)
+        {
+        }
     }
 }

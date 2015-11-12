@@ -45,7 +45,7 @@
             PropertyInfo property = propertyAccessExpr.Member as PropertyInfo;
             Contract.Assert(property != null);
 
-            Contract.Assert(_includedProperties.Add(property));
+            Contract.Assert(_includedProperties.Add(property), "Property must be included once");
 
             return this;
         }
@@ -57,7 +57,11 @@
         /// <returns>Current trackable type configuration</returns>
         public TrackableType<T> IncludeProperties(params Expression<Func<T, object>>[] propertySelectors)
         {
-            Contract.Requires(propertySelectors != null && propertySelectors.Length > 0 && propertySelectors.All(s => s != null));
+            Contract.Requires
+            (
+                propertySelectors != null && propertySelectors.Length > 0 
+                && propertySelectors.All(s => s != null)
+            );
             Contract.Ensures(Contract.Result<TrackableType<T>>() != null);
 
             foreach (Expression<Func<T, object>> propertySelector in propertySelectors)

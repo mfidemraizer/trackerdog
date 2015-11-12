@@ -42,7 +42,7 @@
             Contract.Requires(enumerable != null);
             Contract.Requires(parentObjectProperty != null);
             Contract.Requires(parentObject != null);
-            Contract.Requires(parentObjectProperty.DeclaringType == parentObject.GetType());
+            Contract.Requires(parentObjectProperty.DeclaringType.GetActualTypeIfTrackable() == parentObject.GetActualTypeIfTrackable());
 
             if (enumerable.Count() > 0 &&
                 TrackerDogConfiguration.CanTrackType(enumerable.First().GetType()))

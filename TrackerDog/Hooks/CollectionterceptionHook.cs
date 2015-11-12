@@ -9,6 +9,7 @@
 
     internal sealed class CollectionterceptionHook : IProxyGenerationHook
     {
+        private readonly static Guid _id = Guid.NewGuid();
         private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
         private static readonly HashSet<MethodInfo> _skippedMethods;
 
@@ -22,6 +23,7 @@
             );
         }
 
+        internal Guid Id => _id;
         private static HashSet<MethodInfo> SkippedMethods => _skippedMethods;
 
         public void MethodsInspected()
@@ -34,5 +36,18 @@
 
         public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
             => !SkippedMethods.Contains(methodInfo) && !methodInfo.IsPropertyGetter();
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            CollectionterceptionHook mixin = obj as CollectionterceptionHook;
+
+            if (mixin == null) return false;
+
+            return mixin.Id == Id;
+        }
+
+        public override int GetHashCode() => Id.GetHashCode();
     }
 }
