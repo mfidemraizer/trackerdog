@@ -17,7 +17,7 @@
     /// Represents an in-memory object property change tracker.
     /// </summary>
     [DebuggerDisplay("Changed properties: {ChangedProperties.Count}")]
-    internal class ObjectChangeTracker : IObjectChangeUnitOfWork, IObjectChangeTracker, IEnumerable<IDeclaredObjectPropertyChangeTracking>
+    internal class ObjectChangeTracker : IObjectChangeUnitOfWork, IObjectChangeTracker, IEnumerable<IObjectPropertyChangeTracking>
     {
         private readonly Guid _id = Guid.NewGuid();
         private const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance;
@@ -49,19 +49,20 @@
         /// Gets a dictionary of tracked property states, where the keys are instances of <see cref="System.Reflection.PropertyInfo"/> and
         /// the values are <see cref="DeclaredObjectPropertyChangeTracking"/>.
         /// </summary>
-        private Dictionary<PropertyInfo, DeclaredObjectPropertyChangeTracking> PropertyTrackings { get; }
+        internal Dictionary<PropertyInfo, DeclaredObjectPropertyChangeTracking> PropertyTrackings { get; }
             = new Dictionary<PropertyInfo, DeclaredObjectPropertyChangeTracking>();
 
-        private Dictionary<string, ObjectPropertyChangeTracking> DynamicPropertyTrackings { get; }
+        internal Dictionary<string, ObjectPropertyChangeTracking> DynamicPropertyTrackings { get; }
             = new Dictionary<string, ObjectPropertyChangeTracking>();
 
-        public IImmutableSet<IDeclaredObjectPropertyChangeTracking> ChangedProperties =>
-            PropertyTrackings.Where(t => t.Value.HasChanged)
-                        .Select(t => (IDeclaredObjectPropertyChangeTracking)t.Value)
+        public IImmutableSet<IObjectPropertyChangeTracking> ChangedProperties =>
+            PropertyTrackings.Where(t => t.Value.HasChanged).Select(t => (IObjectPropertyChangeTracking)t.Value)
+                        .Concat(DynamicPropertyTrackings.Where(t => t.Value.HasChanged).Select(t => (IObjectPropertyChangeTracking)t.Value))
                         .ToImmutableHashSet();
-        public IImmutableSet<IDeclaredObjectPropertyChangeTracking> UnchangedProperties =>
-            PropertyTrackings.Where(t => !t.Value.HasChanged)
-                        .Select(t => (IDeclaredObjectPropertyChangeTracking)t.Value)
+
+        public IImmutableSet<IObjectPropertyChangeTracking> UnchangedProperties =>
+            PropertyTrackings.Where(t => !t.Value.HasChanged).Select(t => (IObjectPropertyChangeTracking)t.Value)
+                        .Concat(DynamicPropertyTrackings.Where(t => !t.Value.HasChanged).Select(t => (IObjectPropertyChangeTracking)t.Value))
                         .ToImmutableHashSet();
 
         public void Complete()
@@ -111,14 +112,14 @@
             Contract.Assert(PropertyTrackings != null);
 
             PropertyInfo baseProperty = property.GetBaseProperty();
-            
+
             if (TrackerDogConfiguration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(baseProperty, out existingTracking))
                 PropertyTrackings.Add
                 (
                     baseProperty,
                     new DeclaredObjectPropertyChangeTracking(this, targetObject, property, currentValue)
                 );
-            else if(existingTracking != null)
+            else if (existingTracking != null)
                 existingTracking.CurrentValue = currentValue;
         }
 
@@ -151,7 +152,7 @@
                 existingTracking.CurrentValue = currentValue;
         }
 
-        public IEnumerator<IDeclaredObjectPropertyChangeTracking> GetEnumerator() => PropertyTrackings.Values.GetEnumerator();
+        public IEnumerator<IObjectPropertyChangeTracking> GetEnumerator() => PropertyTrackings.Values.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
@@ -165,6 +166,13 @@
 
             return PropertyTrackings.Single(t => t.Key.DeclaringType.GetActualTypeIfTrackable().GetProperty(t.Key.Name) == property)
                             .Value;
+        }
+
+        public IObjectPropertyChangeTracking GetDynamicTrackingByProperty(string propertyName)
+        {
+            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+
+            return DynamicPropertyTrackings[propertyName];
         }
     }
 }

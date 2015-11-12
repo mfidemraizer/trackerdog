@@ -1,13 +1,8 @@
 ﻿namespace TrackerDog.Test
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
-    using System.Collections.Generic;
-    using System.Dynamic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Configuration;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Dynamic;
 
     [TestClass]
     public sealed class DynamicObjectTest
@@ -37,13 +32,24 @@
             (
                 Track.ThisType<TestDynamicObject>()
             );
-
-
+            
             dynamic dynamicObject = new TestDynamicObject().AsTrackable();
-            string x = dynamicObject.Text;
-            ((object)dynamicObject).GetDynamicMember("Text");
+
             dynamicObject.Text = "hello world 1";
             dynamicObject.Text = "hello world 2";
+            dynamicObject.Text2 = "hello world 3";
+
+            IObjectChangeTracker tracker = ((object)dynamicObject).GetChangeTracker();
+            IObjectPropertyChangeTracking tracking = tracker.GetDynamicTrackingByProperty("Text");
+
+            Assert.AreEqual(1, tracker.ChangedProperties.Count);
+            Assert.AreEqual("Text", tracking.PropertyName);
+            Assert.AreEqual("hello world 1", tracking.OldValue);
+            Assert.AreEqual("hello world 2", tracking.CurrentValue);
+            Assert.AreEqual("hello world 1", ((object)dynamicObject).OldPropertyValue("Text"));
+            Assert.AreEqual("hello world 2", ((object)dynamicObject).CurrentPropertyValue("Text"));
+            Assert.IsTrue(((object)dynamicObject).PropertyHasChanged("Text"));
+            Assert.IsFalse(((object)dynamicObject).PropertyHasChanged("Text2"));
         }
     }
 }

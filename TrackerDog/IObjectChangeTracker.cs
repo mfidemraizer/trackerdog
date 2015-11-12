@@ -10,17 +10,17 @@
     /// Defines an object change tracker.
     /// </summary>
     [ContractClass(typeof(IObjectChangeTrackerContract))]
-    public interface IObjectChangeTracker : IEnumerable<IDeclaredObjectPropertyChangeTracking>
+    public interface IObjectChangeTracker : IEnumerable<IObjectPropertyChangeTracking>
     {
         /// <summary>
         /// Gets a set of already changed properties
         /// </summary>
-        IImmutableSet<IDeclaredObjectPropertyChangeTracking> ChangedProperties { get; }
+        IImmutableSet<IObjectPropertyChangeTracking> ChangedProperties { get; }
 
         /// <summary>
         /// Gets a set of unchanged properties
         /// </summary>
-        IImmutableSet<IDeclaredObjectPropertyChangeTracking> UnchangedProperties { get; }
+        IImmutableSet<IObjectPropertyChangeTracking> UnchangedProperties { get; }
 
         /// <summary>
         /// Gets an object property tracking by specifying a property selector
@@ -30,5 +30,14 @@
         /// <param name="propertySelector">The property selector</param>
         /// <returns>The object property tracking</returns>
         IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector);
+
+        /// <summary>
+        /// Gets a dynamic object property tracking by specifying a property name
+        /// </summary>
+        /// <typeparam name="T">The type of the object owning the whole property tracking to get</typeparam>
+        /// <typeparam name="TProperty">The return type of the property owned by the change-tracked object</typeparam>
+        /// <param name="propertyName">The dynamic property name</param>
+        /// <returns>The object property tracking</returns>
+        IObjectPropertyChangeTracking GetDynamicTrackingByProperty(string propertyName);
     }
 }

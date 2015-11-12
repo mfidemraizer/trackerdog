@@ -67,7 +67,7 @@
             Assert.AreEqual(1, changeTracker.ChangedProperties.Count);
             Assert.AreEqual(1, changeTracker.UnchangedProperties.Count);
 
-            IDeclaredObjectPropertyChangeTracking tracking = changeTracker.ChangedProperties.Single();
+            IDeclaredObjectPropertyChangeTracking tracking = changeTracker.ChangedProperties.OfType<IDeclaredObjectPropertyChangeTracking>().Single();
 
             Assert.AreEqual("Text", tracking.Property.Name);
             Assert.AreEqual(initialValue, tracking.OldValue);

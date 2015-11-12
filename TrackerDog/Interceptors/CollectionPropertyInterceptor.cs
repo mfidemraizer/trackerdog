@@ -54,8 +54,10 @@
 
         private void InterceptSetSpecificMethod(IInvocation invocation, IEnumerable<object> currentItems, IChangeTrackableCollection trackableCollection)
         {
-            IDeclaredObjectPropertyChangeTracking tracking = trackableCollection.GetChangeTracker()
-                                                .ChangedProperties
+            IEnumerable<IDeclaredObjectPropertyChangeTracking> declaredPropertyTrackings =
+                trackableCollection.GetChangeTracker().ChangedProperties.OfType<IDeclaredObjectPropertyChangeTracking>();
+
+            IDeclaredObjectPropertyChangeTracking tracking = declaredPropertyTrackings
                                                 .Single(t => t.Property.GetBaseProperty() == trackableCollection.ParentObjectProperty.GetBaseProperty());
 
             IEnumerable<object> oldItems = (IEnumerable<object>)tracking.OldValue;

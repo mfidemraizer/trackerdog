@@ -1,7 +1,9 @@
 ﻿namespace TrackerDog
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
 
@@ -117,7 +119,39 @@
             Contract.Requires(some != null);
             Contract.Requires(propertySelector != null);
 
-            return some.GetChangeTracker().GetTrackingByProperty(propertySelector);
+            return some.GetChangeTracker().GetTrackingByProperty(propertySelector) as IDeclaredObjectPropertyChangeTracking;
+        }
+
+        /// <summary>
+        /// Gets a property change tracking for a given property
+        /// </summary>
+        /// <param name="some">The tracked object</param>
+        /// <param name="propertyName">A property selector</param>
+        /// <returns>The property tracking</returns>
+        public static IObjectPropertyChangeTracking GetPropertyTracking(this object some, string propertyName)
+        {
+            Contract.Requires(some != null);
+            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+
+            ObjectChangeTracker tracker = (ObjectChangeTracker)some.GetChangeTracker();
+
+            if (tracker.DynamicPropertyTrackings.ContainsKey(propertyName))
+                return tracker.GetDynamicTrackingByProperty(propertyName);
+            else
+            {
+                Dictionary<string, DeclaredObjectPropertyChangeTracking> declaredPropertyTrackings = tracker.PropertyTrackings
+                                                                    .ToDictionary(t => t.Key.Name, t => t.Value);
+
+                DeclaredObjectPropertyChangeTracking declaredPropertyTracking;
+
+                if (declaredPropertyTrackings.TryGetValue(propertyName, out declaredPropertyTracking))
+                    return declaredPropertyTracking;
+                else
+                    throw new InvalidOperationException
+                    (
+                        $"Cannot locate a tracking for the given property name '{propertyName}'. This can be either caused because there is more than a property with the given name or actually the given property is not being tracked for changes"
+                    );
+            }
         }
 
         /// <summary>
@@ -174,6 +208,22 @@
         }
 
         /// <summary>
+        /// Gets the value of given selected property that had when the change-tracked object started to track its changes.
+        /// </summary>
+        /// <param name="some">The change-tracked object</param>
+        /// <param name="propertyName">The property name</param>
+        /// <returns>The value of the property when it was started to be tracked</returns>
+        /// </example>
+        public static dynamic OldPropertyValue(this object some, string propertyName)
+        {
+            Contract.Requires(some != null);
+            Contract.Requires(some is IChangeTrackableObject);
+            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+
+            return some.GetPropertyTracking(propertyName).OldValue;
+        }
+
+        /// <summary>
         /// Gets the last value of given selected property.
         /// </summary>
         /// <typeparam name="T">The type of the change-tracked object</typeparam>
@@ -197,6 +247,21 @@
         }
 
         /// <summary>
+        /// Gets the last value of given selected property.
+        /// </summary>
+        /// <param name="some">The change-tracked object</param>
+        /// <param name="propertyName">The property name</param>
+        /// <returns>The last value of the property</returns>
+        public static dynamic CurrentPropertyValue(this object some, string propertyName)
+        {
+            Contract.Requires(some != null);
+            Contract.Requires(some is IChangeTrackableObject);
+            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+
+            return some.GetPropertyTracking(propertyName).CurrentValue;
+        }
+
+        /// <summary>
         /// Determines if a given property by selector has changed since its tracking was started.
         /// </summary>
         /// <typeparam name="T">The type of the object owning the whole property</typeparam>
@@ -211,6 +276,21 @@
             Contract.Requires(propertySelector != null);
 
             return some.GetPropertyTracking(propertySelector).HasChanged;
+        }
+
+        /// <summary>
+        /// Determines if a given property by name has changed since its tracking was started.
+        /// </summary>
+        /// <param name="some">The trackable object</param>
+        /// <param name="propertyName">The property selector</param>
+        /// <returns><codeInline>true</codeInline> if it has changed, <codeInline>false</codeInline> if it doesn't changed.</returns>
+        public static bool PropertyHasChanged(this object some, string propertyName)
+        {
+            Contract.Requires(some != null);
+            Contract.Requires(some is IChangeTrackableObject);
+            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+
+            return some.GetPropertyTracking(propertyName).HasChanged;
         }
     }
 }
