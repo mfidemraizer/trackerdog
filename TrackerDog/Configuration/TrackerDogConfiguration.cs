@@ -27,7 +27,7 @@
         /// <param name="types">The types to track its changes</param>
         public static void TrackTheseTypes(params ITrackableType[] types)
         {
-            Contract.Requires(types != null && types.Length > 0 && types.All(t => t != null));
+            Contract.Requires(types != null && types.Length > 0 && types.All(t => t != null), "Given types cannot be null");
 
             foreach (ITrackableType type in types)
                 Contract.Assert(TrackableTypes.Add(type), "Type can only be configured to be tracked once");
@@ -35,7 +35,7 @@
 
         internal static ITrackableType GetTrackableType(Type type)
         {
-            Contract.Requires(type != null);
+            Contract.Requires(type != null, "Given type cannot be null");
 
             return TrackableTypes.SingleOrDefault(t => t.Type == type);
         }
@@ -47,17 +47,20 @@
         /// <returns><literal>true</literal> if it can be tracked, <literal>false</literal> if it can't be tracked</returns>
         public static bool CanTrackType(Type someType)
         {
-            Contract.Requires(someType != null);
+            Contract.Requires(someType != null, "Given type cannot be null");
 
             return TrackableTypes.Any(t => t.Type == someType.GetActualTypeIfTrackable());
         }
 
         public static bool CanTrackProperty(PropertyInfo property)
         {
-            Contract.Requires(property != null);
-            Contract.Requires(CanTrackType(property.ReflectedType));
+            Contract.Requires(property != null, "Property to check cannot be null");
+            Contract.Requires(CanTrackType(property.ReflectedType), "Declaring type must be configured as trackable");
 
-            return TrackableTypes.Any(t => t.IncludedProperties.Contains(property.GetBaseProperty()));
+            ITrackableType trackableType = GetTrackableType(property.GetBaseProperty().DeclaringType);
+
+            return trackableType.IncludedProperties.Count == 0 
+                        || trackableType.IncludedProperties.Contains(property.GetBaseProperty());
         }
     }
 }

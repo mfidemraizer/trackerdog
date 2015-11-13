@@ -20,10 +20,11 @@
         /// <param name="some">The object to track its changes</param>
         /// <returns>A proxy of the given object to track its changes</returns>
         public static TObject AsTrackable<TObject>(this TObject some)
+            where TObject : class
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "Reference must not be null to turn an object into a trackable one");
 
-            return TrackableObjectFactory.Create(some);
+            return TrackableObjectFactory.Create(some: some);
         }
 
         /// <summary>
@@ -34,10 +35,11 @@
         /// <param name="propertyToSet">The property to which the proxy must be set to</param>
         /// <returns>A proxy of the given object to track its changes</returns>
         internal static TObject AsTrackable<TObject>(this TObject some, PropertyInfo propertyToSet)
+            where TObject : class
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "Reference must not be null to turn an object into a trackable one");
 
-            return TrackableObjectFactory.Create(some, propertyToSet: propertyToSet);
+            return TrackableObjectFactory.Create(some: some, propertyToSet: propertyToSet);
         }
 
         /// <summary>
@@ -52,7 +54,7 @@
 
         public static Type GetActualTypeIfTrackable(this object some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "Reference must not be null to get actual object type");
             Contract.Ensures(Contract.Result<Type>() != null);
 
             return GetActualTypeIfTrackable(some.GetType());
@@ -60,7 +62,7 @@
 
         public static Type GetActualTypeIfTrackable(this Type some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "Reference must not be null to get actual object type");
             Contract.Ensures(Contract.Result<Type>() != null);
 
             if (some.IsTrackable())
@@ -76,7 +78,7 @@
         /// <returns><literal>true</literal> if it's change-trackable, <literal>false</literal> if it's not change-trackable</returns>
         public static bool IsTrackable(this Type some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "Reference must not be null to check if a type is trackable");
 
             return typeof(IChangeTrackableObject).IsAssignableFrom(some);
         }
@@ -88,7 +90,7 @@
         /// <returns>The change tracker</returns>
         public static IObjectChangeTracker GetChangeTracker(this object some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "Reference must not be null to get object change tracker");
             Contract.Ensures(Contract.Result<IObjectChangeTracker>() != null);
 
             IChangeTrackableObject trackableObject = some as IChangeTrackableObject;
@@ -101,7 +103,7 @@
                     trackableObject = withParent.ParentObject;
             }
 
-            Contract.Assert(trackableObject != null);
+            Contract.Assert(trackableObject != null, "An object must be trackable in order to get its change tracker");
 
             return trackableObject.ChangeTracker;
         }
@@ -116,8 +118,8 @@
         /// <returns>The property tracking</returns>
         public static IDeclaredObjectPropertyChangeTracking GetPropertyTracking<TObject, TReturn>(this TObject some, Expression<Func<TObject, TReturn>> propertySelector)
         {
-            Contract.Requires(some != null);
-            Contract.Requires(propertySelector != null);
+            Contract.Requires(some != null, "Reference must not be null because the given object is required to get its change tracker and find the desired property tracking");
+            Contract.Requires(propertySelector != null, "A property selector is mandatory to get a property tracking");
 
             return some.GetChangeTracker().GetTrackingByProperty(propertySelector) as IDeclaredObjectPropertyChangeTracking;
         }
@@ -130,8 +132,8 @@
         /// <returns>The property tracking</returns>
         public static IObjectPropertyChangeTracking GetPropertyTracking(this object some, string propertyName)
         {
-            Contract.Requires(some != null);
-            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+            Contract.Requires(some != null, "Reference must not be null because the given object is required to get its change tracker and find the desired property tracking");
+            Contract.Requires(!string.IsNullOrEmpty(propertyName), "A property name is mandatory to get a property tracking");
 
             ObjectChangeTracker tracker = (ObjectChangeTracker)some.GetChangeTracker();
 
@@ -160,11 +162,11 @@
         /// <param name="some">The change-tracked object</param>
         public static void AcceptChanges(this object some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "A non-null reference is required to accept tracked object changes");
 
             IChangeTrackableObject trackableObject = some as IChangeTrackableObject;
 
-            Contract.Assert(trackableObject != null);
+            Contract.Assert(trackableObject != null, "Given object must be trackable to accept its changes");
 
             trackableObject.ChangeTracker.Complete();
         }
@@ -175,11 +177,11 @@
         /// <param name="some">The change-tracked object</param>
         public static void UndoChanges(this object some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "A non-null reference is required to undo tracked object changes");
 
             IChangeTrackableObject trackableObject = some as IChangeTrackableObject;
 
-            Contract.Assert(trackableObject != null);
+            Contract.Assert(trackableObject != null, "Given object must be trackable to undo its changes");
 
             trackableObject.ChangeTracker.Discard();
         }
@@ -199,9 +201,8 @@
         /// </example>
         public static TReturn OldPropertyValue<T, TReturn>(this T some, Expression<Func<T, TReturn>> propertySelector)
         {
-            Contract.Requires(some != null);
-            Contract.Requires(some is IChangeTrackableObject);
-            Contract.Requires(propertySelector != null);
+            Contract.Requires(some != null, "A non-null reference is mandatory to get an object old value property");
+            Contract.Requires(some is IChangeTrackableObject, "Given object must be trackable");
             Contract.Ensures(Contract.Result<TReturn>() != null);
 
             return (TReturn)some.GetPropertyTracking(propertySelector).OldValue;
@@ -216,9 +217,8 @@
         /// </example>
         public static dynamic OldPropertyValue(this object some, string propertyName)
         {
-            Contract.Requires(some != null);
-            Contract.Requires(some is IChangeTrackableObject);
-            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+            Contract.Requires(some != null, "A non-null reference is mandatory to get an object old property value");
+            Contract.Requires(some is IChangeTrackableObject, "Given object must be trackable");
 
             return some.GetPropertyTracking(propertyName).OldValue;
         }
@@ -238,9 +238,8 @@
         /// </example>
         public static TReturn CurrentPropertyValue<T, TReturn>(this T some, Expression<Func<T, TReturn>> propertySelector)
         {
-            Contract.Requires(some != null);
-            Contract.Requires(some is IChangeTrackableObject);
-            Contract.Requires(propertySelector != null);
+            Contract.Requires(some != null, "A non-null reference is mandatory to get an object current property value");
+            Contract.Requires(some is IChangeTrackableObject, "Given object must be trackable");
             Contract.Ensures(Contract.Result<TReturn>() != null);
 
             return (TReturn)some.GetPropertyTracking(propertySelector).CurrentValue;
@@ -254,9 +253,8 @@
         /// <returns>The last value of the property</returns>
         public static dynamic CurrentPropertyValue(this object some, string propertyName)
         {
-            Contract.Requires(some != null);
-            Contract.Requires(some is IChangeTrackableObject);
-            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+            Contract.Requires(some != null, "A non-null reference is mandatory to get an object current property value");
+            Contract.Requires(some is IChangeTrackableObject, "Given object must be trackable");
 
             return some.GetPropertyTracking(propertyName).CurrentValue;
         }
@@ -270,10 +268,8 @@
         /// <returns><codeInline>true</codeInline> if it has changed, <codeInline>false</codeInline> if it doesn't changed.</returns>
         public static bool PropertyHasChanged<T>(this T some, Expression<Func<T, object>> propertySelector)
         {
-
-            Contract.Requires(some != null);
-            Contract.Requires(some is IChangeTrackableObject);
-            Contract.Requires(propertySelector != null);
+            Contract.Requires(some != null, "A non-null reference is mandatory to check if a property has changed");
+            Contract.Requires(some is IChangeTrackableObject, "Given object must be trackable");
 
             return some.GetPropertyTracking(propertySelector).HasChanged;
         }
@@ -286,9 +282,8 @@
         /// <returns><codeInline>true</codeInline> if it has changed, <codeInline>false</codeInline> if it doesn't changed.</returns>
         public static bool PropertyHasChanged(this object some, string propertyName)
         {
-            Contract.Requires(some != null);
-            Contract.Requires(some is IChangeTrackableObject);
-            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+            Contract.Requires(some != null, "A non-null reference is mandatory to check if a property has changed");
+            Contract.Requires(some is IChangeTrackableObject, "Given object must be trackable");
 
             return some.GetPropertyTracking(propertyName).HasChanged;
         }

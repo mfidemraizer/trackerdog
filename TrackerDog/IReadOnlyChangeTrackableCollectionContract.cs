@@ -26,9 +26,9 @@
         [ContractInvariantMethod]
         private void Invariants()
         {
-            Contract.Invariant(AddedItems != null);
-            Contract.Invariant(RemovedItems != null);
-            Contract.Invariant(AddedItems.Intersect(RemovedItems).Count == 0);
+            Contract.Invariant(AddedItems != null, "Added items cannot be a null reference");
+            Contract.Invariant(RemovedItems != null, "Removed items cannot be a null reference");
+            Contract.Invariant(AddedItems.Intersect(RemovedItems).Count == 0, "Added and removed item collection cannot match because it would mean that some items have been added and removed");
         }
     }
 }

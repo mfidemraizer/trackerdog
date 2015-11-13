@@ -21,16 +21,16 @@
 
         public void RaiseCollectionChanged(NotifyCollectionChangedAction action, IEnumerable<object> changedItems)
         {
-            Contract.Requires(changedItems != null && changedItems.Count() > 0);
-            Contract.Assert(CollectionChanged != null);
+            Contract.Requires(changedItems != null && changedItems.Count() > 0, "A collection change must change some item");
+            Contract.Assert(CollectionChanged != null, "This event cannot be raised with no event handler in the broadcast list");
         }
 
         [ContractInvariantMethod]
         private void Invariants()
         {
-            Contract.Invariant(AddedItems != null);
-            Contract.Invariant(RemovedItems != null);
-            Contract.Invariant(AddedItems.Intersect(RemovedItems).Count() == 0);
+            Contract.Invariant(AddedItems != null, "This property cannot be null");
+            Contract.Invariant(RemovedItems != null, "This property cannot be null");
+            Contract.Invariant(AddedItems.Intersect(RemovedItems).Count() == 0, "This property cannot be null");
         }
     }
 }

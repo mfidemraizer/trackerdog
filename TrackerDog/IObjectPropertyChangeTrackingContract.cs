@@ -2,10 +2,9 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using System.Reflection;
 
-    [ContractClassFor(typeof(IDeclaredObjectPropertyChangeTracking))]
-    public abstract class IDeclaredObjectPropertyChangeTrackingContract : IDeclaredObjectPropertyChangeTracking
+    [ContractClassFor(typeof(IObjectPropertyChangeTracking))]
+    public abstract class IObjectPropertyChangeTrackingContract : IObjectPropertyChangeTracking
     {
         public object CurrentValue
         {
@@ -31,7 +30,7 @@
             }
         }
 
-        public PropertyInfo Property
+        public string PropertyName
         {
             get
             {
@@ -47,24 +46,13 @@
             }
         }
 
-        public string PropertyName
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         [ContractInvariantMethod]
         private void Invariants()
         {
-            Contract.Invariant(Property != null, "A tracking must have an associated property");
-            Contract.Invariant(Property.Name == PropertyName, "Both property reference and property name must match");
-        }
-
-        public bool Equals(IDeclaredObjectPropertyChangeTracking other)
-        {
-            throw new NotImplementedException();
+            Contract.Invariant(Tracker != null, "A property tracking must own a change tracker");
+            Contract.Invariant(!string.IsNullOrEmpty(PropertyName), "A property tracking must specify which property tracks");
+            Contract.Invariant(CurrentValue == OldValue != HasChanged, "If both current and old value as equal, a tracking cannot expose that property has changed");
+            Contract.Invariant(CurrentValue != OldValue == !HasChanged, "If both current and old value are not equal, a tracking cannot expose that property has not changed");
         }
 
         public bool Equals(IObjectPropertyChangeTracking other)

@@ -21,6 +21,10 @@
         /// <returns>The instance of given type</returns>
         public static object CreateInstanceWithGenericArgs(this Type some, IEnumerable<object> args, params Type[] genericArgs)
         {
+            Contract.Requires(some != null, "Cannot create an instance of a null type");
+            Contract.Requires(genericArgs?.Count() != null, "One generic argument must be provided at least");
+            Contract.Ensures(Contract.Result<object>() != null);
+
             return Activator.CreateInstance(some.MakeGenericType(genericArgs), args?.ToArray());
         }
 
@@ -31,7 +35,7 @@
         /// <returns><codeInline>true</codeInline> if it's a property getter, <codeInline>false</codeInline> if it's not a property getter</returns>
         public static bool IsPropertyGetter(this MemberInfo member)
         {
-            Contract.Requires(member != null);
+            Contract.Requires(member != null, "Given member cannot be null");
 
             return member.Name.StartsWith("get_");
         }
@@ -43,7 +47,7 @@
         /// <returns><literal>true</literal> if it's an indexer, <literal>false</literal> if it's not an indexer</returns>
         public static bool IsIndexer(this PropertyInfo property)
         {
-            Contract.Requires(property != null);
+            Contract.Requires(property != null, "Given property cannot be null");
 
             return property.GetIndexParameters().Length > 0;
         }
@@ -55,7 +59,7 @@
         /// <returns><codeInline>true</codeInline> if it's a property setter, <codeInline>false</codeInline> if it's not a property setter</returns>
         public static bool IsPropertySetter(this MemberInfo member)
         {
-            Contract.Requires(member != null);
+            Contract.Requires(member != null, "Given member cannot be null");
 
             return member.Name.StartsWith("set_");
         }
@@ -78,7 +82,7 @@
         /// <returns></returns>
         public static string NormalizePropertyGetterSetterName(this MemberInfo member)
         {
-            Contract.Requires(member != null);
+            Contract.Requires(member != null, "Given member cannot be null");
 
             return member.Name.Replace("get_", string.Empty).Replace("set_", string.Empty);
         }
@@ -90,8 +94,8 @@
         /// <returns>The base property implementation</returns>
         public static PropertyInfo GetBaseProperty(this PropertyInfo property)
         {
-            Contract.Requires(property != null);
-            Contract.Requires(property.DeclaringType.BaseType != null);
+            Contract.Requires(property != null, "Given property cannot be null");
+            Contract.Ensures(Contract.Result<PropertyInfo>() != null);
 
             if (property.DeclaringType.IsTrackable())
                 return property.DeclaringType.BaseType.GetProperty(property.Name);
@@ -106,7 +110,7 @@
         /// <returns><codeInline>true</codeInline> if its an implementation of <see cref="System.Collections.Generic.IList{T}"/>, <codeInline>false</codeInline> if it's not an implementation of <see cref="System.Collections.Generic.IList{T}"/></returns>
         public static bool IsList(this PropertyInfo property)
         {
-            Contract.Requires(property != null);
+            Contract.Requires(property != null, "Given property cannot be null");
 
             return property.PropertyType.IsGenericType
                 &&
@@ -123,7 +127,7 @@
         /// <returns><codeInline>true</codeInline> if its an implementation of <see cref="System.Collections.Generic.IList{T}"/>, <codeInline>false</codeInline> if it's not an implementation of <see cref="System.Collections.Generic.IList{T}"/></returns>
         public static bool IsList(this Type type)
         {
-            Contract.Requires(type != null);
+            Contract.Requires(type != null, "Given type cannot be null");
 
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IList<>);
         }
@@ -135,7 +139,7 @@
         /// <returns><codeInline>true</codeInline> if its an implementation of <see cref="System.Collections.Generic.ISet{T}"/>, <codeInline>false</codeInline> if it's not an implementation of <see cref="System.Collections.Generic.ISet{T}"/></returns>
         public static bool IsSet(this PropertyInfo property)
         {
-            Contract.Requires(property != null);
+            Contract.Requires(property != null, "Given property cannot be null");
 
             return property.PropertyType.IsGenericType && typeof(ISet<>).IsAssignableFrom(property.PropertyType.GetGenericTypeDefinition());
         }
@@ -146,7 +150,7 @@
         /// <returns><codeInline>true</codeInline> if its an implementation of <see cref="System.Collections.Generic.ISet{T}"/>, <codeInline>false</codeInline> if it's not an implementation of <see cref="System.Collections.Generic.ISet{T}"/></returns>
         public static bool IsSet(this Type type)
         {
-            Contract.Requires(type != null);
+            Contract.Requires(type != null, "Given type cannot be null");
 
             return type.IsGenericType && typeof(ISet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
         }
@@ -159,16 +163,19 @@
         /// <returns>The type of collection items</returns>
         public static Type GetCollectionItemType(this object some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "Given collection object cannot be null");
+            Contract.Ensures(Contract.Result<Type>() != null);
 
             Type enumerableInterface = some.GetType().GetInterfaces()
                                            .SingleOrDefault
                                            (
                                                 i => i.IsGenericType
                                                 && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                                                && i.GetGenericTypeDefinition().GetGenericArguments().Length == 1
                                             );
 
-            Contract.Assert(enumerableInterface != null);
+            Contract.Assert(enumerableInterface != null, "Given object is not a supported collection");
+            Contract.Assert(enumerableInterface.GetGenericArguments().Length == 1, "Given collection has no generic type parameter or has more than a parameter");
 
             return enumerableInterface.GetGenericArguments()[0];
         }
@@ -180,8 +187,8 @@
         /// <param name="parentObject">The object owning the property</param>
         public static void MakeTrackable(this PropertyInfo property, IChangeTrackableObject parentObject)
         {
-            Contract.Requires(property != null);
-            Contract.Requires(parentObject != null);
+            Contract.Requires(property != null, "Cannot turn the object held by the property because the given property is null");
+            Contract.Requires(parentObject != null, "A non-null reference to the object owning given property is mandatory");
 
             property.SetValue(parentObject, TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property));
         }
@@ -193,7 +200,7 @@
         /// <returns><literal>true</literal> if it's a dynamic object, <literal>false</literal> if it's not a dynamic object</returns>
         public static bool IsDynamicObject(this Type some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "Given type cannot be null");
 
             return typeof(DynamicObject).IsAssignableFrom(some);
         }
@@ -204,7 +211,7 @@
         /// <returns><literal>true</literal> if it's a dynamic object, <literal>false</literal> if it's not a dynamic object</returns>
         public static bool IsDynamicObject(this object some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "Given object cannot be null");
 
             return IsDynamicObject(some.GetType());
         }

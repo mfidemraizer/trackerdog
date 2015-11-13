@@ -35,7 +35,7 @@
         /// <returns>A pair, where the key is the collection interface and value is the collection implementation</returns>
         public KeyValuePair<Type, Type> GetImplementation(Type some)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null, "A non-null reference to a type is mandatory to get its implementation");
 
             Type someGenericTypeDefinition =  some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
             IEnumerable<Type> someInterfaces = some.GetInterfaces();
@@ -66,14 +66,14 @@
         /// <param name="implementationType">The collection implementation</param>
         public void AddImplementation(Type interfaceType, Type implementationType)
         {
-            Contract.Requires(interfaceType != null);
-            Contract.Requires(interfaceType.IsInterface);
-            Contract.Requires(interfaceType.IsGenericTypeDefinition);
-            Contract.Requires(implementationType != null);
-            Contract.Requires(implementationType.IsClass && !implementationType.IsAbstract);
-            Contract.Requires(implementationType.IsGenericTypeDefinition);
+            Contract.Requires(interfaceType != null, "Cannot add an implementation of a null interface");
+            Contract.Requires(interfaceType.IsInterface, "Given type must be an interface");
+            Contract.Requires(interfaceType.IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
+            Contract.Requires(implementationType != null, "Given collection implementation cannot be a null reference");
+            Contract.Requires(implementationType.IsClass && !implementationType.IsAbstract, "Given collection implementation must be a non-abstract class");
+            Contract.Requires(implementationType.IsGenericTypeDefinition, "Given collection implementation must be a generic type definition");
 
-            Contract.Assert(!Implementations.ContainsKey(interfaceType));
+            Contract.Assert(!Implementations.ContainsKey(interfaceType), "Adding an implementation can be done once");
 
             Implementations.Add(interfaceType, implementationType);
         }
@@ -85,12 +85,12 @@
         /// <param name="implementationType"></param>
         public void ReplaceImplementation(Type interfaceType, Type implementationType)
         {
-            Contract.Requires(interfaceType != null);
-            Contract.Requires(interfaceType.IsInterface);
-            Contract.Requires(interfaceType.IsGenericTypeDefinition);
-            Contract.Requires(implementationType != null);
-            Contract.Requires(implementationType.IsClass && !implementationType.IsAbstract);
-            Contract.Requires(implementationType.IsGenericTypeDefinition);
+            Contract.Requires(interfaceType != null, "Cannot add an implementation of a null interface");
+            Contract.Requires(interfaceType.IsInterface, "Given type must be an interface");
+            Contract.Requires(interfaceType.IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
+            Contract.Requires(implementationType != null, "Given collection implementation cannot be a null reference");
+            Contract.Requires(implementationType.IsClass && !implementationType.IsAbstract, "Given collection implementation must be a non-abstract class");
+            Contract.Requires(implementationType.IsGenericTypeDefinition, "Given collection implementation must be a generic type definition");
 
             if (Implementations.ContainsKey(interfaceType))
                 Implementations[interfaceType] = implementationType;

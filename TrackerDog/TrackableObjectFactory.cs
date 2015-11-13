@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Reflection;
     using TrackerDog.Configuration;
     using TrackerDog.Hooks;
@@ -32,15 +33,16 @@
         /// <returns>The change-trackable proxy of the given collection object</returns>
         public static object CreateForCollection(object some, IChangeTrackableObject parentObject, PropertyInfo parentObjectProperty)
         {
-            Contract.Requires(parentObject != null);
-            Contract.Requires(parentObjectProperty != null);
+            Contract.Requires(parentObject != null, "A parent object to the given collection is mandatory");
+            Contract.Requires(parentObjectProperty != null, "A non-null reference to the property holding the collection is mandatory");
+            Contract.Ensures(Contract.Result<object>() != null);
 
             if (some == null)
                 some = TrackerDogConfiguration.CollectionConfiguration
                                 .GetImplementation(parentObjectProperty.PropertyType).Value
                                 .CreateInstanceWithGenericArgs(null, parentObjectProperty.PropertyType.GetGenericArguments()[0]);
 
-            Contract.Assert(some != null);
+            Contract.Assert(some != null, "Either if a collection object is provided or not, a proxied instance of the whole collection type must be created");
 
             Type genericCollectionType = some.GetType().GetGenericArguments()[0];
 
@@ -88,15 +90,18 @@
         /// associated object associations in the object graph.
         /// </summary>
         /// <param name="some">The object to be trackable</param>
+        /// <param name="typeToTrack">The type to track</param>
         /// <param name="reusedTracker">An optional object change tracker to reuse instead of creating a new one</param>
         /// <param name="parentObject">An optional parent object if object to be proxied is associated to other object</param>
         /// <param name="propertyToSet">An optional parent object property of the given parent object where given object to be proxied is held in the other side of the association</param>
         /// <returns>The change-trackable proxy of the given object</returns>
-        public static object Create(object some, ObjectChangeTracker reusedTracker = null, object parentObject = null, PropertyInfo propertyToSet = null)
+        public static object Create(object some = null, Type typeToTrack = null, ObjectChangeTracker reusedTracker = null, object parentObject = null, PropertyInfo propertyToSet = null, object[] constructorArguments = null)
         {
-            Contract.Requires(some != null);
+            Contract.Requires(some != null || typeToTrack != null, "Either an object or type to track must be provided");
 
-            if (TrackerDogConfiguration.CanTrackType(some.GetType()) && !(some is IChangeTrackableObject))
+            typeToTrack = typeToTrack ?? some.GetType();
+
+            if (TrackerDogConfiguration.CanTrackType(typeToTrack) && !typeToTrack.IsTrackable())
             {
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new SimplePropertyInterceptionHook());
                 options.AddMixinInstance(new ChangeTrackableObjectMixin());
@@ -106,23 +111,41 @@
                     new SimplePropertyInterceptor()
                 };
 
-                if (some.IsDynamicObject())
+                if (typeToTrack.IsDynamicObject())
                     interceptors.Add(new DynamicObjectInterceptor());
 
-                object proxy = ProxyGenerator.CreateClassProxyWithTarget
-                (
-                    some.GetType(),
-                    new[] { typeof(IChangeTrackableObject) },
-                    some,
-                    options,
-                    interceptors.ToArray()
-                );
+                object proxy;
+
+                if (some != null)
+                    proxy = ProxyGenerator.CreateClassProxyWithTarget
+                    (
+                        classToProxy: typeToTrack,
+                        additionalInterfacesToProxy: new[] { typeof(IChangeTrackableObject) },
+                        target: some,
+                        options: options,
+                        interceptors: interceptors.ToArray()
+                    );
+                else
+                    proxy = ProxyGenerator.CreateClassProxy
+                    (
+                        classToProxy: typeToTrack,
+                        additionalInterfacesToProxy: new[] { typeof(IChangeTrackableObject) },
+                        options: options,
+                        constructorArguments: constructorArguments,
+                        interceptors: interceptors.ToArray()
+                    );
+
 
                 IChangeTrackableObject trackableObject = (IChangeTrackableObject)proxy;
                 trackableObject.StartTracking(trackableObject, reusedTracker);
 
-                foreach (PropertyInfo property in
-                    trackableObject.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                IEnumerable<PropertyInfo> propertiesToTrack =
+                    TrackerDogConfiguration.GetTrackableType(typeToTrack).IncludedProperties;
+
+                if (propertiesToTrack.Count() == 0)
+                    propertiesToTrack = typeToTrack.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+                foreach (PropertyInfo property in propertiesToTrack)
                 {
                     if (!property.IsIndexer())
                     {
@@ -130,6 +153,8 @@
 
                         if (propertyValue != null)
                             Create(propertyValue, trackableObject.ChangeTracker, proxy, property);
+                        else
+                            Create(property.PropertyType, trackableObject.ChangeTracker, proxy, property);
                     }
                 }
 
@@ -153,9 +178,10 @@
         /// <param name="parentObject">An optional parent object if object to be proxied is associated to other object</param>
         /// <param name="propertyToSet">An optional parent object property of the given parent object where given object to be proxied is held in the other side of the association</param>
         /// <returns>The change-trackable proxy of the given object</returns>
-        public static TObject Create<TObject>(TObject some, ObjectChangeTracker reusedTracker = null, object parentObject = null, PropertyInfo propertyToSet = null)
+        public static TObject Create<TObject>(TObject some = null, ObjectChangeTracker reusedTracker = null, object parentObject = null, PropertyInfo propertyToSet = null, object[] constructorArguments = null)
+            where TObject : class
         {
-            return (TObject)Create((object)some, reusedTracker, parentObject, propertyToSet);
+            return (TObject)Create(some, some == null ? typeof(TObject) : null, reusedTracker, parentObject, propertyToSet, constructorArguments);
         }
     }
 }

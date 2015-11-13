@@ -23,13 +23,15 @@
                         ParentObjectProperty != null
                         && ParentObjectProperty.DeclaringType == ParentObject.GetType()
                     )
-                )
+                ),
+                "An object which declares that has a parent object must provide a non-null reference to the whole parent object"
             );
 
             Contract.Invariant
             (
                 ParentObjectProperty != null
-                && ParentObjectProperty.DeclaringType == ParentObject.GetType()
+                && ParentObjectProperty.DeclaringType == ParentObject.GetType(),
+                "An object which declares that has a parent object must provide a non-null reference to the property which holds the parent object"
             );
         }
     }

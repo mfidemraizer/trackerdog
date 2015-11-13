@@ -17,7 +17,7 @@
 
         public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
         {
-            Contract.Requires(propertySelector != null);
+            Contract.Requires(propertySelector != null, "Property selector is mandatory to get a property tracking");
             Contract.Ensures(Contract.Result<IDeclaredObjectPropertyChangeTracking>() != null);
 
             throw new NotImplementedException();
@@ -26,9 +26,9 @@
         [ContractInvariantMethod, SuppressMessage("CC", "CC1036", Justification = "ChangedProperties and UnchangedProperties must be intersected to check that they don't have shared items")]
         private void Invariants()
         {
-            Contract.Invariant(ChangedProperties != null);
-            Contract.Invariant(UnchangedProperties != null);
-            Contract.Invariant(ChangedProperties.Intersect(UnchangedProperties).Count == 0);
+            Contract.Invariant(ChangedProperties != null, "A change tracker must expose its changed properties with a non-null reference to a collection");
+            Contract.Invariant(UnchangedProperties != null, "A change tracker must expose its unchanged properties with a non-null reference to a collection");
+            Contract.Invariant(ChangedProperties.Intersect(UnchangedProperties).Count == 0, "Changed and unchanged property collection cannot match, because it would mean that one or many properties would be changed and unchanged");
         }
 
         public IEnumerator<IObjectPropertyChangeTracking> GetEnumerator()
@@ -43,7 +43,7 @@
 
         public IObjectPropertyChangeTracking GetDynamicTrackingByProperty(string propertyName)
         {
-            Contract.Requires(!string.IsNullOrEmpty(propertyName));
+            Contract.Requires(!string.IsNullOrEmpty(propertyName), "Property name is mandatory to get a property tracking");
             Contract.Ensures(Contract.Result<IObjectPropertyChangeTracking>() != null);
 
             throw new NotImplementedException();

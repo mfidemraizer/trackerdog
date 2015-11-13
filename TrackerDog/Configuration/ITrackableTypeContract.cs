@@ -27,8 +27,8 @@
         [ContractInvariantMethod]
         private void Invariants()
         {
-            Contract.Invariant(IncludedProperties != null);
-            Contract.Invariant(Type != null);
+            Contract.Invariant(IncludedProperties != null, "Included properties cannot be null");
+            Contract.Invariant(Type != null, "Type cannot be null");
         }
     }
 }

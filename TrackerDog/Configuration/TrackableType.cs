@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics.Contracts;
-    using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
 
@@ -30,22 +29,7 @@
             Contract.Requires(propertySelector != null);
             Contract.Ensures(Contract.Result<TrackableType<T>>() != null);
 
-            MemberExpression propertyAccessExpr = propertySelector.Body as MemberExpression;
-
-            if(propertyAccessExpr == null)
-            {
-                UnaryExpression convertExpr = propertySelector.Body as UnaryExpression;
-
-                if (convertExpr != null)
-                    propertyAccessExpr = convertExpr.Operand as MemberExpression;
-            }
-
-            Contract.Assert(propertyAccessExpr != null);
-
-            PropertyInfo property = propertyAccessExpr.Member as PropertyInfo;
-            Contract.Assert(property != null);
-
-            Contract.Assert(_includedProperties.Add(property), "Property must be included once");
+            Contract.Assert(_includedProperties.Add(propertySelector.ExtractProperty()), "Property must be included once");
 
             return this;
         }
@@ -57,11 +41,7 @@
         /// <returns>Current trackable type configuration</returns>
         public TrackableType<T> IncludeProperties(params Expression<Func<T, object>>[] propertySelectors)
         {
-            Contract.Requires
-            (
-                propertySelectors != null && propertySelectors.Length > 0 
-                && propertySelectors.All(s => s != null)
-            );
+            Contract.Requires(propertySelectors != null && propertySelectors.Length > 0, "Cannot include no selectors");
             Contract.Ensures(Contract.Result<TrackableType<T>>() != null);
 
             foreach (Expression<Func<T, object>> propertySelector in propertySelectors)
