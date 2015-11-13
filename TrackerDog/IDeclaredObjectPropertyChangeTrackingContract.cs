@@ -60,6 +60,7 @@
         {
             Contract.Invariant(Property != null, "A tracking must have an associated property");
             Contract.Invariant(Property.Name == PropertyName, "Both property reference and property name must match");
+            Contract.Invariant(Property.SetMethod.IsVirtual, "Tracked property must be virtual (i.e. polymorphic)");
         }
 
         public bool Equals(IDeclaredObjectPropertyChangeTracking other)

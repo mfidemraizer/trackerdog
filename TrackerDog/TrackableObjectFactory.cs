@@ -103,6 +103,8 @@
 
             if (TrackerDogConfiguration.CanTrackType(typeToTrack) && !typeToTrack.IsTrackable())
             {
+                Contract.Assert(typeToTrack.IsClass && !typeToTrack.IsAbstract && !typeToTrack.IsSealed, "The object type to track must be a non-abstract, non-sealed class");
+
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new SimplePropertyInterceptionHook());
                 options.AddMixinInstance(new ChangeTrackableObjectMixin());
 

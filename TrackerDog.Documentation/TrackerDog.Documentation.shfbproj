@@ -87,7 +87,7 @@
       </ComponentConfig>
     </ComponentConfigurations>
     <PlugInConfigurations>
-      <PlugInConfig id="Additional Content Only" enabled="True">
+      <PlugInConfig id="Additional Content Only" enabled="False">
         <configuration />
       </PlugInConfig>
     </PlugInConfigurations>

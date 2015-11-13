@@ -8,6 +8,47 @@
     </introduction>
 
     <section>
+      <title>Index of contents</title>
+      <content>
+        <list bullet="class">
+          <listItem>
+            <link xlink:href="#objects2trackable">How to turn objects into change-trackable ones</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#changedPropertyChecking">Checking which properties have been changed</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#oldValue">Getting the value of some property before it was changed</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#currentValue">Getting current property value</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#propertyChanged">Checking if a property changed its value since it was started to be tracked</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#undo">How do I accept or undo changes</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#collectionChanges">Tracking collection changes</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#graph">Object graph changes</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#observe">Observe property and collection changes</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#dynamic">Track dynamic objects</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#test">Read the tests too</link>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="objects2trackable">
       <title>How to turn objects into change-trackable ones</title>
       <content>
         <para>
@@ -60,7 +101,30 @@
               // or...
               User user = new User();
               user = user.AsTrackable();
+              
+              // Also you can create a trackable object from the type directly:
+              User user2 = Trackable.Of<User>();
               ]]>
+        </code>
+        <para>
+          Note that you won't be able to create trackable objects using <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.AsTrackable``1(``0)</codeEntityReference>
+          extension method if the whole object type has no paramterless constructor. Either if it has both a parameterless constructor or a one with parameters, and you want to create a trackable
+          object with constructor arguments, you'll need to use <codeEntityReference>M:TrackerDog.Trackable.Of``1(System.Object[])</codeEntityReference> method:
+        </para>
+        <code language="c#">
+          <![CDATA[
+            public class A 
+            {
+              public A() { }
+              public A(int a, string b) { }
+            }
+            
+            TrackerDogConfiguration.TrackTheseTypes(Track.ThisType<User>());
+            
+            A a1 = new A().AsTrackable(); // Regular way
+            A a2 = Trackable.Of<A>(); // From type with parameterless constructor
+            A a3 = Trackable.Of<A>(101, "hello world"); // From type with constructor which has parameters
+          ]]>
         </code>
         <para>Now you can produce changes to the trackable object:</para>
         <code language="c#">
@@ -72,7 +136,7 @@
       </content>
     </section>
 
-    <section>
+    <section address="changedPropertyChecking">
       <title>Checking which properties have been changed</title>
       <content>
         <para>
@@ -88,10 +152,30 @@
             IImmutableSet<IObjectPropertyChangeTracking> unchangedProperties = changeTracker.UnchangedProperties;
             ]]>
         </code>
+        <para>
+          This will give sets of changed and unchanged properties typed as <codeEntityReference>T:TrackerDog.IObjectPropertyChangeTracking</codeEntityReference>. Mostly this
+          is fine, but the whole interface exposes the affected property as string. If you need further info to perform reflection operations, you should cast set elements to
+          <codeEntityReference>T:TrackerDog.IDeclaredObjectPropertyChangeTracking</codeEntityReference>:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          IEnumerable<IObjectPropertyChangeTracking> changedProperties = changeTracker.ChangedProperties.Of<IDeclaredObjectPropertyChangeTracking>();
+            
+          // Also you can get unchanged properties
+          IEnumerable<IObjectPropertyChangeTracking> unchangedProperties = changeTracker.UnchangedProperties.Of<IDeclaredObjectPropertyChangeTracking>();
+          ]]>
+        </code>
+        <para>
+          Now you'll be able to access <codeEntityReference>P:TrackerDog.IDeclaredObjectPropertyChangeTracking.Property</codeEntityReference>.
+        </para>
+        <para>
+          Since <codeEntityReference>T:TrackerDog.IDeclaredObjectPropertyChangeTracking</codeEntityReference> also implements <codeEntityReference>T:TrackerDog.IObjectPropertyChangeTracking</codeEntityReference>, unless
+          you need the property info of tracked property, there's no need to perform the whole cast.
+        </para>
       </content>
     </section>
 
-    <section>
+    <section address="oldValue">
       <title>Getting the value of some property before it was changed</title>
       <content>
         <para>
@@ -110,7 +194,7 @@
       </content>
     </section>
 
-    <section>
+    <section address="currentValue">
       <title>Getting current property value</title>
       <content>
         <para>
@@ -134,7 +218,7 @@
       </content>
     </section>
 
-    <section>
+    <section address="propertyChanged">
       <title>Checking if a property changed its value since it was started to be tracked</title>
       <content>
         <para>
@@ -159,7 +243,7 @@
       </content>
     </section>
 
-    <section>
+    <section address="undo">
       <title>How do I accept or undo changes</title>
       <content>
         <para>
@@ -178,7 +262,7 @@
       </content>
     </section>
 
-    <section>
+    <section address="collectionChanges">
       <title>Tracking collection changes</title>
       <content>
         <code language="c#">
@@ -224,9 +308,7 @@
       </content>
     </section>
 
-
-
-    <section>
+    <section address="graph">
       <title>Object graph changes</title>
       <content>
         <para>
@@ -291,7 +373,7 @@
       </content>
     </section>
 
-    <section>
+    <section address="observe">
       <title>Observe property and collection changes</title>
       <content>
         <para>
@@ -353,6 +435,97 @@
     </section>
 
     <section>
+      <title>Track dynamic objects</title>
+      <content>
+        <para>
+          A dynamic object (i.e. a derived class of <codeEntityReference>T:System.Dynamic.DynamicObject</codeEntityReference>) can't be tracked
+          <phrase>per se</phrase>. For example, <codeEntityReference>T:System.Dynamic.ExpandoObject</codeEntityReference> can't be tracked because
+          it's a sealed class and either way its members aren't virtual.
+        </para>
+        <para>
+          <token>projectName</token> supports dynamic objects but they must be non-sealed class and their members must be virtual. That is, <token>projectName</token>
+          will be able to track custom dynamic objects. For example:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          public class TestDynamicObject : DynamicObject
+          {
+              private string value;
+
+              public override bool TryGetMember(GetMemberBinder binder, out object result)
+              {
+                  result = value;
+
+                  return true;
+              }
+
+              public override bool TrySetMember(SetMemberBinder binder, object value)
+              {
+                  this.value = value?.ToString();
+                  return true;
+              }
+          }
+          ]]>
+        </code>
+        <para>
+          Above class has no sense in a real-world case, since any try to set a member sets the same class field
+          and whenever any member is tried to be got, it will return the last set value. But this sample dynamic object
+          is a good enough to test that <token>projectName</token> can track dynamic objects:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          TrackerDogConfiguration.TrackTheseTypes
+          (
+              Track.ThisType<TestDynamicObject>()
+          );
+          
+          dynamic trackable = new TestDynamicObject().AsTrackable();
+          trackable.Text = "hello world";
+          trackable.Text = "hello world2";
+          ]]>
+        </code>
+        <para>
+          Now the issue will be using <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.AsTrackable``1(``0)</codeEntityReference> with a dynamic object.
+          You'll need to cast the <literal>dynamic</literal>-typed variable into <literal>object</literal> to be able to call all object change tracking-related extension methods:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          // Note that all extension methods that relate to dynamic objects will require
+          // you to give the property name as string, because expression trees can't work with 
+          // dynamic objects, and anyway, "Text" property doesn't exist since it's not declared but
+          // dynamically-handled using DynamicObject.TryGetMemeber and DynamicObject.TrySetMember
+          string currentTextValue = ((object)trackable).OldPropertyValue("Text");
+          IObjectChangeTracker changeTracker ((object)trackable).GetChangeTracker();
+          // ...and so on.
+          ]]>
+        </code>
+        <para>
+          When getting property trackings, there's a difference between <phrase>declared properties</phrase> and <phrase>dynamic properties</phrase>
+        </para>
+        <list class="bullet">
+          <listItem>
+            ...when you want a tracking of a declared property (i.e. a design-time declared property), you'll get a <codeEntityReference>T:TrackerDog.IDeclaredObjectPropertyChangeTracking</codeEntityReference>, and it
+            will provide access you to the <codeEntityReference>P:TrackerDog.IDeclaredObjectPropertyChangeTracking.Property</codeEntityReference> which is of type <codeEntityReference>T:System.Reflection.PropertyInfo</codeEntityReference>.
+          </listItem>
+          <listItem>
+            ...when you want a tracking of a dynamic property (i.e. a run-time added property), you'll get a <codeEntityReference>T:TrackerDog.IObjectPropertyChangeTracking</codeEntityReference>, and it
+            will provide access you to the <codeEntityReference>P:TrackerDog.IObjectPropertyChangeTracking.PropertyName</codeEntityReference> which provides less info than a <codeEntityReference>T:System.Reflection.PropertyInfo</codeEntityReference> since
+            the property belongs to the object where it was declared but <phrase>since it's not an actual property, you don't know more than just its name</phrase>.
+          </listItem>
+        </list>
+        <para>
+          For example, if you want to get a dynamic property tracking, you would do as follows:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          IObjectChangeTracker changeTracker ((object)trackable).GetChangeTracker();
+          IObjectPropertyChangeTracking propertyTracking = tracker.GetDynamicTrackingByProperty("Text");
+          ]]>
+        </code>
+      </content>
+    </section>
+
+    <section address="test">
       <title>Read the tests too</title>
       <content>
         <para>
@@ -376,6 +549,7 @@
         </list>
       </content>
     </section>
+    
     <relatedTopics>
       <link xlink:href="1e03762d-b9f5-44af-a4b0-c23c36064c24" />
     </relatedTopics>
