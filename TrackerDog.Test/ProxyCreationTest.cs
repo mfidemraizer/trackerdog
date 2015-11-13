@@ -1,6 +1,8 @@
 ﻿namespace TrackerDog.Test
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.ComponentModel;
+    using System.Dynamic;
     using TrackerDog.Configuration;
 
     [TestClass]

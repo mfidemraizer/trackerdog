@@ -204,6 +204,31 @@
 
             return typeof(DynamicObject).IsAssignableFrom(some);
         }
+
+        /// <summary>
+        /// Checks if given property is declared on <see cref="System.Dynamic.DynamicObject"/>.
+        /// </summary>
+        /// <param name="property">The whole property</param>
+        /// <returns><literal>true</literal> if it's of <see cref="System.Dynamic.DynamicObject"/>, <literal>false</literal> if it's not.</returns>
+        public static bool IsPropertyOfDynamicObject(this PropertyInfo property)
+        {
+            Contract.Requires(property != null, "Property must be provided");
+
+            return property.GetBaseProperty().DeclaringType != typeof(DynamicObject);
+        }
+
+        /// <summary>
+        /// Checks if given method is declared on <see cref="System.Dynamic.DynamicObject"/>.
+        /// </summary>
+        /// <param name="method">The whole method</param>
+        /// <returns><literal>true</literal> if it's of <see cref="System.Dynamic.DynamicObject"/>, <literal>false</literal> if it's not.</returns>
+        public static bool IsMethodOfDynamicObject(this MethodInfo method)
+        {
+            Contract.Requires(method != null, "Method must be provided");
+
+            return method.GetRuntimeBaseDefinition().DeclaringType == typeof(DynamicObject);
+        }
+
         /// <summary>
         /// Determines if given object type is a <see cref="System.Dynamic.DynamicObject"/> derived class
         /// </summary>

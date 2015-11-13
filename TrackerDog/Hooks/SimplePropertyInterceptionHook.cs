@@ -51,7 +51,7 @@
             if (trackableType == null)
                 return false;
 
-            if (type.IsDynamicObject())
+            if (type.IsDynamicObject() && methodInfo.IsMethodOfDynamicObject())
                 return _dynamicObjectGetterSetterMethods.Contains(methodInfo.GetRuntimeBaseDefinition());
 
             if (trackableType.IncludedProperties.Count == 0)

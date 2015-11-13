@@ -47,24 +47,25 @@
                 }
         }
 
-        private void TrackProperty(IChangeTrackableObject trackableObject, string propertyName)
+        private void TrackProperty(IChangeTrackableObject trackableObject, string propertyName = null, PropertyInfo property = null)
         {
             Contract.Assert(ChangeTracker != null);
 
             DynamicObject dynamicObject = trackableObject as DynamicObject;
+            property = property ?? trackableObject.GetType().GetProperty(propertyName, DefaultBindingFlags);
 
-            if (dynamicObject == null)
+            if (dynamicObject == null || (property != null && property.IsPropertyOfDynamicObject()))
             {
-                PropertyInfo property;
+                PropertyInfo cachedProperty;
 
-                if (!CachedProperties.TryGetValue(propertyName, out property))
+                if (!CachedProperties.TryGetValue(propertyName, out cachedProperty))
                     CachedProperties.Add
                     (
                         propertyName,
-                        (property = trackableObject.GetType().GetProperty(propertyName, DefaultBindingFlags))
+                        property
                     );
 
-                ChangeTracker.AddOrUpdateTracking(property, trackableObject);
+                ChangeTracker.AddOrUpdateTracking(cachedProperty ?? property, trackableObject);
             }
             else
                 ChangeTracker.AddOrUpdateTracking(propertyName, dynamicObject);

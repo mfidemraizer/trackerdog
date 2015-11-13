@@ -4,6 +4,7 @@
     using System;
     using System.Diagnostics.Contracts;
     using System.Dynamic;
+    using System.Reflection;
 
     internal sealed class DynamicObjectInterceptor : MethodInterceptor
     {
@@ -14,7 +15,7 @@
         {
             invocation.Proceed();
 
-            if (invocation.Proxy is DynamicObject)
+            if (invocation.Proxy is DynamicObject && invocation.Method.GetRuntimeBaseDefinition().DeclaringType == typeof(DynamicObject))
             {
                 SetMemberBinder setBinder = invocation.Arguments[0] as SetMemberBinder;
 

@@ -203,7 +203,6 @@
         {
             Contract.Requires(some != null, "A non-null reference is mandatory to get an object old value property");
             Contract.Requires(some is IChangeTrackableObject, "Given object must be trackable");
-            Contract.Ensures(Contract.Result<TReturn>() != null);
 
             return (TReturn)some.GetPropertyTracking(propertySelector).OldValue;
         }
@@ -240,7 +239,6 @@
         {
             Contract.Requires(some != null, "A non-null reference is mandatory to get an object current property value");
             Contract.Requires(some is IChangeTrackableObject, "Given object must be trackable");
-            Contract.Ensures(Contract.Result<TReturn>() != null);
 
             return (TReturn)some.GetPropertyTracking(propertySelector).CurrentValue;
         }
