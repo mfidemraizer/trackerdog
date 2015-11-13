@@ -19,22 +19,26 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TrackerDog</Id>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <Title>TrackerDog: A generic object change tracker</Title>
     <Authors>Matías Fidemraizer</Authors>
     <Owners>Matías Fidemraizer</Owners>
     <Summary>Track changes of any object and full object graphs</Summary>
     <Description>TrackerDog turns any object or full object graph into a change-trackable object</Description>
-    <ReleaseNotes>Bugfix to enable tracking value-typed properties.</ReleaseNotes>
+    <ReleaseNotes>Now TrackerDog can track dynamic objects, also can create proxies from types directly. This version fixes an issue consisting in that Castle DynamicProxy was generating different proxy classes whenever an object of the same type was tracker. Now proxy types are cached in the right way by Castle DynamicProxy.</ReleaseNotes>
     <ProjectUrl>http://mfidemraizer.github.io/trackerdog/</ProjectUrl>
     <LicenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © Matías Fidemraizer</Copyright>
     <Tags>changetracking dynamicproxy changetracker change-tracker change-tracking poco objects oop proxy object object-graph objects unitofwork</Tags>
     <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
     <IconUrl>http://mfidemraizer.github.io/trackerdog/media/dogtracker.png</IconUrl>
+    <NuSpecTemplate>TrackerDog.nuspec</NuSpecTemplate>
+    <GenerateSymbolPackage>false</GenerateSymbolPackage>
+    <EmbedSourceFiles>false</EmbedSourceFiles>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />
+    <Content Include="TrackerDog.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TrackerDog\TrackerDog.csproj" />
