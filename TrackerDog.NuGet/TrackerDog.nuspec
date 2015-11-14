@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>TrackerDog</id>
-    <version>1.0.4</version>
+    <version>1.0.6</version>
     <title>TrackerDog: A generic object change tracker</title>
     <authors>Matías Fidemraizer</authors>
     <owners>Matías Fidemraizer</owners>
     <summary>Track changes of any object and full object graphs</summary>
     <description>TrackerDog turns any object or full object graph into a change-trackable object</description>
-    <releaseNotes>Bugfix to enable tracking value-typed properties.</releaseNotes>
+    <releaseNotes>Bugfix: Non-dynamic properties were confused with dynamic properties in dynamic objects</releaseNotes>
     <projectUrl>http://mfidemraizer.github.io/trackerdog/</projectUrl>
     <licenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</licenseUrl>
     <copyright>Copyright © Matías Fidemraizer</copyright>

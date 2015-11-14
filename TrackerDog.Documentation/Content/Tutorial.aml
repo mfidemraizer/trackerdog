@@ -159,10 +159,10 @@
         </para>
         <code language="c#">
           <![CDATA[
-          IEnumerable<IObjectPropertyChangeTracking> changedProperties = changeTracker.ChangedProperties.Of<IDeclaredObjectPropertyChangeTracking>();
+          IEnumerable<IObjectPropertyChangeTracking> changedProperties = changeTracker.ChangedProperties.OfType<IDeclaredObjectPropertyChangeTracking>();
             
           // Also you can get unchanged properties
-          IEnumerable<IObjectPropertyChangeTracking> unchangedProperties = changeTracker.UnchangedProperties.Of<IDeclaredObjectPropertyChangeTracking>();
+          IEnumerable<IObjectPropertyChangeTracking> unchangedProperties = changeTracker.UnchangedProperties.OfType<IDeclaredObjectPropertyChangeTracking>();
           ]]>
         </code>
         <para>
