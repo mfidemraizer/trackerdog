@@ -157,13 +157,7 @@
 
         public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
         {
-            PropertyInfo property = propertySelector.ExtractProperty();
-
-            Contract.Assert(property != null, "Selected member is not a property");
-            Contract.Assert(PropertyTrackings != null, "Cannot get the property tracking if tracking collection is null");
-
-            return PropertyTrackings.Single(t => t.Key.DeclaringType.GetActualTypeIfTrackable().GetProperty(t.Key.Name) == property)
-                            .Value;
+           return GetTrackingByProperty(propertySelector.ExtractProperty());
         }
 
         public IObjectPropertyChangeTracking GetDynamicTrackingByProperty(string propertyName)
@@ -171,6 +165,15 @@
             Contract.Requires(!string.IsNullOrEmpty(propertyName), "Property name cannot be null or empty");
 
             return DynamicPropertyTrackings[propertyName];
+        }
+
+        public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty(PropertyInfo property)
+        {
+            Contract.Assert(property != null, "Selected member is not a property");
+            Contract.Assert(PropertyTrackings != null, "Cannot get the property tracking if tracking collection is null");
+
+            return PropertyTrackings.Single(t => t.Key.DeclaringType.GetActualTypeIfTrackable().GetProperty(t.Key.Name) == property)
+                            .Value;
         }
     }
 }

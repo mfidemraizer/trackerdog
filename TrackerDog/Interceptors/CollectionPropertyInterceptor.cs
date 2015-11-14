@@ -3,8 +3,11 @@
     using Castle.DynamicProxy;
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Collections.Specialized;
     using System.Linq;
+    using CollectionHandling;
+    using TrackerDog.Configuration;
 
     internal sealed class CollectionPropertyInterceptor : MethodInterceptor
     {
@@ -26,23 +29,31 @@
                 invocation.Arguments[0] = changedItem ?? invocation.Arguments[0];
                 invocation.Proceed();
 
-                switch (invocation.Method.Name)
+                KeyValuePair<Type, CollectionImplementation> implementation =
+                    TrackerDogConfiguration.CollectionConfiguration.GetImplementation(collectionType);
+
+                CollectionChange whatChange = implementation.Value.TrackingHandler.HandleTracking
+                (
+                    new CollectionChangeContext
+                    {
+                        Collection = (IEnumerable<object>)trackableCollection,
+                        ItemsBefore = currentItems,
+                        ParentObjectProperty = trackableCollection.ParentObjectProperty,
+                        CalledMember = invocation.Method,
+                        CallArguments = invocation.Arguments.ToImmutableList()
+                    },
+                    trackableCollection.AddedItems,
+                    trackableCollection.RemovedItems
+                );
+
+                switch (whatChange)
                 {
-                    case "Add":
-                        trackableCollection.AddedItems.Add(changedItem);
-                        trackableCollection.RemovedItems.Remove(changedItem);
+                    case CollectionChange.Add:
                         trackableCollection.RaiseCollectionChanged(NotifyCollectionChangedAction.Add, new[] { changedItem });
                         break;
 
-                    case "Remove":
-                        trackableCollection.AddedItems.Remove(changedItem);
-                        trackableCollection.RemovedItems.Add(changedItem);
+                    case CollectionChange.Remove:
                         trackableCollection.RaiseCollectionChanged(NotifyCollectionChangedAction.Remove, new[] { changedItem });
-                        break;
-
-                    default:
-                        if (collectionType.IsSet())
-                            InterceptSetSpecificMethod(invocation, currentItems, trackableCollection);
                         break;
                 }
             }
@@ -50,49 +61,6 @@
             {
                 invocation.Proceed();
             }
-        }
-
-        private void InterceptSetSpecificMethod(IInvocation invocation, IEnumerable<object> currentItems, IChangeTrackableCollection trackableCollection)
-        {
-            IEnumerable<IDeclaredObjectPropertyChangeTracking> declaredPropertyTrackings =
-                trackableCollection.GetChangeTracker().ChangedProperties.OfType<IDeclaredObjectPropertyChangeTracking>();
-
-            IDeclaredObjectPropertyChangeTracking tracking = declaredPropertyTrackings
-                                                .Single(t => t.Property.GetBaseProperty() == trackableCollection.ParentObjectProperty.GetBaseProperty());
-
-            IEnumerable<object> oldItems = (IEnumerable<object>)tracking.OldValue;
-
-            switch (invocation.Method.Name)
-            {
-                case "IntersectWith":
-                    ProcessSetIntersection(currentItems, oldItems, trackableCollection);
-                    break;
-
-                case "ExceptWith":
-                    ProcessSetExcept(invocation, currentItems, oldItems, trackableCollection);
-                    break;
-
-            }
-        }
-
-        private void ProcessSetIntersection(IEnumerable<object> currentItems, IEnumerable<object> oldItems, IChangeTrackableCollection trackableCollection)
-        {
-            trackableCollection.AddedItems.IntersectWith(currentItems);
-
-            IEnumerable<object> itemsToRemove = currentItems.Except((IEnumerable<object>)trackableCollection).ToList();
-            trackableCollection.RemovedItems.ExceptWith(trackableCollection.AddedItems);
-
-            foreach (object item in itemsToRemove)
-                trackableCollection.RemovedItems.Add(item);
-        }
-
-        private void ProcessSetExcept(IInvocation invocation, IEnumerable<object> currentItems, IEnumerable<object> oldItems, IChangeTrackableCollection trackableCollection)
-        {
-            IEnumerable<object> itemsToRemove = (IEnumerable<object>)invocation.Arguments[0];
-            trackableCollection.AddedItems.ExceptWith(itemsToRemove);
-
-            foreach (object item in itemsToRemove.Intersect(currentItems))
-                trackableCollection.RemovedItems.Add(item);
         }
 
         public override bool Equals(object obj)

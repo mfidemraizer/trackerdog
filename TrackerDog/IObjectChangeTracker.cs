@@ -5,6 +5,7 @@
     using System.Collections.Immutable;
     using System.Diagnostics.Contracts;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     /// <summary>
     /// Defines an object change tracker.
@@ -32,10 +33,15 @@
         IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector);
 
         /// <summary>
+        /// Gets an object property tracking by specifying a property
+        /// </summary>
+        /// <param name="property">The property</param>
+        /// <returns>The object property tracking</returns>
+        IDeclaredObjectPropertyChangeTracking GetTrackingByProperty(PropertyInfo property);
+
+        /// <summary>
         /// Gets a dynamic object property tracking by specifying a property name
         /// </summary>
-        /// <typeparam name="T">The type of the object owning the whole property tracking to get</typeparam>
-        /// <typeparam name="TProperty">The return type of the property owned by the change-tracked object</typeparam>
         /// <param name="propertyName">The dynamic property name</param>
         /// <returns>The object property tracking</returns>
         IObjectPropertyChangeTracking GetDynamicTrackingByProperty(string propertyName);

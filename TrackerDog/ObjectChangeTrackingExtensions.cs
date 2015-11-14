@@ -128,6 +128,20 @@
         /// Gets a property change tracking for a given property
         /// </summary>
         /// <param name="some">The tracked object</param>
+        /// <param name="property">A property</param>
+        /// <returns>The property tracking</returns>
+        public static IDeclaredObjectPropertyChangeTracking GetPropertyTracking(this object some, PropertyInfo property)
+        {
+            Contract.Requires(some != null, "Reference must not be null because the given object is required to get its change tracker and find the desired property tracking");
+            Contract.Requires(property != null, "A property is mandatory to get a property tracking");
+
+            return some.GetChangeTracker().GetTrackingByProperty(property) as IDeclaredObjectPropertyChangeTracking;
+        }
+
+        /// <summary>
+        /// Gets a property change tracking for a given property
+        /// </summary>
+        /// <param name="some">The tracked object</param>
         /// <param name="propertyName">A property selector</param>
         /// <returns>The property tracking</returns>
         public static IObjectPropertyChangeTracking GetPropertyTracking(this object some, string propertyName)

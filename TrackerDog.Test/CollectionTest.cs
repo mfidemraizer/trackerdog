@@ -127,7 +127,7 @@
 
             c.Dogs.ExceptWith(new[] { new Dog { Name = "Rex" } });
             Assert.AreEqual(0, c.Dogs.Count);
-            Assert.AreEqual(3, trackableCollection.RemovedItems.Count);
+            Assert.AreEqual(2, trackableCollection.RemovedItems.Count);
             Assert.AreEqual(0, trackableCollection.AddedItems.Count);
         }
     }

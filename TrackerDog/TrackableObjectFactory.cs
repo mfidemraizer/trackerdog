@@ -39,7 +39,7 @@
 
             if (some == null)
                 some = TrackerDogConfiguration.CollectionConfiguration
-                                .GetImplementation(parentObjectProperty.PropertyType).Value
+                                .GetImplementation(parentObjectProperty.PropertyType).Value.Type
                                 .CreateInstanceWithGenericArgs(null, parentObjectProperty.PropertyType.GetGenericArguments()[0]);
 
             Contract.Assert(some != null, "Either if a collection object is provided or not, a proxied instance of the whole collection type must be created");
@@ -51,10 +51,10 @@
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new CollectionterceptionHook());
                 options.AddMixinInstance(new ChangeTrackableCollectionMixin());
 
-                KeyValuePair<Type, Type> collectionImplementationDetail = TrackerDogConfiguration.CollectionConfiguration.GetImplementation(some.GetType());
+                KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail = TrackerDogConfiguration.CollectionConfiguration.GetImplementation(some.GetType());
 
                 object targetList =
-                    collectionImplementationDetail.Value.CreateInstanceWithGenericArgs
+                    collectionImplementationDetail.Value.Type.CreateInstanceWithGenericArgs
                     (
                         new[]
                         {

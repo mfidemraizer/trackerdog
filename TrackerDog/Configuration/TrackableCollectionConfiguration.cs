@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using TrackerDog.CollectionHandling;
 
     /// <summary>
     /// Represents a configuration to setup how collection change tracking will behave.
@@ -15,16 +16,19 @@
         /// </summary>
         public TrackableCollectionConfiguration()
         {
-            AddImplementation(typeof(ISet<>), typeof(HashSet<>));
-            AddImplementation(typeof(IList<>), typeof(List<>));
-            AddImplementation(typeof(ICollection<>), typeof(List<>));
-            AddImplementation(typeof(IEnumerable<>), typeof(List<>));
+            DefaultCollectionTrackingHandler defaultHandler = new DefaultCollectionTrackingHandler();
+            SetTrackingHandler setHandler = new SetTrackingHandler();
+
+            AddImplementation(typeof(ISet<>), typeof(HashSet<>), setHandler);
+            AddImplementation(typeof(IList<>), typeof(List<>), defaultHandler);
+            AddImplementation(typeof(ICollection<>), typeof(List<>), defaultHandler);
+            AddImplementation(typeof(IEnumerable<>), typeof(List<>), defaultHandler);
         }
 
         /// <summary>
         /// Gets a dictionary of implementations to common collection interfaces.
         /// </summary>
-        internal Dictionary<Type, Type> Implementations { get; } = new Dictionary<Type, Type>();
+        internal Dictionary<Type, CollectionImplementation> Implementations { get; } = new Dictionary<Type, CollectionImplementation>();
 
         /// <summary>
         /// Gets the implementation of a given type. The given type can or cannot be a collection interface, but
@@ -33,14 +37,15 @@
         /// </summary>
         /// <param name="some">The whole collection type</param>
         /// <returns>A pair, where the key is the collection interface and value is the collection implementation</returns>
-        public KeyValuePair<Type, Type> GetImplementation(Type some)
+        public KeyValuePair<Type, CollectionImplementation> GetImplementation(Type some)
         {
             Contract.Requires(some != null, "A non-null reference to a type is mandatory to get its implementation");
+            Contract.Ensures(Contract.Result<KeyValuePair<Type, CollectionImplementation>>().Key != null);
 
-            Type someGenericTypeDefinition =  some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
+            Type someGenericTypeDefinition = some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
             IEnumerable<Type> someInterfaces = some.GetInterfaces();
 
-            KeyValuePair<Type, Type> result = Implementations.FirstOrDefault
+            KeyValuePair<Type, CollectionImplementation> result = Implementations.FirstOrDefault
             (
                 interfaceType =>
                     someGenericTypeDefinition != null && someGenericTypeDefinition == interfaceType.Key
@@ -64,7 +69,8 @@
         /// </summary>
         /// <param name="interfaceType">The collection interface</param>
         /// <param name="implementationType">The collection implementation</param>
-        public void AddImplementation(Type interfaceType, Type implementationType)
+        /// <param name="trackingHandler">A tracking handler to specify how collection changes will be handled</param>
+        public void AddImplementation(Type interfaceType, Type implementationType, ICollectionTrackingHandler trackingHandler)
         {
             Contract.Requires(interfaceType != null, "Cannot add an implementation of a null interface");
             Contract.Requires(interfaceType.IsInterface, "Given type must be an interface");
@@ -72,10 +78,11 @@
             Contract.Requires(implementationType != null, "Given collection implementation cannot be a null reference");
             Contract.Requires(implementationType.IsClass && !implementationType.IsAbstract, "Given collection implementation must be a non-abstract class");
             Contract.Requires(implementationType.IsGenericTypeDefinition, "Given collection implementation must be a generic type definition");
+            Contract.Requires(trackingHandler != null);
 
             Contract.Assert(!Implementations.ContainsKey(interfaceType), "Adding an implementation can be done once");
 
-            Implementations.Add(interfaceType, implementationType);
+            Implementations.Add(interfaceType, new CollectionImplementation(implementationType, trackingHandler));
         }
 
         /// <summary>
@@ -83,7 +90,8 @@
         /// </summary>
         /// <param name="interfaceType"></param>
         /// <param name="implementationType"></param>
-        public void ReplaceImplementation(Type interfaceType, Type implementationType)
+        /// <param name="trackingHandler">A tracking handler to specify how collection changes will be handled</param>
+        public void ReplaceImplementation(Type interfaceType, Type implementationType, ICollectionTrackingHandler trackingHandler)
         {
             Contract.Requires(interfaceType != null, "Cannot add an implementation of a null interface");
             Contract.Requires(interfaceType.IsInterface, "Given type must be an interface");
@@ -91,11 +99,12 @@
             Contract.Requires(implementationType != null, "Given collection implementation cannot be a null reference");
             Contract.Requires(implementationType.IsClass && !implementationType.IsAbstract, "Given collection implementation must be a non-abstract class");
             Contract.Requires(implementationType.IsGenericTypeDefinition, "Given collection implementation must be a generic type definition");
+            Contract.Requires(trackingHandler != null);
 
             if (Implementations.ContainsKey(interfaceType))
-                Implementations[interfaceType] = implementationType;
+                Implementations[interfaceType] = new CollectionImplementation(implementationType, trackingHandler);
             else
-                AddImplementation(interfaceType, implementationType);
+                AddImplementation(interfaceType, implementationType, trackingHandler);
         }
     }
 }

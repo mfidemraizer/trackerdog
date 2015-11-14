@@ -7,6 +7,7 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     [ContractClassFor(typeof(IObjectChangeTracker))]
     public abstract class IObjectChangeTrackerContract : IObjectChangeTracker
@@ -15,13 +16,6 @@
 
         public IImmutableSet<IObjectPropertyChangeTracking> UnchangedProperties { get; set; }
 
-        public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
-        {
-            Contract.Requires(propertySelector != null, "Property selector is mandatory to get a property tracking");
-            Contract.Ensures(Contract.Result<IDeclaredObjectPropertyChangeTracking>() != null);
-
-            throw new NotImplementedException();
-        }
 
         [ContractInvariantMethod, SuppressMessage("CC", "CC1036", Justification = "ChangedProperties and UnchangedProperties must be intersected to check that they don't have shared items")]
         private void Invariants()
@@ -40,12 +34,26 @@
         {
             throw new NotImplementedException();
         }
+        public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
+        {
+            Contract.Requires(propertySelector != null, "Property selector is mandatory to get a property tracking");
+            Contract.Ensures(Contract.Result<IDeclaredObjectPropertyChangeTracking>() != null);
+
+            throw new NotImplementedException();
+        }
 
         public IObjectPropertyChangeTracking GetDynamicTrackingByProperty(string propertyName)
         {
             Contract.Requires(!string.IsNullOrEmpty(propertyName), "Property name is mandatory to get a property tracking");
             Contract.Ensures(Contract.Result<IObjectPropertyChangeTracking>() != null);
 
+            throw new NotImplementedException();
+        }
+
+        public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty(PropertyInfo property)
+        {
+            Contract.Requires(property != null, "Property is mandatory to get a property tracking");
+            Contract.Ensures(Contract.Result<IDeclaredObjectPropertyChangeTracking>() != null);
             throw new NotImplementedException();
         }
     }
