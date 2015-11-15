@@ -107,7 +107,7 @@
     <Compile Include="Configuration\TrackableType.cs" />
     <Compile Include="Configuration\ITrackableTypeEqualityComparer.cs" />
     <Compile Include="Configuration\TrackerDogConfiguration.cs" />
-    <Compile Include="CollectionHandling\DefaultCollectionTrackingHandler.cs" />
+    <Compile Include="CollectionHandling\DefaultCollectionChangeInterceptor.cs" />
     <Compile Include="DynamicObjectExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ExpressionExtensions.cs" />
@@ -116,8 +116,6 @@
     <Compile Include="IChangeTrackableCollection.cs" />
     <Compile Include="IChangeTrackableCollectionContract.cs" />
     <Compile Include="IChangeTrackableObjectContract.cs" />
-    <Compile Include="CollectionHandling\ICollectionTrackingHandler.cs" />
-    <Compile Include="CollectionHandling\ICollectionTrackingHandlerContract.cs" />
     <Compile Include="IHasParentContract.cs" />
     <Compile Include="Interceptors\DynamicObjectInterceptor.cs" />
     <Compile Include="IObjectChangeTrackerContract.cs" />
@@ -143,7 +141,7 @@
     <Compile Include="Interceptors\SimplePropertyInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
-    <Compile Include="CollectionHandling\SetTrackingHandler.cs" />
+    <Compile Include="CollectionHandling\SetChangeInterceptor.cs" />
     <Compile Include="Trackable.cs" />
     <Compile Include="TrackableObjectFactory.cs" />
   </ItemGroup>

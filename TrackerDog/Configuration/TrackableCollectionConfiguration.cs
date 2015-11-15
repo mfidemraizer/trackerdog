@@ -16,13 +16,10 @@
         /// </summary>
         public TrackableCollectionConfiguration()
         {
-            DefaultCollectionTrackingHandler defaultHandler = new DefaultCollectionTrackingHandler();
-            SetTrackingHandler setHandler = new SetTrackingHandler();
-
-            AddImplementation(typeof(ISet<>), typeof(HashSet<>), setHandler);
-            AddImplementation(typeof(IList<>), typeof(List<>), defaultHandler);
-            AddImplementation(typeof(ICollection<>), typeof(List<>), defaultHandler);
-            AddImplementation(typeof(IEnumerable<>), typeof(List<>), defaultHandler);
+            AddImplementation(typeof(ISet<>), typeof(HashSet<>), typeof(SetChangeInterceptor<>));
+            AddImplementation(typeof(IList<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
+            AddImplementation(typeof(ICollection<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
+            AddImplementation(typeof(IEnumerable<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
         }
 
         /// <summary>
@@ -69,20 +66,17 @@
         /// </summary>
         /// <param name="interfaceType">The collection interface</param>
         /// <param name="implementationType">The collection implementation</param>
-        /// <param name="trackingHandler">A tracking handler to specify how collection changes will be handled</param>
-        public void AddImplementation(Type interfaceType, Type implementationType, ICollectionTrackingHandler trackingHandler)
+        /// <param name="collectionChangeInterceptor">An implementation to interface type which intercepts calls to the whole collection type to handle changes</param>
+        public void AddImplementation(Type interfaceType, Type implementationType, Type collectionChangeInterceptor)
         {
             Contract.Requires(interfaceType != null, "Cannot add an implementation of a null interface");
             Contract.Requires(interfaceType.IsInterface, "Given type must be an interface");
             Contract.Requires(interfaceType.IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
-            Contract.Requires(implementationType != null, "Given collection implementation cannot be a null reference");
-            Contract.Requires(implementationType.IsClass && !implementationType.IsAbstract, "Given collection implementation must be a non-abstract class");
-            Contract.Requires(implementationType.IsGenericTypeDefinition, "Given collection implementation must be a generic type definition");
-            Contract.Requires(trackingHandler != null);
+            Contract.Requires(collectionChangeInterceptor.GetInterfaces().Any(i => collectionChangeInterceptor.GetInterfaces().Any(i2 => i2 == i)), "Provided change interceptor type must be assignable to collection implementation type");
 
             Contract.Assert(!Implementations.ContainsKey(interfaceType), "Adding an implementation can be done once");
 
-            Implementations.Add(interfaceType, new CollectionImplementation(implementationType, trackingHandler));
+            Implementations.Add(interfaceType, new CollectionImplementation(implementationType, collectionChangeInterceptor));
         }
 
         /// <summary>
@@ -90,21 +84,18 @@
         /// </summary>
         /// <param name="interfaceType"></param>
         /// <param name="implementationType"></param>
-        /// <param name="trackingHandler">A tracking handler to specify how collection changes will be handled</param>
-        public void ReplaceImplementation(Type interfaceType, Type implementationType, ICollectionTrackingHandler trackingHandler)
+        /// <param name="collectionChangeInterceptor">An implementation to interface type which intercepts calls to the whole collection type to handle changes</param>
+        public void ReplaceImplementation(Type interfaceType, Type implementationType, Type collectionChangeInterceptor)
         {
             Contract.Requires(interfaceType != null, "Cannot add an implementation of a null interface");
             Contract.Requires(interfaceType.IsInterface, "Given type must be an interface");
             Contract.Requires(interfaceType.IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
-            Contract.Requires(implementationType != null, "Given collection implementation cannot be a null reference");
-            Contract.Requires(implementationType.IsClass && !implementationType.IsAbstract, "Given collection implementation must be a non-abstract class");
-            Contract.Requires(implementationType.IsGenericTypeDefinition, "Given collection implementation must be a generic type definition");
-            Contract.Requires(trackingHandler != null);
+            Contract.Requires(interfaceType.IsAssignableFrom(collectionChangeInterceptor), "Provided change interceptor type must be assignable to collection implementation type");
 
             if (Implementations.ContainsKey(interfaceType))
-                Implementations[interfaceType] = new CollectionImplementation(implementationType, trackingHandler);
+                Implementations[interfaceType] = new CollectionImplementation(implementationType, collectionChangeInterceptor);
             else
-                AddImplementation(interfaceType, implementationType, trackingHandler);
+                AddImplementation(interfaceType, implementationType, collectionChangeInterceptor);
         }
     }
 }

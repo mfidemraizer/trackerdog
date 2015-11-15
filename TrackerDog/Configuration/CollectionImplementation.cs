@@ -2,23 +2,25 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using TrackerDog.CollectionHandling;
 
     public sealed class CollectionImplementation
     {
-        private readonly ICollectionTrackingHandler _trackingHandler;
         private readonly Type _type;
+        private readonly Type _changeInterceptor;
 
-        public CollectionImplementation(Type type, ICollectionTrackingHandler trackingHandler)
+        public CollectionImplementation(Type type, Type changeInterceptor)
         {
-            Contract.Requires(type != null, "A collection implementation type is mandatory");
-            Contract.Requires(trackingHandler != null, "A collection change tracking handler is mandatory");
+            Contract.Requires(type != null, "Given collection implementation cannot be a null reference");
+            Contract.Requires(type.IsClass && !type.IsAbstract, "Given collection implementation must be a non-abstract class");
+            Contract.Requires(type.IsGenericTypeDefinition, "Given collection implementation must be a generic type definition");
+            Contract.Requires(changeInterceptor != null, "A collection change interceptor type is mandatory");
+            Contract.Requires(changeInterceptor.IsGenericType && changeInterceptor.IsGenericTypeDefinition, "Given collection change interceptor must be a generic type definition");
 
             _type = type;
-            _trackingHandler = trackingHandler;
+            _changeInterceptor = changeInterceptor;
         }
 
         public Type Type => _type;
-        public ICollectionTrackingHandler TrackingHandler => _trackingHandler;
+        public Type ChangeInterceptor => _changeInterceptor;
     }
 }

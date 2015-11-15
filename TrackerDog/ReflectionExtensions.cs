@@ -240,5 +240,10 @@
 
             return IsDynamicObject(some.GetType());
         }
+
+        public static object CallMethod(this object some, string name, IEnumerable<object> args, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        {
+            return some.GetType().GetMethod(name, bindingFlags).Invoke(some, args?.ToArray());
+        }
     }
 }

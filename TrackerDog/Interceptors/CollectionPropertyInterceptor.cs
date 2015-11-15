@@ -3,10 +3,9 @@
     using Castle.DynamicProxy;
     using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.Collections.Specialized;
     using System.Linq;
-    using CollectionHandling;
+    using TrackerDog.CollectionHandling;
     using TrackerDog.Configuration;
 
     internal sealed class CollectionPropertyInterceptor : MethodInterceptor
@@ -31,22 +30,20 @@
 
                 KeyValuePair<Type, CollectionImplementation> implementation =
                     TrackerDogConfiguration.CollectionConfiguration.GetImplementation(collectionType);
-
-                CollectionChange whatChange = implementation.Value.TrackingHandler.HandleTracking
+                
+                CollectionChangeContext changeContext = new CollectionChangeContext
                 (
-                    new CollectionChangeContext
-                    {
-                        Collection = (IEnumerable<object>)trackableCollection,
-                        ItemsBefore = currentItems,
-                        ParentObjectProperty = trackableCollection.ParentObjectProperty,
-                        CalledMember = invocation.Method,
-                        CallArguments = invocation.Arguments.ToImmutableList()
-                    },
+                    (IEnumerable<object>)trackableCollection,
+                    currentItems,
+                    trackableCollection.ParentObjectProperty,
                     trackableCollection.AddedItems,
                     trackableCollection.RemovedItems
                 );
 
-                switch (whatChange)
+                Activator.CreateInstance(implementation.Value.ChangeInterceptor.MakeGenericType(trackableCollection.GetCollectionItemType()), changeContext)
+                            .CallMethod(invocation.Method.Name, invocation.Arguments);
+
+                switch (changeContext.Change)
                 {
                     case CollectionChange.Add:
                         trackableCollection.RaiseCollectionChanged(NotifyCollectionChangedAction.Add, new[] { changedItem });
