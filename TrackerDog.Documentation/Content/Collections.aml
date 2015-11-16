@@ -10,13 +10,122 @@
         the quircks of collection change tracking on this document.
       </para>
     </introduction>
-
     <section>
-      <title>How does it work</title>
+      <title>Index of contents</title>
+      <content>
+        <list bullet="class">
+          <listItem>
+            <link xlink:href="#interceptors">Under the hoods: how it works and how to support more collection types</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#configuration">
+              How to configure <token>projectName</token> to support collection change tracking
+            </link>
+          </listItem>
+        </list>
+      </content>
+    </section>
+
+    <section address="interceptors">
+      <title>Under the hoods: how it works and how to support more collection types</title>
+      <content>
+        <para>
+          Collection change handling is done implementing collection interfaces that work like <phrase>interceptors</phrase>.
+        </para>
+        <para>Basically, the anatomy of an interceptor is:</para>
+        <code language="c#">
+          <![CDATA[
+          public sealed class CollectionChangeInterceptor : ICollection<T>
+          {
+              public CollectionChangeInterceptor(CollectionChangeContext changeContext)
+              {
+                  ChangeContext = changeContext;
+              }
+              
+              private CollectionChangeContext ChangeContext { get; set; }
+              
+              // ICollection<T> member implementations like Add, Remove...here
+          }
+          ]]>
+        </code>
+        <para>
+          Any collection change interceptor must provide a constructor with one parameter of type
+          <codeEntityReference>T:TrackerDog.CollectionHandling.CollectionChangeContext</codeEntityReference>.
+        </para>
+        <para>
+          <codeEntityReference>T:TrackerDog.CollectionHandling.CollectionChangeContext</codeEntityReference> exposes some properties that not all
+          interceptors might need, but it has three properties that are very important (see linked property documentation for further details):
+        </para>
+        <list class="bullet">
+          <listItem>
+            <codeEntityReference>P:TrackerDog.CollectionHandling.AddedItems</codeEntityReference>
+          </listItem>
+          <listItem>
+            <codeEntityReference>P:TrackerDog.CollectionHandling.RemovedItems</codeEntityReference>
+          </listItem>
+          <listItem>
+            <codeEntityReference>P:TrackerDog.CollectionHandling.Change</codeEntityReference>
+          </listItem>
+        </list>
+        <para>
+          When some collection method is called that may or may not change the collection, the collection change interceptor must add or remove items of
+          <codeEntityReference>P:TrackerDog.CollectionHandling.AddedItems</codeEntityReference> and <codeEntityReference>P:TrackerDog.CollectionHandling.RemovedItems</codeEntityReference>
+          properties to reflect which item(s) was/were added and/or removed. In addition, the whole called method must set
+          <codeEntityReference>P:TrackerDog.CollectionHandling.Change</codeEntityReference> property with a <codeEntityReference>T:TrackerDog.CollectionHandling.CollectionChange</codeEntityReference> enumeration
+          value to reflect if it has added or removed items from the collection, or otherwise if it produced no change in the collection.
+        </para>
+        <para>
+          For example, <codeEntityReference qualifyHint="true">M:System.Collections.Generic.ICollection`1.Add(`0)</codeEntityReference> can be implemented as follows:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          public void Add(T item)
+          {
+            // #1 Add the item to AddedItems set of ChangeContext
+            ChangeContext.AddedItems.Add(item);
+            // #2 Remove the item to RemovedItems to ensure that it won't be in both sides...
+            ChangeContext.RemovedItems.Remove(item);
+            // #3 Set that the collection change was adding items
+            ChangeContext.Change = CollectionChange.Add;
+          }
+          ]]>
+        </code>
+        <alert class="note">
+          <para>
+            It's advisable that you check default collection change interceptor implementations provided by
+            <token>projectName</token> in order to correctly implement a new collection change interceptor:
+          </para>
+
+          <list class="bullet">
+            <listItem>
+              <externalLink>
+                <linkText>
+                  <legacyBold>DefaultCollectionChangeInterceptor</legacyBold> source code
+                </linkText>
+                <linkUri>https://github.com/mfidemraizer/trackerdog/blob/master/TrackerDog/CollectionHandling/DefaultCollectionChangeInterceptor.cs</linkUri>
+              </externalLink>
+            </listItem>
+            <listItem>
+              <externalLink>
+                <linkText>
+                  <legacyBold>SetChangeInterceptor</legacyBold> source code
+                </linkText>
+                <linkUri>https://github.com/mfidemraizer/trackerdog/blob/master/TrackerDog/CollectionHandling/SetChangeInterceptor.cs</linkUri>
+              </externalLink>
+            </listItem>
+          </list>
+        </alert>
+      </content>
+    </section>
+
+    <section address="configuration">
+      <title>
+        How to configure <token>projectName</token> to support collection change tracking
+      </title>
       <content>
         <para>
           Actually, <token>projectName</token> doesn't track any type of collection, but you must tell it to track
-          certain collection types. <codeEntityReference>P:TrackerDog.Configuration.TrackerDogConfiguration.CollectionConfiguration</codeEntityReference> let's you
+          certain collection types. <codeEntityReference qualifyHint="true">P:TrackerDog.Configuration.TrackerDogConfiguration.CollectionConfiguration</codeEntityReference> let's you
           customize which collection interfaces can be tracked on and what implementations should be instantiated and proxied to
           track their changes.
         </para>
@@ -46,7 +155,7 @@
         </list>
 
         <para>
-          Right collection implementation is evaluated using a FIFO (<phrase>first-in, first-out</phrase>) criteria. That is,
+          Right collection implementation is evaluated using FIFO (<phrase>first-in, first-out</phrase>) criteria. That is,
           <tokenName>projectName</tokenName> will look for the most specific implementation for a given collection type.
         </para>
 
@@ -56,19 +165,36 @@
         </para>
         <list class="bullet">
           <listItem>
-            <codeEntityReference>M:TrackerDog.Configuration.TrackableCollectionConfiguration.AddImplementation(System.Type,System.Type)</codeEntityReference>
+            <codeEntityReference>M:TrackerDog.Configuration.TrackableCollectionConfiguration.AddImplementation(System.Type,System.Type,System.Type)</codeEntityReference>
           </listItem>
           <listItem>
-
-            <codeEntityReference>M:TrackerDog.Configuration.TrackableCollectionConfiguration.ReplaceImplementation(System.Type,System.Type)</codeEntityReference>
+            <codeEntityReference>M:TrackerDog.Configuration.TrackableCollectionConfiguration.ReplaceImplementation(System.Type,System.Type,System.Type)</codeEntityReference>
+          </listItem>
+        </list>
+        <para>
+          Method arguments explained:
+        </para>
+        <list class="bullet">
+          <listItem>
+            <legacyBold>First argument</legacyBold> must be a collection interface. It can be either .NET Framework ones or they can be invented, but any given interface must also implement
+            <codeEntityReference>T:System.Collections.Generic.IEnumerable`1</codeEntityReference>.
+          </listItem>
+          <listItem>
+            <legacyBold>Second argument</legacyBold> must be a collection implementation of type of first argument. For example, if first argument was
+            <codeEntityReference>T:System.Collections.Generic.ICollection`1</codeEntityReference> second argument may be
+            <codeEntityReference>T:System.Collections.Generic.List`1</codeEntityReference>.
+          </listItem>
+          <listItem>
+            <legacyBold>Third argument</legacyBold> must be also collection implementation of type of first argument. But this case is different: you need to provide an implementation
+            that will act as collection change interceptor. <link xlink:href="#interceptors">Follow this link to learn more about this concept</link>.
           </listItem>
         </list>
 
-        <para>
-          <legacyBold>
-            Note that both method arguments should be generic type definitions and you mustn't provide a collection interface and implementation
-            giving their type:
-          </legacyBold>
+        <alert class="note">
+          <para>
+            Method arguments should be generic type definitions and you mustn't provide a collection interface and implementation
+            giving collection item type:
+          </para>
 
           <list class="bullet">
             <listItem>
@@ -78,7 +204,7 @@
               <legacyBold>OK:</legacyBold> <codeInline>typeof(IList&lt;&gt;)</codeInline>, <codeInline>typeof(HashSet&lt;&gt;)</codeInline>
             </listItem>
           </list>
-        </para>
+        </alert>
 
         <para>
           When <token>projectName</token> starts to track a collection property, it turns it into an instance of configured implementation to some
@@ -107,6 +233,7 @@
           (
               typeof(IList<>),
               typeof(MyIListImplementation<>)
+              typeof(SomeIListInterceptor<>)
           );
           ]]>
         </code>

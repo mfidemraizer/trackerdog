@@ -3,6 +3,11 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// Represents default set collection change interceptor. It intercepts any implementation of
+    /// <see cref="ISet{T}"/> interface.
+    /// </summary>
+    /// <typeparam name="T">The type of collection items</typeparam>
     public class SetChangeInterceptor<T> : DefaultCollectionChangeInterceptor<T>, ISet<T>
     {
         public SetChangeInterceptor(CollectionChangeContext changeContext)

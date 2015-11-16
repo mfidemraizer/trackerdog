@@ -3,6 +3,11 @@
     using System.Collections;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Represents the default collection change interceptor. It intercepts any implementation of
+    /// <see cref="ICollection{T}"/> interface.
+    /// </summary>
+    /// <typeparam name="T">The type of collection items</typeparam>
     public class DefaultCollectionChangeInterceptor<T> : ICollection<T>
     {
         private readonly CollectionChangeContext _changeContext;

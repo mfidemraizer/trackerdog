@@ -4,6 +4,10 @@
     using System.Diagnostics.Contracts;
     using System.Reflection;
 
+    /// <summary>
+    /// Represents a set of available information to collection change handling participants like 
+    /// collection change interceptors.
+    /// </summary>
     public sealed class CollectionChangeContext
     {
         private readonly IEnumerable<object> _collection;
@@ -27,11 +31,34 @@
             _removedItems = removedItems;
         }
 
+        /// <summary>
+        /// Gets the collection subject of changes
+        /// </summary>
         public IEnumerable<object> Collection => _collection;
+
+        /// <summary>
+        /// Gets a copy of collection items before the collection was changed
+        /// </summary>
         public IEnumerable<object> ItemsBefore => _itemsBefore;
+
+        /// <summary>
+        /// Gets a reference to the property which holds the collection instance
+        /// </summary>
         public PropertyInfo ParentObjectProperty => _parentObjectProperty;
+
+        /// <summary>
+        /// Gets the set of added item tracking
+        /// </summary>
         public ISet<object> AddedItems => _addedItems;
+
+        /// <summary>
+        /// Gets the set of removed item tracking
+        /// </summary>
         public ISet<object> RemovedItems => _removedItems;
+
+        /// <summary>
+        /// Gets or sets the change produced by a collection change handler like a collection change interceptor
+        /// </summary>
         public CollectionChange Change { get; set; }
     }
 }
