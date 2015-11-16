@@ -58,13 +58,13 @@
         </para>
         <list class="bullet">
           <listItem>
-            <codeEntityReference>P:TrackerDog.CollectionHandling.AddedItems</codeEntityReference>
+            <codeEntityReference>P:TrackerDog.CollectionHandling.CollectionChangeContext.AddedItems</codeEntityReference>
           </listItem>
           <listItem>
-            <codeEntityReference>P:TrackerDog.CollectionHandling.RemovedItems</codeEntityReference>
+            <codeEntityReference>P:TrackerDog.CollectionHandling.CollectionChangeContext.RemovedItems</codeEntityReference>
           </listItem>
           <listItem>
-            <codeEntityReference>P:TrackerDog.CollectionHandling.Change</codeEntityReference>
+            <codeEntityReference>P:TrackerDog.CollectionHandling.CollectionChangeContext.Change</codeEntityReference>
           </listItem>
         </list>
         <para>
