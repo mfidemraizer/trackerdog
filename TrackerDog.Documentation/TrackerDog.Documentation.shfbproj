@@ -112,7 +112,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Content" />
-    <Folder Include="Content\VersionHistory" />
     <Folder Include="icons" />
     <Folder Include="media" />
   </ItemGroup>
@@ -121,8 +120,6 @@
     <None Include="Content\Collections.aml" />
     <None Include="Content\WhatIsTracked.aml" />
     <None Include="Content\Tutorial.aml" />
-    <None Include="Content\VersionHistory\v1.0.0.0.aml" />
-    <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
   </ItemGroup>
   <ItemGroup>

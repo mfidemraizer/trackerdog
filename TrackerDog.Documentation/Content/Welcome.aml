@@ -101,10 +101,37 @@
           change-trackable domain objects!
         </para>
         <para>
+          Also, there's another example of a good case to implement change tracking using <token>projectName</token>: <phrase>UI data-binding</phrase>. If you've
+          already implemented many classes and you want them to be data-bound to a grid or any UI control, instead of wasting your time implementing
+          <codeEntityReference>T:System.ComponentModel.INotifyPropertyChanged</codeEntityReference> and <codeEntityReference>T:System.Collections.Specialized.INotifyCollectionChanged</codeEntityReference> interfaces in all of them,
+          just use <token>projectName</token> and you'll get objects which implement these interfaces with zero effort!
+        </para>
+        <para>
           In summary, <token>projectName</token> turns your object graphs into interceptable object proxies that share
           a common <newTerm>change tracker</newTerm> which let you check what has changed in your objects or even accept
           or undo changes to a given object graph.
         </para>
+      </content>
+    </section>
+
+    <section>
+      <title>Who's behind the project?</title>
+      <content>
+        <para>
+          Hi! This is Matías Fidemraizer and I've fully architected/designed this project. If you want to contact me,
+          <externalLink>
+            <linkText>you may find me on LinkedIn</linkText>
+            <linkUri>https://linkedin.com/in/mfidemraizer/en</linkUri>
+          </externalLink>
+        </para>
+        <para>Also, I'm a big fan of StackOverflow (click on the picture bellow to visit my profile there):</para>
+        <markup>
+          <div style="display: flex; justify-content: center">
+            <a href="http://stackoverflow.com/users/411632" target="_blank">
+              <img src="http://stackoverflow.com/users/flair/411632.png" width="208" height="58" alt="profile for Mat&#237;as Fidemraizer at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for Mat&#237;as Fidemraizer at Stack Overflow, Q&amp;A for professional and enthusiast programmers" />
+            </a>
+          </div>
+        </markup>
       </content>
     </section>
 

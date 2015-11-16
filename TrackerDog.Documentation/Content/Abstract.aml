@@ -19,6 +19,11 @@
           and detect changes. Actually, when you turn a POCO instance into a change-trackable object, you don't get
           the same instance but a proxy that derives from your POCO class as a new instance.
         </para>
+        <para>
+          In addition, proxies implement <codeEntityReference>T:System.ComponentModel.INotifyPropertyChanged</codeEntityReference> and collection property object proxies
+          implement <codeEntityReference>T:System.Collections.Specialized.INotifyCollectionChanged</codeEntityReference> which let you listen changes easily without
+          wasting your time implementing these interfaces manually!
+        </para>
       </content>
     </section>
   </developerConceptualDocument>

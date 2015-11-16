@@ -6,9 +6,9 @@
     <title>TrackerDog: A generic object change tracker</title>
     <authors>Matías Fidemraizer</authors>
     <owners>Matías Fidemraizer</owners>
-    <summary>Track changes of any object and full object graphs</summary>
-    <description>TrackerDog turns any object or full object graph into a change-trackable object</description>
-    <releaseNotes>Bugfix: Non-dynamic properties were confused with dynamic properties in dynamic objects</releaseNotes>
+    <summary>Track changes of any .NET object and full object graphs</summary>
+    <description>TrackerDog turns any .NET object or full object graph into a change-trackable object</description>
+    <releaseNotes>New decoupled collection change tracking architecture (see http://mfidemraizer.github.io/trackerdog/html/1e03762d-b9f5-44af-a4b0-c23c36064c24.htm)</releaseNotes>
     <projectUrl>http://mfidemraizer.github.io/trackerdog/</projectUrl>
     <licenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</licenseUrl>
     <copyright>Copyright © Matías Fidemraizer</copyright>
