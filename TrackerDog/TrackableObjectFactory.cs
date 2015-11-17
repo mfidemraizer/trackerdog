@@ -37,8 +37,11 @@
             Contract.Requires(parentObjectProperty != null, "A non-null reference to the property holding the collection is mandatory");
             Contract.Ensures(Contract.Result<object>() != null);
 
+            if (some.IsTrackable())
+                return some;
+
             if (some == null)
-                some = TrackerDogConfiguration.CollectionConfiguration
+                some = TrackerDogConfiguration.Collections
                                 .GetImplementation(parentObjectProperty.PropertyType).Value.Type
                                 .CreateInstanceWithGenericArgs(null, parentObjectProperty.PropertyType.GetGenericArguments()[0]);
 
@@ -51,7 +54,7 @@
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new CollectionterceptionHook());
                 options.AddMixinInstance(new ChangeTrackableCollectionMixin());
 
-                KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail = TrackerDogConfiguration.CollectionConfiguration.GetImplementation(some.GetType());
+                KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail = TrackerDogConfiguration.Collections.GetImplementation(some.GetType());
 
                 object targetList =
                     collectionImplementationDetail.Value.Type.CreateInstanceWithGenericArgs

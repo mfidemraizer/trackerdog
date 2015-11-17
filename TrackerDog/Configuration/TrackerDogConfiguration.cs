@@ -19,7 +19,7 @@
         /// <summary>
         /// Gets current trackable collection configuration
         /// </summary>
-        public static TrackableCollectionConfiguration CollectionConfiguration { get; } = new TrackableCollectionConfiguration();
+        public static TrackableCollectionConfiguration Collections { get; } = new TrackableCollectionConfiguration();
 
         /// <summary>
         /// Configures which types will support change tracking on current <see cref="AppDomain"/>.
@@ -33,6 +33,11 @@
                 Contract.Assert(TrackableTypes.Add(type), "Type can only be configured to be tracked once");
         }
 
+        /// <summary>
+        /// Gets a configured trackable type by type, or returns null if it's not already configured.
+        /// </summary>
+        /// <param name="type">The whole type to get its tracking configuration</param>
+        /// <returns>The configured trackable type by type, or returns null if it's not already configured</returns>
         internal static ITrackableType GetTrackableType(Type type)
         {
             Contract.Requires(type != null, "Given type cannot be null");
@@ -52,6 +57,11 @@
             return TrackableTypes.Any(t => t.Type == someType.GetActualTypeIfTrackable());
         }
 
+        /// <summary>
+        /// Determines if a given property holds an object type configured as a trackable type
+        /// </summary>
+        /// <param name="property">The whole property to check</param>
+        /// <returns><literal>true</literal> if helds an object type configured as a trackable type, <literal>false</literal> if not </returns>
         public static bool CanTrackProperty(PropertyInfo property)
         {
             Contract.Requires(property != null, "Property to check cannot be null");

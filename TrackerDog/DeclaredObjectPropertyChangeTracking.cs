@@ -1,6 +1,7 @@
 ﻿namespace TrackerDog
 {
     using Castle.DynamicProxy;
+    using Configuration;
     using System.Collections;
     using System.Diagnostics;
     using System.Linq;
@@ -38,7 +39,7 @@
             {
                 _oldValue = value;
 
-                if (!(_oldValue is string))
+                if (_oldValue != null && _oldValue.CanBeTrackedAsCollection())
                 {
                     IEnumerable enumerable = _oldValue as IEnumerable;
 

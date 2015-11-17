@@ -20,7 +20,7 @@
             Contract.Requires(enumerable != null, "Given enumerable must be a non-null reference");
             Contract.Ensures(Contract.Result<IEnumerable>() != null);
 
-            Type collectionType = TrackerDogConfiguration.CollectionConfiguration.GetImplementation(enumerable.GetType()).Value.Type;
+            Type collectionType = TrackerDogConfiguration.Collections.GetImplementation(enumerable.GetType()).Value.Type;
             Type collectionItemType = enumerable.GetCollectionItemType();
 
             IEnumerable collectionClone = (IEnumerable)collectionType

@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
@@ -18,7 +19,8 @@
                 Track.ThisType<A>().IncludeProperty(a => a.Items),
                 Track.ThisType<B>().IncludeProperty(b => b.Dogs),
                 Track.ThisType<C>().IncludeProperty(c => c.Dogs),
-                Track.ThisType<Dog>().IncludeProperty(d => d.Name)
+                Track.ThisType<Dog>().IncludeProperty(d => d.Name),
+                Track.ThisType<D>()
             );
         }
 
@@ -60,6 +62,20 @@
                 new Dog { Name = "Doggy" },
                 new Dog { Name = "Bobby" }
             };
+        }
+
+        public class D
+        {
+            public virtual BitArray Mask { get; set; } = new BitArray(2);
+        }
+
+        [TestMethod]
+        public void TrackingTypeWithNonTrackableCollectionWontCrash()
+        {
+            D d = new D().AsTrackable();
+            d.Mask = new BitArray(38);
+
+            Assert.IsTrue(d.PropertyHasChanged(o => o.Mask));
         }
 
         [TestMethod]

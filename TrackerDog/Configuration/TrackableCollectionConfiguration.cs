@@ -17,7 +17,6 @@
         public TrackableCollectionConfiguration()
         {
             AddImplementation(typeof(ISet<>), typeof(HashSet<>), typeof(SetChangeInterceptor<>));
-            AddImplementation(typeof(IList<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
             AddImplementation(typeof(ICollection<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
             AddImplementation(typeof(IEnumerable<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
         }
@@ -26,6 +25,34 @@
         /// Gets a dictionary of implementations to common collection interfaces.
         /// </summary>
         internal Dictionary<Type, CollectionImplementation> Implementations { get; } = new Dictionary<Type, CollectionImplementation>();
+
+        /// <summary>
+        /// Determines if given type can be tracked as collection
+        /// </summary>
+        /// <param name="some">The whole type to check</param>
+        /// <returns><literal>true</literal> if it can be tracked as collection, <literal>false if it can't be tracked as collection</literal></returns>
+        public bool CanTrack(Type some)
+        {
+            Contract.Requires(some != null, "A non-null reference to a type is mandatory to get its implementation");
+
+            if (some == typeof(string))
+                return false;
+
+            Type someGenericTypeDefinition = some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
+            IEnumerable<Type> someInterfaces = some.GetInterfaces();
+
+            return Implementations.Any
+            (
+                interfaceType =>
+                    someGenericTypeDefinition != null && someGenericTypeDefinition == interfaceType.Key
+                    ||
+                    someInterfaces.Any
+                    (
+                        i => i.IsGenericType
+                            && i.GetGenericTypeDefinition() == interfaceType.Key
+                    )
+            );
+        }
 
         /// <summary>
         /// Gets the implementation of a given type. The given type can or cannot be a collection interface, but

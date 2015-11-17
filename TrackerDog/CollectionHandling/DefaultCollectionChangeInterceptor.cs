@@ -34,6 +34,7 @@
         {
             ChangeContext.AddedItems.Remove(item);
             ChangeContext.RemovedItems.Add(item);
+            ChangeContext.Change = CollectionChange.Remove;
 
             return true;
         }

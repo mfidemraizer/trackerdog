@@ -29,7 +29,7 @@
                 invocation.Proceed();
 
                 KeyValuePair<Type, CollectionImplementation> implementation =
-                    TrackerDogConfiguration.CollectionConfiguration.GetImplementation(collectionType);
+                    TrackerDogConfiguration.Collections.GetImplementation(collectionType);
                 
                 CollectionChangeContext changeContext = new CollectionChangeContext
                 (

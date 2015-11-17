@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using TrackerDog.Configuration;
 
     /// <summary>
     /// Represents a set of object change-tracking related operations that work as façades to simplify the work
@@ -13,6 +14,42 @@
     /// </summary>
     public static class ObjectChangeTrackingExtensions
     {
+        /// <summary>
+        /// Determines if given type can be tracked as collection
+        /// </summary>
+        /// <param name="some">The whole type to check</param>
+        /// <returns><literal>true</literal> if can be tracked as collection, <literal>false</literal> if it can't be tracked as collection</returns>
+        internal static bool CanBeTrackedAsCollection(this Type some)
+        {
+            Contract.Requires(some != null, "Given type must be a non-null reference");
+
+            return TrackerDogConfiguration.Collections.CanTrack(some);
+        }
+
+        /// <summary>
+        /// Determines if given property can be tracked as collection
+        /// </summary>
+        /// <param name="some">The whole property to check</param>
+        /// <returns><literal>true</literal> if can be tracked as collection, <literal>false</literal> if it can't be tracked as collection</returns>
+        internal static bool CanBeTrackedAsCollection(this PropertyInfo some)
+        {
+            Contract.Requires(some != null, "Given property must be a non-null reference");
+
+            return some.PropertyType.CanBeTrackedAsCollection();
+        }
+
+        /// <summary>
+        /// Determines if given object type can be tracked as collection
+        /// </summary>
+        /// <param name="some">The whole object to check its type</param>
+        /// <returns><literal>true</literal> if can be tracked as collection, <literal>false</literal> if it can't be tracked as collection</returns>
+        internal static bool CanBeTrackedAsCollection(this object some)
+        {
+            Contract.Requires(some != null, "Given object must be a non-null reference");
+
+            return some.GetType().CanBeTrackedAsCollection();
+        }
+
         /// <summary>
         /// Turns some object into a trackable object.
         /// </summary>
@@ -43,15 +80,34 @@
         }
 
         /// <summary>
+        /// Turns an object held by a property into a change-trackable one.
+        /// </summary>
+        /// <param name="property">The whole property</param>
+        /// <param name="parentObject">The object owning the property</param>
+        internal static void AsTrackableCollection(this PropertyInfo property, IChangeTrackableObject parentObject)
+        {
+            Contract.Requires(property != null, "Cannot turn the object held by the property because the given property is null");
+            Contract.Requires(parentObject != null, "A non-null reference to the object owning given property is mandatory");
+
+            if (property.IsEnumerable() && property.CanBeTrackedAsCollection())
+                property.SetValue(parentObject, TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property));
+        }
+
+        /// <summary>
         /// Determines if a given object is a change-trackable object already
         /// </summary>
         /// <param name="some">The object to check</param>
         /// <returns><literal>true</literal> if it's change-trackable, <literal>false</literal> if it's not change-trackable</returns>
         public static bool IsTrackable(this object some)
         {
-            return some is IChangeTrackableObject;
+            return some is IChangeTrackableObject || some is IChangeTrackableCollection;
         }
 
+        /// <summary>
+        /// Gets if non-proxied object type is already change-trackable
+        /// </summary>
+        /// <param name="some">The whole object to check</param>
+        /// <returns><literal>true</literal> if it's trackable, <literal>false</literal> if it's not trackable</returns>
         public static Type GetActualTypeIfTrackable(this object some)
         {
             Contract.Requires(some != null, "Reference must not be null to get actual object type");
@@ -59,7 +115,11 @@
 
             return GetActualTypeIfTrackable(some.GetType());
         }
-
+        /// <summary>
+        /// Gets if non-proxied type is already change-trackable
+        /// </summary>
+        /// <param name="some">The whole type to check</param>
+        /// <returns><literal>true</literal> if it's trackable, <literal>false</literal> if it's not trackable</returns>
         public static Type GetActualTypeIfTrackable(this Type some)
         {
             Contract.Requires(some != null, "Reference must not be null to get actual object type");

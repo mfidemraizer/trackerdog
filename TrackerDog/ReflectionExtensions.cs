@@ -13,6 +13,35 @@
     internal static class ReflectionExtensions
     {
         /// <summary>
+        /// Determines if given type implements <see cref="System.Collections.Generic.IEnumerable{T}"/>
+        /// </summary>
+        /// <param name="some">The whole type to check</param>
+        /// <returns><literal>true</literal> if it implements <see cref="System.Collections.Generic.IEnumerable{T}"/>, <literal>false</literal> if it doesn't implement <see cref="System.Collections.Generic.IEnumerable{T}"/></returns>
+        public static bool IsEnumerable(this Type some)
+        {
+            Contract.Requires(some != null, "Given type must be a non-null reference");
+            
+            return some.GetInterfaces().Any
+            (
+                someInterface =>
+                    someInterface.IsGenericType
+                    && someInterface.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+            );
+        }
+
+        /// <summary>
+        /// Determines if given property implements <see cref="System.Collections.Generic.IEnumerable{T}"/>
+        /// </summary>
+        /// <param name="some">The whole property to check</param>
+        /// <returns><literal>true</literal> if it implements <see cref="System.Collections.Generic.IEnumerable{T}"/>, <literal>false</literal> if it doesn't implement <see cref="System.Collections.Generic.IEnumerable{T}"/></returns>
+        public static bool IsEnumerable(this PropertyInfo some)
+        {
+            Contract.Requires(some != null, "Given property must be a non-null reference");
+
+            return some.PropertyType.IsEnumerable();
+        }
+
+        /// <summary>
         /// Creates an instance using reflection of given type where the type has generic parameters.
         /// </summary>
         /// <param name="some">The type to instantiate</param>
@@ -181,19 +210,6 @@
         }
 
         /// <summary>
-        /// Turns an object held by a property into a change-trackable one.
-        /// </summary>
-        /// <param name="property">The whole property</param>
-        /// <param name="parentObject">The object owning the property</param>
-        public static void MakeTrackable(this PropertyInfo property, IChangeTrackableObject parentObject)
-        {
-            Contract.Requires(property != null, "Cannot turn the object held by the property because the given property is null");
-            Contract.Requires(parentObject != null, "A non-null reference to the object owning given property is mandatory");
-
-            property.SetValue(parentObject, TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property));
-        }
-
-        /// <summary>
         /// Determines if given type is a <see cref="System.Dynamic.DynamicObject"/> derived class
         /// </summary>
         /// <param name="some">The whole type of the possible dynamic object</param>
@@ -241,7 +257,15 @@
             return IsDynamicObject(some.GetType());
         }
 
-        public static object CallMethod(this object some, string name, IEnumerable<object> args, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        /// <summary>
+        /// Calls a method from current object by its name
+        /// </summary>
+        /// <param name="some">The object owning the method to call</param>
+        /// <param name="name">The name of the method to call</param>
+        /// <param name="args">Arguments to pass the whole method. Leave null if it's a parameterless method</param>
+        /// <param name="bindingFlags">The reflection binding flags to look for the whole method</param>
+        /// <returns>The return value obtained as result of calling the whole method</returns>
+        public static object CallMethod(this object some, string name, IEnumerable<object> args = null, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
             return some.GetType().GetMethod(name, bindingFlags).Invoke(some, args?.ToArray());
         }

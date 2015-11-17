@@ -3,11 +3,19 @@
     using System;
     using System.Diagnostics.Contracts;
 
+    /// <summary>
+    /// Represents a collection implementation information
+    /// </summary>
     public sealed class CollectionImplementation
     {
         private readonly Type _type;
         private readonly Type _changeInterceptor;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="type">The collection implementation type</param>
+        /// <param name="changeInterceptor">The collection change interceptor implementation type</param>
         public CollectionImplementation(Type type, Type changeInterceptor)
         {
             Contract.Requires(type != null, "Given collection implementation cannot be a null reference");
@@ -20,7 +28,14 @@
             _changeInterceptor = changeInterceptor;
         }
 
+        /// <summary>
+        /// Gets the collection implementation type
+        /// </summary>
         public Type Type => _type;
+
+        /// <summary>
+        /// Gets the collection change interceptor implementation type
+        /// </summary>
         public Type ChangeInterceptor => _changeInterceptor;
     }
 }

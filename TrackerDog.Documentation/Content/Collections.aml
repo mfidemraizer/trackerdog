@@ -172,6 +172,10 @@
           </listItem>
         </list>
         <para>
+          <codeEntityReference>T:TrackerDog.Configuration.TrackableCollectionConfiguration</codeEntityReference> must be accessed and configured
+          getting it using the static property <codeEntityReference>P:TrackerDogConfiguration.Collections</codeEntityReference>
+        </para>
+        <para>
           Method arguments explained:
         </para>
         <list class="bullet">
@@ -229,7 +233,7 @@
         </para>
         <code language="c#">
           <![CDATA[
-          TrackerDogConfiguration.CollectionConfiguration.ReplaceImplementation
+          TrackerDogConfiguration.Collections.ReplaceImplementation
           (
               typeof(IList<>),
               typeof(MyIListImplementation<>)

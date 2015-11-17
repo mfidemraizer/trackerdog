@@ -41,7 +41,7 @@
                 if (!property.IsIndexer() && !PropertyInterceptor.ChangeTrackingMembers.Contains(property.Name))
                 {
                     if (property.IsList() || property.IsSet())
-                        property.MakeTrackable(trackableObject);
+                        property.AsTrackableCollection(trackableObject);
 
                     TrackProperty(trackableObject, property.Name);
                 }
