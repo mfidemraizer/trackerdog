@@ -11,12 +11,15 @@
     /// </summary>
     public sealed class TrackableCollectionConfiguration
     {
+        private readonly static object _syncLock = new object();
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         public TrackableCollectionConfiguration()
         {
             AddImplementation(typeof(ISet<>), typeof(HashSet<>), typeof(SetChangeInterceptor<>));
+            AddImplementation(typeof(IList<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
             AddImplementation(typeof(ICollection<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
             AddImplementation(typeof(IEnumerable<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
         }
@@ -35,23 +38,26 @@
         {
             Contract.Requires(some != null, "A non-null reference to a type is mandatory to get its implementation");
 
-            if (some == typeof(string))
-                return false;
+            lock (_syncLock)
+            {
+                if (some == typeof(string))
+                    return false;
 
-            Type someGenericTypeDefinition = some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
-            IEnumerable<Type> someInterfaces = some.GetInterfaces();
+                Type someGenericTypeDefinition = some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
+                IEnumerable<Type> someInterfaces = some.GetInterfaces();
 
-            return Implementations.Any
-            (
-                interfaceType =>
-                    someGenericTypeDefinition != null && someGenericTypeDefinition == interfaceType.Key
-                    ||
-                    someInterfaces.Any
-                    (
-                        i => i.IsGenericType
-                            && i.GetGenericTypeDefinition() == interfaceType.Key
-                    )
-            );
+                return Implementations.Any
+                (
+                    interfaceType =>
+                        someGenericTypeDefinition != null && someGenericTypeDefinition == interfaceType.Key
+                        ||
+                        someInterfaces.Any
+                        (
+                            i => i.IsGenericType
+                                && i.GetGenericTypeDefinition() == interfaceType.Key
+                        )
+                );
+            }
         }
 
         /// <summary>
@@ -66,25 +72,28 @@
             Contract.Requires(some != null, "A non-null reference to a type is mandatory to get its implementation");
             Contract.Ensures(Contract.Result<KeyValuePair<Type, CollectionImplementation>>().Key != null);
 
-            Type someGenericTypeDefinition = some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
-            IEnumerable<Type> someInterfaces = some.GetInterfaces();
+            lock (_syncLock)
+            {
+                Type someGenericTypeDefinition = some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
+                IEnumerable<Type> someInterfaces = some.GetInterfaces();
 
-            KeyValuePair<Type, CollectionImplementation> result = Implementations.FirstOrDefault
-            (
-                interfaceType =>
-                    someGenericTypeDefinition != null && someGenericTypeDefinition == interfaceType.Key
-                    ||
-                    someInterfaces.Any
-                    (
-                        i => i.IsGenericType
-                            && i.GetGenericTypeDefinition() == interfaceType.Key
-                    )
-            );
+                KeyValuePair<Type, CollectionImplementation> result = Implementations.FirstOrDefault
+                (
+                    interfaceType =>
+                        someGenericTypeDefinition != null && someGenericTypeDefinition == interfaceType.Key
+                        ||
+                        someInterfaces.Any
+                        (
+                            i => i.IsGenericType
+                                && i.GetGenericTypeDefinition() == interfaceType.Key
+                        )
+                );
 
-            if (result.Key != null)
-                return result;
-            else
-                throw new InvalidOperationException($"No implementation found to '{some.AssemblyQualifiedName}'");
+                if (result.Key != null)
+                    return result;
+                else
+                    throw new InvalidOperationException($"No implementation found to '{some.AssemblyQualifiedName}'");
+            }
         }
 
         /// <summary>
@@ -101,9 +110,12 @@
             Contract.Requires(interfaceType.IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
             Contract.Requires(collectionChangeInterceptor.GetInterfaces().Any(i => collectionChangeInterceptor.GetInterfaces().Any(i2 => i2 == i)), "Provided change interceptor type must be assignable to collection implementation type");
 
-            Contract.Assert(!Implementations.ContainsKey(interfaceType), "Adding an implementation can be done once");
+            lock (_syncLock)
+            {
+                Contract.Assert(!Implementations.ContainsKey(interfaceType), "Adding an implementation can be done once");
 
-            Implementations.Add(interfaceType, new CollectionImplementation(implementationType, collectionChangeInterceptor));
+                Implementations.Add(interfaceType, new CollectionImplementation(implementationType, collectionChangeInterceptor));
+            }
         }
 
         /// <summary>
@@ -119,10 +131,13 @@
             Contract.Requires(interfaceType.IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
             Contract.Requires(interfaceType.IsAssignableFrom(collectionChangeInterceptor), "Provided change interceptor type must be assignable to collection implementation type");
 
-            if (Implementations.ContainsKey(interfaceType))
-                Implementations[interfaceType] = new CollectionImplementation(implementationType, collectionChangeInterceptor);
-            else
-                AddImplementation(interfaceType, implementationType, collectionChangeInterceptor);
+            lock (_syncLock)
+            {
+                if (Implementations.ContainsKey(interfaceType))
+                    Implementations[interfaceType] = new CollectionImplementation(implementationType, collectionChangeInterceptor);
+                else
+                    AddImplementation(interfaceType, implementationType, collectionChangeInterceptor);
+            }
         }
     }
 }

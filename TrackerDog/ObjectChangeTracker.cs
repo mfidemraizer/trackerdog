@@ -23,6 +23,7 @@
         private const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance;
         private readonly object _targetObject;
         private readonly Type _targetObjectType;
+        private readonly object _syncLock = new object();
 
         /// <summary>
         /// Default constructor
@@ -67,30 +68,35 @@
 
         public void Complete()
         {
-            Contract.Assert(PropertyTrackings != null, "Property trackings cannot be null to accept all changes");
+            lock (_syncLock)
+            {
+                Contract.Assert(PropertyTrackings != null, "Property trackings cannot be null to accept all changes");
 
-            if (PropertyTrackings.Count > 0)
-                foreach (KeyValuePair<PropertyInfo, DeclaredObjectPropertyChangeTracking> tracking in PropertyTrackings)
-                {
-                    Contract.Assert(ReferenceEquals(tracking.Value.Tracker, this), "This tracking must be tracked by current change tracker");
+                if (PropertyTrackings.Count > 0)
+                    foreach (KeyValuePair<PropertyInfo, DeclaredObjectPropertyChangeTracking> tracking in PropertyTrackings)
+                    {
+                        Contract.Assert(ReferenceEquals(tracking.Value.Tracker, this), "This tracking must be tracked by current change tracker");
 
-                    tracking.Value.OldValue = tracking.Value.CurrentValue;
-                }
-
+                        tracking.Value.OldValue = tracking.Value.CurrentValue;
+                    }
+            }
         }
 
         public void Discard()
         {
-            Contract.Assert(PropertyTrackings != null, "Property trackings cannot be null to undo all changes");
+            lock (_syncLock)
+            {
+                Contract.Assert(PropertyTrackings != null, "Property trackings cannot be null to undo all changes");
 
-            if (PropertyTrackings.Count > 0)
-                foreach (KeyValuePair<PropertyInfo, DeclaredObjectPropertyChangeTracking> tracking in PropertyTrackings)
-                {
-                    Contract.Assert(ReferenceEquals(tracking.Value.Tracker, this), "This tracking must be tracked by current change tracker");
+                if (PropertyTrackings.Count > 0)
+                    foreach (KeyValuePair<PropertyInfo, DeclaredObjectPropertyChangeTracking> tracking in PropertyTrackings)
+                    {
+                        Contract.Assert(ReferenceEquals(tracking.Value.Tracker, this), "This tracking must be tracked by current change tracker");
 
-                    tracking.Value.CurrentValue = tracking.Value.OldValue;
-                    tracking.Value.Property.SetValue(tracking.Value.TargetObject, tracking.Value.OldValue);
-                }
+                        tracking.Value.CurrentValue = tracking.Value.OldValue;
+                        tracking.Value.Property.SetValue(tracking.Value.TargetObject, tracking.Value.OldValue);
+                    }
+            }
         }
 
         /// <summary>
@@ -102,25 +108,29 @@
         {
             Contract.Requires(property != null, "Since this is tracking a property, the property itself cannot be null");
             Contract.Requires(targetObject == null || property.DeclaringType.IsAssignableFrom(targetObject.GetType()), "Given property must be declared on the given target object");
-            targetObject = targetObject ?? TargetObject;
 
-            object currentValue = targetObject.GetType().GetProperty(property.Name, DefaultBindingFlags)
-                                            .GetValue(targetObject);
+            lock (_syncLock)
+            {
+                targetObject = targetObject ?? TargetObject;
 
-            DeclaredObjectPropertyChangeTracking existingTracking = null;
+                object currentValue = targetObject.GetType().GetProperty(property.Name, DefaultBindingFlags)
+                                                .GetValue(targetObject);
 
-            Contract.Assert(PropertyTrackings != null, "Cannot add or update a tracking if tracking collection is null");
+                DeclaredObjectPropertyChangeTracking existingTracking = null;
 
-            PropertyInfo baseProperty = property.GetBaseProperty();
+                Contract.Assert(PropertyTrackings != null, "Cannot add or update a tracking if tracking collection is null");
 
-            if (TrackerDogConfiguration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(baseProperty, out existingTracking))
-                PropertyTrackings.Add
-                (
-                    baseProperty,
-                    new DeclaredObjectPropertyChangeTracking(this, targetObject, property, currentValue)
-                );
-            else if (existingTracking != null)
-                existingTracking.CurrentValue = currentValue;
+                PropertyInfo baseProperty = property.GetBaseProperty();
+
+                if (TrackerDogConfiguration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(baseProperty, out existingTracking))
+                    PropertyTrackings.Add
+                    (
+                        baseProperty,
+                        new DeclaredObjectPropertyChangeTracking(this, targetObject, property, currentValue)
+                    );
+                else if (existingTracking != null)
+                    existingTracking.CurrentValue = currentValue;
+            }
         }
 
         /// <summary>
@@ -132,24 +142,27 @@
         {
             Contract.Requires(propertyName != null, "Since this is tracking a property, the property property itself cannot be null or empty");
 
-            targetObject = targetObject ?? TargetObject as DynamicObject;
+            lock (_syncLock)
+            {
+                targetObject = targetObject ?? TargetObject as DynamicObject;
 
-            Contract.Assert(targetObject != null, "To add or update a tracking by the property name, the object owning the property must be a dynamic object");
+                Contract.Assert(targetObject != null, "To add or update a tracking by the property name, the object owning the property must be a dynamic object");
 
-            object currentValue = targetObject.GetDynamicMember(propertyName);
+                object currentValue = targetObject.GetDynamicMember(propertyName);
 
-            ObjectPropertyChangeTracking existingTracking = null;
+                ObjectPropertyChangeTracking existingTracking = null;
 
-            Contract.Assert(DynamicPropertyTrackings != null, "Cannot add a property tracking if tracking collection is null");
+                Contract.Assert(DynamicPropertyTrackings != null, "Cannot add a property tracking if tracking collection is null");
 
-            if (!DynamicPropertyTrackings.TryGetValue(propertyName, out existingTracking))
-                DynamicPropertyTrackings.Add
-                (
-                    propertyName,
-                    new ObjectPropertyChangeTracking(this, targetObject, propertyName, currentValue)
-                );
-            else if (existingTracking != null)
-                existingTracking.CurrentValue = currentValue;
+                if (!DynamicPropertyTrackings.TryGetValue(propertyName, out existingTracking))
+                    DynamicPropertyTrackings.Add
+                    (
+                        propertyName,
+                        new ObjectPropertyChangeTracking(this, targetObject, propertyName, currentValue)
+                    );
+                else if (existingTracking != null)
+                    existingTracking.CurrentValue = currentValue;
+            }
         }
 
         public IEnumerator<IObjectPropertyChangeTracking> GetEnumerator() => PropertyTrackings.Values.GetEnumerator();
@@ -157,14 +170,17 @@
 
         public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty<T, TProperty>(Expression<Func<T, TProperty>> propertySelector)
         {
-           return GetTrackingByProperty(propertySelector.ExtractProperty());
+            return GetTrackingByProperty(propertySelector.ExtractProperty());
         }
 
         public IObjectPropertyChangeTracking GetDynamicTrackingByProperty(string propertyName)
         {
             Contract.Requires(!string.IsNullOrEmpty(propertyName), "Property name cannot be null or empty");
 
-            return DynamicPropertyTrackings[propertyName];
+            lock(_syncLock)
+            {
+                return DynamicPropertyTrackings[propertyName];
+            }
         }
 
         public IDeclaredObjectPropertyChangeTracking GetTrackingByProperty(PropertyInfo property)
@@ -172,8 +188,11 @@
             Contract.Assert(property != null, "Selected member is not a property");
             Contract.Assert(PropertyTrackings != null, "Cannot get the property tracking if tracking collection is null");
 
-            return PropertyTrackings.Single(t => t.Key.DeclaringType.GetActualTypeIfTrackable().GetProperty(t.Key.Name) == property)
-                            .Value;
+            lock(_syncLock)
+            {
+                return PropertyTrackings.Single(t => t.Key.DeclaringType.GetActualTypeIfTrackable().GetProperty(t.Key.Name) == property)
+                                .Value;
+            }
         }
     }
 }

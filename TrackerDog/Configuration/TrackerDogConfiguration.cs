@@ -11,6 +11,8 @@
     /// </summary>
     public static class TrackerDogConfiguration
     {
+        private readonly static object _syncLock = new object();
+
         /// <summary>
         /// Gets current white list of types to which its instances will support change tracking.
         /// </summary>
@@ -29,8 +31,11 @@
         {
             Contract.Requires(types != null && types.Length > 0 && types.All(t => t != null), "Given types cannot be null");
 
-            foreach (ITrackableType type in types)
-                Contract.Assert(TrackableTypes.Add(type), "Type can only be configured to be tracked once");
+            lock (_syncLock)
+            {
+                foreach (ITrackableType type in types)
+                    Contract.Assert(TrackableTypes.Add(type), "Type can only be configured to be tracked once");
+            }
         }
 
         /// <summary>
@@ -42,7 +47,8 @@
         {
             Contract.Requires(type != null, "Given type cannot be null");
 
-            return TrackableTypes.SingleOrDefault(t => t.Type == type);
+            lock (_syncLock)
+                return TrackableTypes.SingleOrDefault(t => t.Type == type);
         }
 
         /// <summary>
@@ -54,7 +60,8 @@
         {
             Contract.Requires(someType != null, "Given type cannot be null");
 
-            return TrackableTypes.Any(t => t.Type == someType.GetActualTypeIfTrackable());
+            lock (_syncLock)
+                return TrackableTypes.Any(t => t.Type == someType.GetActualTypeIfTrackable());
         }
 
         /// <summary>
@@ -67,12 +74,15 @@
             Contract.Requires(property != null, "Property to check cannot be null");
             Contract.Requires(CanTrackType(property.ReflectedType), "Declaring type must be configured as trackable");
 
-            Contract.Assert(CanTrackType(property.GetBaseProperty().DeclaringType), "Declaring type must be configured as trackable even if it's a base class");
+            lock (_syncLock)
+            {
+                Contract.Assert(CanTrackType(property.GetBaseProperty().DeclaringType), "Declaring type must be configured as trackable even if it's a base class");
 
-            ITrackableType trackableType = GetTrackableType(property.GetBaseProperty().DeclaringType);
+                ITrackableType trackableType = GetTrackableType(property.GetBaseProperty().DeclaringType);
 
-            return trackableType.IncludedProperties.Count == 0 
-                        || trackableType.IncludedProperties.Contains(property.GetBaseProperty());
+                return trackableType.IncludedProperties.Count == 0
+                            || trackableType.IncludedProperties.Contains(property.GetBaseProperty());
+            }
         }
     }
 }

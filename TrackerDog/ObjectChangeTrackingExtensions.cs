@@ -261,7 +261,7 @@
             trackableObject.ChangeTracker.Discard();
         }
 
-        public static TObject ToNonTracked<TObject>(this TObject some)
+        public static TObject ToUntracked<TObject>(this TObject some)
             where TObject : class
         {
             Contract.Requires(some != null);
@@ -300,7 +300,6 @@
         /// <param name="some">The change-tracked object</param>
         /// <param name="propertyName">The property name</param>
         /// <returns>The value of the property when it was started to be tracked</returns>
-        /// </example>
         public static dynamic OldPropertyValue(this object some, string propertyName)
         {
             Contract.Requires(some != null, "A non-null reference is mandatory to get an object old property value");

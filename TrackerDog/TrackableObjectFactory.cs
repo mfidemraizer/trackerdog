@@ -56,6 +56,8 @@
 
                 KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail = TrackerDogConfiguration.Collections.GetImplementation(some.GetType());
 
+                Contract.Assert(parentObjectProperty.PropertyType.GetGenericTypeDefinition().IsAssignableFrom(collectionImplementationDetail.Key), $"Trackable collection implementation of type '{collectionImplementationDetail.Key.AssemblyQualifiedName}' cannot be set to the target property '{parentObjectProperty.DeclaringType.FullName}.{parentObjectProperty.Name}' with type '{parentObjectProperty.PropertyType.AssemblyQualifiedName}'. Currently the whole property type is not supported. Provide a collection implementation during configuration stage.");
+
                 object targetList =
                     collectionImplementationDetail.Value.Type.CreateInstanceWithGenericArgs
                     (
@@ -97,6 +99,7 @@
         /// <param name="reusedTracker">An optional object change tracker to reuse instead of creating a new one</param>
         /// <param name="parentObject">An optional parent object if object to be proxied is associated to other object</param>
         /// <param name="propertyToSet">An optional parent object property of the given parent object where given object to be proxied is held in the other side of the association</param>
+        /// <param name="constructorArguments">Constructor arguments if the type to be tracked has a constructor with parameters</param>
         /// <returns>The change-trackable proxy of the given object</returns>
         public static object Create(object some = null, Type typeToTrack = null, ObjectChangeTracker reusedTracker = null, object parentObject = null, PropertyInfo propertyToSet = null, object[] constructorArguments = null)
         {
@@ -182,6 +185,7 @@
         /// <param name="reusedTracker">An optional object change tracker to reuse instead of creating a new one</param>
         /// <param name="parentObject">An optional parent object if object to be proxied is associated to other object</param>
         /// <param name="propertyToSet">An optional parent object property of the given parent object where given object to be proxied is held in the other side of the association</param>
+        /// <param name="constructorArguments">Constructor arguments if the type to be tracked has a constructor with parameters</param>
         /// <returns>The change-trackable proxy of the given object</returns>
         public static TObject Create<TObject>(TObject some = null, ObjectChangeTracker reusedTracker = null, object parentObject = null, PropertyInfo propertyToSet = null, object[] constructorArguments = null)
             where TObject : class
