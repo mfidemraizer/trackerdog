@@ -1,5 +1,6 @@
 ﻿namespace TrackerDog
 {
+    using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
 
@@ -7,6 +8,14 @@
     internal abstract class IChangeTrackableObjectContract : IChangeTrackableObject
     {
         public ObjectChangeTracker ChangeTracker { get; set; }
+
+        public object UnderlyingObject
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

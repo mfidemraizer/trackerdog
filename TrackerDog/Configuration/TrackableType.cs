@@ -29,7 +29,11 @@
             Contract.Requires(propertySelector != null);
             Contract.Ensures(Contract.Result<TrackableType<T>>() != null);
 
-            Contract.Assert(_includedProperties.Add(propertySelector.ExtractProperty()), "Property must be included once");
+            PropertyInfo property = propertySelector.ExtractProperty();
+
+            Contract.Assert(property.DeclaringType == typeof(T), $"Property '{propertySelector.ToString()}' must be declared on the type being configured as trackable. If the property to include is declared on a base type, the whole base type must be also configured as trackable and the so-called property should be included on the particular base type.");
+
+            Contract.Assert(_includedProperties.Add(property), "Property must be included once");
 
             return this;
         }

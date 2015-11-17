@@ -67,6 +67,8 @@
             Contract.Requires(property != null, "Property to check cannot be null");
             Contract.Requires(CanTrackType(property.ReflectedType), "Declaring type must be configured as trackable");
 
+            Contract.Assert(CanTrackType(property.GetBaseProperty().DeclaringType), "Declaring type must be configured as trackable even if it's a base class");
+
             ITrackableType trackableType = GetTrackableType(property.GetBaseProperty().DeclaringType);
 
             return trackableType.IncludedProperties.Count == 0 

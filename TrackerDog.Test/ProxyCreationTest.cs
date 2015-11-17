@@ -22,6 +22,25 @@
             public virtual string Text { get; set; }
         }
 
+        public class C
+        {
+            public string Text { get; set; }
+        }
+
+        [TestMethod]
+        public void CanExtractProxyTargetWithChanges()
+        {
+            TrackerDogConfiguration.TrackTheseTypes(Track.ThisType<A>());
+
+            C c = new C { Text = "hello world" }.AsTrackable();
+            c.Text = "hello world 2";
+
+            C noProxy = c.ToNonTracked();
+
+            Assert.AreEqual("hello world 2", noProxy.Text);
+        }
+
+
         [TestMethod]
         public void AllProxiesAreOfSameProxyType()
         {

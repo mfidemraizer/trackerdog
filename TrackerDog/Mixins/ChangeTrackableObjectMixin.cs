@@ -1,5 +1,6 @@
 ﻿namespace TrackerDog.Mixins
 {
+    using Castle.DynamicProxy;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;

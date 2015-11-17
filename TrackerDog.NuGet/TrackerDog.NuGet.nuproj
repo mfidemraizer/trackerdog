@@ -19,13 +19,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TrackerDog</Id>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <Title>TrackerDog: A generic .NET object change tracker</Title>
     <Authors>Matías Fidemraizer</Authors>
     <Owners>Matías Fidemraizer</Owners>
     <Summary>Track changes of any .NET object and full object graphs</Summary>
     <Description>TrackerDog turns any .NET object or full object graph into a change-trackable object</Description>
-    <ReleaseNotes>New decoupled collection change tracking architecture (see http://mfidemraizer.github.io/trackerdog/html/1e03762d-b9f5-44af-a4b0-c23c36064c24.htm)</ReleaseNotes>
+    <ReleaseNotes>When a trackable object had a non-trackable collection (because its type isn't configured to be tracked) TrackerDog was crashing. Now this is fixed.</ReleaseNotes>
     <ProjectUrl>http://mfidemraizer.github.io/trackerdog/</ProjectUrl>
     <LicenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © Matías Fidemraizer</Copyright>

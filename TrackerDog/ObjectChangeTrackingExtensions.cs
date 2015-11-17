@@ -1,5 +1,6 @@
 ﻿namespace TrackerDog
 {
+    using Castle.DynamicProxy;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
@@ -258,6 +259,18 @@
             Contract.Assert(trackableObject != null, "Given object must be trackable to undo its changes");
 
             trackableObject.ChangeTracker.Discard();
+        }
+
+        public static TObject ToNonTracked<TObject>(this TObject some)
+            where TObject : class
+        {
+            Contract.Requires(some != null);
+            Contract.Ensures(Contract.Result<TObject>() != null);
+            Contract.Ensures(!(Contract.Result<TObject>() is IProxyTargetAccessor), "To convert a tracked object to untracked one the whole tracked object must be created from a pre-existing object");
+
+            IProxyTargetAccessor proxyTargetAccessor = some as IProxyTargetAccessor;
+
+            return proxyTargetAccessor == null ? some : (TObject)proxyTargetAccessor.DynProxyGetTarget();
         }
 
         /// <summary>
