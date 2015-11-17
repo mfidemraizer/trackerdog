@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>TrackerDog</id>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <title>TrackerDog: A generic object change tracker</title>
     <authors>Matías Fidemraizer</authors>
     <owners>Matías Fidemraizer</owners>
     <summary>Track changes of any .NET object and full object graphs</summary>
     <description>TrackerDog turns any .NET object or full object graph into a change-trackable object</description>
-    <releaseNotes>New decoupled collection change tracking architecture (see http://mfidemraizer.github.io/trackerdog/html/1e03762d-b9f5-44af-a4b0-c23c36064c24.htm)</releaseNotes>
+    <releaseNotes>When a trackable object had a non-trackable collection (because its type isn't configured to be tracked) TrackerDog was crashing. Now this is fixed.</releaseNotes>
     <projectUrl>http://mfidemraizer.github.io/trackerdog/</projectUrl>
     <licenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</licenseUrl>
     <copyright>Copyright © Matías Fidemraizer</copyright>
