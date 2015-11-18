@@ -17,7 +17,7 @@
         {
             Type collectionType = invocation.Method.DeclaringType;
 
-            if ((collectionType.IsList() || collectionType.IsSet()) && invocation.Arguments.Length == 1)
+            if (collectionType.IsEnumerable() && invocation.Arguments.Length == 1)
             {
                 IChangeTrackableCollection trackableCollection = (IChangeTrackableCollection)withParent;
                 IChangeTrackableObject changedItem =

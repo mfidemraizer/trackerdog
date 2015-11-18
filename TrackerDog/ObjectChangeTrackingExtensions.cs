@@ -2,6 +2,7 @@
 {
     using Castle.DynamicProxy;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -268,9 +269,52 @@
             Contract.Ensures(Contract.Result<TObject>() != null);
             Contract.Ensures(!(Contract.Result<TObject>() is IProxyTargetAccessor), "To convert a tracked object to untracked one the whole tracked object must be created from a pre-existing object");
 
-            IProxyTargetAccessor proxyTargetAccessor = some as IProxyTargetAccessor;
+            IChangeTrackableObject trackable = some as IChangeTrackableObject;
 
-            return proxyTargetAccessor == null ? some : (TObject)proxyTargetAccessor.DynProxyGetTarget();
+            if (trackable != null)
+            {
+                IProxyTargetAccessor proxyTargetAccessor = (IProxyTargetAccessor)trackable;
+                TObject unwrapped = (TObject)proxyTargetAccessor.DynProxyGetTarget();
+
+                if (trackable.CollectionProperties.Count > 0)
+                {
+                    foreach (PropertyInfo property in trackable.CollectionProperties)
+                    {
+                        PropertyInfo unwrappedProperty = property.GetBaseProperty();
+                        object propertyValue = property.GetValue(some);
+
+                        IProxyTargetAccessor propertyValueProxyAccessor = propertyValue as IProxyTargetAccessor;
+
+                        if (propertyValueProxyAccessor != null)
+                        {
+                            IEnumerable enumerablePropertyValue = propertyValue as IEnumerable;
+
+                            if (enumerablePropertyValue != null)
+                            {
+                                Type collectionItemType = enumerablePropertyValue.GetCollectionItemType();
+
+                                object enumerablePropertyValueCopy =
+                                    TrackerDogConfiguration.Collections.GetImplementation(unwrappedProperty.PropertyType)
+                                        .Value.Type.CreateInstanceWithGenericArgs(null, collectionItemType);
+                                
+                                if(enumerablePropertyValueCopy is ICollection)
+                                {
+                                    foreach (object item in enumerablePropertyValue)
+                                    {
+                                        enumerablePropertyValueCopy.CallMethod("Add", new[] { item.ToUntracked() });
+                                    }
+
+                                    unwrappedProperty.SetValue(unwrapped, enumerablePropertyValueCopy);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return unwrapped;
+
+            }
+            else return some;
         }
 
         /// <summary>

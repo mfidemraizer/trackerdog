@@ -1,7 +1,9 @@
 ﻿namespace TrackerDog
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Defines an object that allows its changes to be tracked.
@@ -13,6 +15,11 @@
         /// Gets the change tracker tracking this object
         /// </summary>
         ObjectChangeTracker ChangeTracker { get; }
+
+        /// <summary>
+        /// Gets a set of current object collection property metadata
+        /// </summary>
+        ISet<PropertyInfo> CollectionProperties { get; }
 
         /// <summary>
         /// Starts tracking this object.

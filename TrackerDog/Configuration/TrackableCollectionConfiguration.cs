@@ -75,6 +75,7 @@
             lock (_syncLock)
             {
                 Type someGenericTypeDefinition = some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
+
                 IEnumerable<Type> someInterfaces = some.GetInterfaces();
 
                 KeyValuePair<Type, CollectionImplementation> result = Implementations.FirstOrDefault

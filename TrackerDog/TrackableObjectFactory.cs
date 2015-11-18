@@ -54,9 +54,10 @@
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new CollectionterceptionHook());
                 options.AddMixinInstance(new ChangeTrackableCollectionMixin());
 
-                KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail = TrackerDogConfiguration.Collections.GetImplementation(some.GetType());
+                KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail 
+                            = TrackerDogConfiguration.Collections.GetImplementation(parentObjectProperty.PropertyType);
 
-                Contract.Assert(parentObjectProperty.PropertyType.GetGenericTypeDefinition().IsAssignableFrom(collectionImplementationDetail.Key), $"Trackable collection implementation of type '{collectionImplementationDetail.Key.AssemblyQualifiedName}' cannot be set to the target property '{parentObjectProperty.DeclaringType.FullName}.{parentObjectProperty.Name}' with type '{parentObjectProperty.PropertyType.AssemblyQualifiedName}'. Currently the whole property type is not supported. Provide a collection implementation during configuration stage.");
+                Contract.Assert(parentObjectProperty.PropertyType.GetGenericTypeDefinition().IsAssignableFrom(collectionImplementationDetail.Key), $"Trackable collection implementation of type '{collectionImplementationDetail.Key.AssemblyQualifiedName}' cannot be set to the target property '{parentObjectProperty.DeclaringType.FullName}.{parentObjectProperty.Name}' with type '{parentObjectProperty.PropertyType.AssemblyQualifiedName}'. This isn't supported because it might require a downcast. Please provide a collection change tracking configuration to work with the more concrete interface.");
 
                 object targetList =
                     collectionImplementationDetail.Value.Type.CreateInstanceWithGenericArgs

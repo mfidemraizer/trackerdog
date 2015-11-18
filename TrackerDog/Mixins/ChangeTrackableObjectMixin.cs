@@ -3,6 +3,7 @@
     using Castle.DynamicProxy;
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Dynamic;
@@ -18,6 +19,7 @@
 
         private Dictionary<string, PropertyInfo> CachedProperties => _cachedProperties;
         public virtual ObjectChangeTracker ChangeTracker { get; set; }
+        public virtual ISet<PropertyInfo> CollectionProperties { get; } = new HashSet<PropertyInfo>();
         public event PropertyChangedEventHandler PropertyChanged;
 
         internal Guid Id => _id;
@@ -41,8 +43,11 @@
             foreach (PropertyInfo property in trackableProperties)
                 if (!property.IsIndexer() && !PropertyInterceptor.ChangeTrackingMembers.Contains(property.Name))
                 {
-                    if (property.IsList() || property.IsSet())
+                    if (property.IsEnumerable())
+                    {
                         property.AsTrackableCollection(trackableObject);
+                        CollectionProperties.Add(property);
+                    }
 
                     TrackProperty(trackableObject, property.Name);
                 }

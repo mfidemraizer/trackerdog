@@ -101,6 +101,19 @@
         }
 
         [TestMethod]
+        public void CanTurnCollectionItemsToUntracked()
+        {
+            B b = new B().AsTrackable();
+            b.Dogs.First().Name = "Rex";
+            b.Dogs.Add(new Dog { Name = "Rex" });
+
+            b = b.ToUntracked();
+
+            Assert.IsFalse(b.IsTrackable());
+            Assert.IsFalse(b.Dogs.Any(dog => dog.IsTrackable()));
+        }
+
+        [TestMethod]
         public void CanTrackSetPropertyChanges()
         {
             C c = new C().AsTrackable();
