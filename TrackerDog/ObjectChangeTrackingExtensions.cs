@@ -318,29 +318,32 @@
                 {
                     foreach (PropertyInfo property in trackable.CollectionProperties)
                     {
-                        PropertyInfo unwrappedProperty = property.GetBaseProperty();
-                        object propertyValue = property.GetValue(some);
-
-                        IProxyTargetAccessor propertyValueProxyAccessor = propertyValue as IProxyTargetAccessor;
-
-                        if (propertyValueProxyAccessor != null)
+                        if (property.CanWrite)
                         {
-                            IEnumerable enumerablePropertyValue = propertyValue as IEnumerable;
+                            PropertyInfo unwrappedProperty = property.GetBaseProperty();
+                            object propertyValue = property.GetValue(some);
 
-                            if (enumerablePropertyValue != null)
+                            IProxyTargetAccessor propertyValueProxyAccessor = propertyValue as IProxyTargetAccessor;
+
+                            if (propertyValueProxyAccessor != null)
                             {
-                                unwrappedProperty.SetValue
-                                (
-                                    unwrapped,
-                                    enumerablePropertyValue.ToUntrackedEnumerable(unwrappedProperty.PropertyType)
-                                );
+                                IEnumerable enumerablePropertyValue = propertyValue as IEnumerable;
+
+                                if (enumerablePropertyValue != null)
+                                {
+                                    unwrappedProperty.SetValue
+                                    (
+                                        unwrapped,
+                                        enumerablePropertyValue.ToUntrackedEnumerable(unwrappedProperty.PropertyType)
+                                    );
+                                }
                             }
                         }
                     }
                 }
 
                 foreach (PropertyInfo declaredProperty in changeTracker.PropertyTrackings.Select(t => t.Key.GetBaseProperty()))
-                    if (declaredProperty.DeclaringType == unwrapped.GetType())
+                    if (declaredProperty.DeclaringType == unwrapped.GetType() && declaredProperty.CanWrite)
                         declaredProperty.SetValue
                         (
                             unwrapped, declaredProperty.GetValue(unwrapped).ToUntracked()
@@ -351,7 +354,7 @@
                     object propertyValueToSet;
                     IChangeTrackableCollection trackableCollection = dynamicProperty.Value.CurrentValue as IChangeTrackableCollection;
 
-                    if(trackableCollection != null)
+                    if (trackableCollection != null)
                     {
                         propertyValueToSet = ((IEnumerable)trackableCollection).ToUntrackedEnumerable(trackableCollection.GetType());
                     }

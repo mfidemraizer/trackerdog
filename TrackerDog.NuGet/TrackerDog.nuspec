@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>TrackerDog</id>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <title>TrackerDog: A generic object change tracker</title>
     <authors>Matías Fidemraizer</authors>
     <owners>Matías Fidemraizer</owners>
@@ -16,9 +16,11 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <iconUrl>http://mfidemraizer.github.io/trackerdog/media/dogtracker.png</iconUrl>
     <dependencies>
-      <dependency id="Castle.Core" />
-      <dependency id="System.Collections.Immutable" />
-      <dependency id="FastMember" />
+      <group>
+        <dependency id="FastMember" />
+        <dependency id="Castle.Core" />
+        <dependency id="System.Collections.Immutable" />
+      </group>
     </dependencies>
   </metadata>
 </package>
