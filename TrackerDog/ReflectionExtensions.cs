@@ -21,7 +21,7 @@
         {
             Contract.Requires(some != null, "Given type must be a non-null reference");
 
-            return some.GetInterfaces().Any
+            return some != typeof(string) && some.GetInterfaces().Any
             (
                 someInterface =>
                     someInterface.IsGenericType

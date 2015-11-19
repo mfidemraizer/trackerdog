@@ -22,6 +22,11 @@
               How to configure <token>projectName</token> to support collection change tracking
             </link>
           </listItem>
+          <listItem>
+            <link xlink:href="#setNotes">
+              Set collection notes
+            </link>
+          </listItem>
         </list>
       </content>
     </section>
@@ -241,6 +246,26 @@
           );
           ]]>
         </code>
+      </content>
+    </section>
+
+    <section address="setNotes">
+      <title>Set collection notes</title>
+      <content>
+        <para>
+          Most <codeEntityReference>T:System.Collections.Generic.ISet`1</codeEntityReference> implementations require members to either
+          override <codeEntityReference>M:System.Object.Equals(System.Object)</codeEntityReference> and <codeEntityReference>M:System.Object.GetHashCode</codeEntityReference>, or when using
+          <codeEntityReference>T:System.Collections.Generic.HashSet`1</codeEntityReference> some constructor overloads accept implementations of
+          <codeEntityReference>T:System.Collections.Generic.IEqualityComparer`1</codeEntityReference> implementations.
+        </para>
+        <para>
+          Current <token>projectName</token> implementation will not be able to create a trackable collection of <codeEntityReference>T:System.Collections.Generic.HashSet`1</codeEntityReference>
+          providing the source untracked  <codeEntityReference>T:System.Collections.Generic.IEqualityComparer`1</codeEntityReference>. <legacyBold>That is, set members will be forced to
+          override both <codeEntityReference>M:System.Object.Equals(System.Object)</codeEntityReference> and <codeEntityReference>M:System.Object.GetHashCode</codeEntityReference> methods instead</legacyBold>.
+        </para>
+        <para>
+          This limitation can be troublesome if member equality may vary depending on the context. Future versions of <token>projectName</token> will try to address this limitation.
+        </para>
       </content>
     </section>
 

@@ -262,12 +262,48 @@
             trackableObject.ChangeTracker.Discard();
         }
 
+        /// <summary>
+        /// Iterates the given enumerable and returns an instance of given target collection type configured implementation
+        /// where each item will be also converted to untracked objects.
+        /// </summary>
+        /// <param name="enumerable">The whole enumerable to untrack</param>
+        /// <param name="targetCollectionType">The whole target collection type. This type should be a supported trackable collection type</param>
+        /// <returns>A copy of source enumerable turned into an untracked collection</returns>
+        public static IEnumerable ToUntrackedEnumerable(this IEnumerable enumerable, Type targetCollectionType)
+        {
+            Contract.Requires(targetCollectionType != null, "Target collection type cannot be a non-null reference");
+
+            if (enumerable != null)
+            {
+                Type collectionItemType = enumerable.GetCollectionItemType();
+
+                IEnumerable enumerableCopy =
+                    (IEnumerable)TrackerDogConfiguration.Collections.GetImplementation(targetCollectionType)
+                        .Value.Type.CreateInstanceWithGenericArgs(null, collectionItemType);
+
+                foreach (object item in enumerable)
+                {
+                    enumerableCopy.CallMethod("Add", new[] { item.ToUntracked() });
+                }
+
+                return enumerableCopy;
+            }
+            else return null;
+        }
+
+        /// <summary>
+        /// Turns given object and all associates to untrackable objects (i.e. POCO objects).
+        /// </summary>
+        /// <typeparam name="TObject">The type of the whole object to untrack</typeparam>
+        /// <param name="some">The whole object to untrack</param>
+        /// <returns>The untracked version of given object</returns>
         public static TObject ToUntracked<TObject>(this TObject some)
             where TObject : class
         {
-            Contract.Requires(some != null);
-            Contract.Ensures(Contract.Result<TObject>() != null);
             Contract.Ensures(!(Contract.Result<TObject>() is IProxyTargetAccessor), "To convert a tracked object to untracked one the whole tracked object must be created from a pre-existing object");
+
+            if (some == null)
+                return some;
 
             IChangeTrackableObject trackable = some as IChangeTrackableObject;
 
@@ -275,6 +311,8 @@
             {
                 IProxyTargetAccessor proxyTargetAccessor = (IProxyTargetAccessor)trackable;
                 TObject unwrapped = (TObject)proxyTargetAccessor.DynProxyGetTarget();
+
+                ObjectChangeTracker changeTracker = (ObjectChangeTracker)trackable.GetChangeTracker();
 
                 if (trackable.CollectionProperties.Count > 0)
                 {
@@ -291,24 +329,42 @@
 
                             if (enumerablePropertyValue != null)
                             {
-                                Type collectionItemType = enumerablePropertyValue.GetCollectionItemType();
-
-                                object enumerablePropertyValueCopy =
-                                    TrackerDogConfiguration.Collections.GetImplementation(unwrappedProperty.PropertyType)
-                                        .Value.Type.CreateInstanceWithGenericArgs(null, collectionItemType);
-                                
-                                if(enumerablePropertyValueCopy is ICollection)
-                                {
-                                    foreach (object item in enumerablePropertyValue)
-                                    {
-                                        enumerablePropertyValueCopy.CallMethod("Add", new[] { item.ToUntracked() });
-                                    }
-
-                                    unwrappedProperty.SetValue(unwrapped, enumerablePropertyValueCopy);
-                                }
+                                unwrappedProperty.SetValue
+                                (
+                                    unwrapped,
+                                    enumerablePropertyValue.ToUntrackedEnumerable(unwrappedProperty.PropertyType)
+                                );
                             }
                         }
                     }
+                }
+
+                foreach (PropertyInfo declaredProperty in changeTracker.PropertyTrackings.Select(t => t.Key.GetBaseProperty()))
+                    if (declaredProperty.DeclaringType == unwrapped.GetType())
+                        declaredProperty.SetValue
+                        (
+                            unwrapped, declaredProperty.GetValue(unwrapped).ToUntracked()
+                        );
+
+                foreach (KeyValuePair<string, ObjectPropertyChangeTracking> dynamicProperty in changeTracker.DynamicPropertyTrackings)
+                {
+                    object propertyValueToSet;
+                    IChangeTrackableCollection trackableCollection = dynamicProperty.Value.CurrentValue as IChangeTrackableCollection;
+
+                    if(trackableCollection != null)
+                    {
+                        propertyValueToSet = ((IEnumerable)trackableCollection).ToUntrackedEnumerable(trackableCollection.GetType());
+                    }
+                    else
+                    {
+                        propertyValueToSet = dynamicProperty.Value.CurrentValue.ToUntracked();
+                    }
+
+                    unwrapped.SetDynamicMember
+                    (
+                        dynamicProperty.Value.PropertyName,
+                        propertyValueToSet
+                    );
                 }
 
                 return unwrapped;

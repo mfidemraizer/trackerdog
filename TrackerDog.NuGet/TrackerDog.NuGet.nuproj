@@ -25,7 +25,7 @@
     <Owners>Matías Fidemraizer</Owners>
     <Summary>Track changes of any .NET object and full object graphs</Summary>
     <Description>TrackerDog turns any .NET object or full object graph into a change-trackable object</Description>
-    <ReleaseNotes>When a trackable object had a non-trackable collection (because its type isn't configured to be tracked) TrackerDog was crashing. Now this is fixed.</ReleaseNotes>
+    <ReleaseNotes>Some bugfixes concerning dynamic object tracking. Now ToUntracked/ToUntrackedEnumerable work like a charm.</ReleaseNotes>
     <ProjectUrl>http://mfidemraizer.github.io/trackerdog/</ProjectUrl>
     <LicenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © Matías Fidemraizer</Copyright>

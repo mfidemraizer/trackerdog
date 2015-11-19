@@ -2,6 +2,7 @@
 {
     using Configuration;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Collections.Generic;
     using System.Dynamic;
 
     [TestClass]
@@ -9,32 +10,42 @@
     {
         public class TestDynamicObject : DynamicObject
         {
-            private string value;
+            private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
 
             public override bool TryGetMember(GetMemberBinder binder, out object result)
             {
-                result = value;
+                result = _values[binder.Name];
 
                 return true;
             }
 
             public override bool TrySetMember(SetMemberBinder binder, object value)
             {
-                this.value = value?.ToString();
+                _values[binder.Name] = value;
                 return true;
             }
 
             public virtual string DeclaredText { get; set; }
         }
 
-        [TestMethod]
-        public void CanTrackDynamicObjectPropertyChanges()
+        public class A
+        {
+            public string Text { get; set; }
+        }
+
+        [ClassInitialize]
+        public static void Init(TestContext context)
         {
             TrackerDogConfiguration.TrackTheseTypes
             (
+                Track.ThisType<A>(),
                 Track.ThisType<TestDynamicObject>()
             );
-            
+        }
+
+        [TestMethod]
+        public void CanTrackDynamicObjectPropertyChanges()
+        {
             dynamic dynamicObject = new TestDynamicObject().AsTrackable();
 
             dynamicObject.Text = "hello world 1";
@@ -56,6 +67,29 @@
             Assert.AreEqual("hello world 5", ((TestDynamicObject)dynamicObject).CurrentPropertyValue(o => o.DeclaredText));
             Assert.IsTrue(((object)dynamicObject).PropertyHasChanged("Text"));
             Assert.IsFalse(((object)dynamicObject).PropertyHasChanged("Text2"));
+        }
+
+        [TestMethod]
+        public void CanUntrackDynamicProperties()
+        {
+            const string text1 = "hello";
+            const string text2 = "world";
+
+            dynamic a = new TestDynamicObject
+            {
+                DeclaredText = text1
+            }.AsTrackable();
+
+            a.DynamicText = text2;
+            a.A = new A();
+
+            TestDynamicObject untrackedA = ((TestDynamicObject)a).ToUntracked();
+
+            Assert.AreEqual(text1, untrackedA.DeclaredText);
+            Assert.AreEqual(text2, ((dynamic)untrackedA).DynamicText);
+            Assert.IsNotNull(((dynamic)untrackedA).A);
+            Assert.IsFalse(untrackedA.IsTrackable());
+            Assert.IsNotNull(((TestDynamicObject)((dynamic)untrackedA)).IsTrackable());
         }
     }
 }

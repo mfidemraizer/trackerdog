@@ -15,6 +15,9 @@
             <link xlink:href="#objects2trackable">How to turn objects into change-trackable ones</link>
           </listItem>
           <listItem>
+            <link xlink:href="#objects2untrackable">How to turn trackable objects into untrackable objects</link>
+          </listItem>
+          <listItem>
             <link xlink:href="#changedPropertyChecking">Checking which properties have been changed</link>
           </listItem>
           <listItem>
@@ -133,6 +136,65 @@
             user.Age = 30;
             ]]>
         </code>
+      </content>
+    </section>
+
+    <section address="objects2untrackable">
+      <title>How to turn trackable objects into untrackable objects</title>
+      <content>
+        <para>
+          Sometimes, once an object has been tracked for changes for a while, some layer may need to get the object
+          with latest property values but the object itself may not be change-trackable anymore.
+        </para>
+        <para>
+          A good use case for this is <newTerm>serialization</newTerm>. When serializing a trackable object, resulting
+          serialization will contain not just source object properties but also change-tracking internal ones, and this can be
+          very dangerous. In fact, since <token>projectName</token> uses <phrase>Castle DynamicProxy</phrase>, serialized proxies
+          will not be able to be deserialized because proxy requires some run-time details that will be available only when the object
+          was created in memory
+        </para>
+        <para>
+          Turning an object to <newTerm>untrackable</newTerm> requires a call to <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.ToUntracked``1(``0)</codeEntityReference>:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          User untrackedUser = user.ToUntracked();
+          ]]>
+        </code>
+        <para>
+          Calling the whole method not only will untrack the target object but also any association, including collections and its items.
+        </para>
+        <para>
+          In the other hand, it's possible to get an untracked version of some collection directly calling <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.ToUntrackedEnumerable(System.Collections.IEnumerable,System.Type)</codeEntityReference>:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          public class A
+          {
+          }
+          
+          public class B
+          {
+              public virtual List<A> ListOfA { get; set; } = new List<A>();
+          }
+          
+          B b = new B().AsTrackable();
+          
+          IList<A> list = b.ListOfA.ToUntrackedEnumerable(typeof(IList<>));
+          ]]>
+        </code>
+        <alert class="note">
+          <para>
+            The whole method to convert a collection to an untracked one requires a type, where the
+            type is a collection type that must be configured. <link xlink:href="1e03762d-b9f5-44af-a4b0-c23c36064c24#configuration">Follow this link to learn more.</link>
+          </para>
+        </alert>
+        <alert class="warning">
+          <para>
+              Be aware that calling both untracking methods will modify the tracked instance. That is, the tracked instance
+              will be still trackable but any trackable association will not be trackable anymore.
+          </para>
+        </alert>
       </content>
     </section>
 
@@ -549,7 +611,7 @@
         </list>
       </content>
     </section>
-    
+
     <relatedTopics>
       <link xlink:href="1e03762d-b9f5-44af-a4b0-c23c36064c24" />
     </relatedTopics>

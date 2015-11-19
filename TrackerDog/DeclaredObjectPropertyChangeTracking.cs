@@ -95,7 +95,7 @@
             IDeclaredObjectPropertyChangeTracking declared = obj as IDeclaredObjectPropertyChangeTracking;
 
             if (declared != null) return Equals(declared);
-            else return Equals(obj as IObjectChangeTracker);
+            else return Equals(obj as IObjectPropertyChangeTracking);
         }
 
         public bool Equals(IDeclaredObjectPropertyChangeTracking other) =>

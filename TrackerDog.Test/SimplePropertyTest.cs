@@ -250,6 +250,51 @@
         }
 
         [TestMethod]
+        public void CanUntrack()
+        {
+            const string initialAText = "hello";
+            const string initialBText = "world";
+            const string initialCText = "!";
+            const string initialDText = "boh!";
+
+            A a = new A
+            {
+                Text = initialAText,
+                B = new B
+                {
+                    Text = initialBText,
+                    C = new C
+                    {
+                        Text = initialCText,
+                        ListOfD = new List<D>
+                        {
+                            new D { Text = initialDText }
+                        }
+                    }
+                }
+            }.AsTrackable();
+
+            a.B.C.Text = "changed 1!";
+            a.B.Text = "changed 2!";
+            a.Text = "changed 3!";
+            a.B.C.ListOfD.First().Text = "changed 4!";
+            a.B.C.ListOfD.Add(new D { Text = "changed 5!" });
+
+            A untrackedA = a.ToUntracked();
+            
+            Assert.AreEqual("changed 1!", untrackedA.B.C.Text);
+            Assert.AreEqual("changed 2!", untrackedA.B.Text);
+            Assert.AreEqual("changed 3!", untrackedA.Text);
+            Assert.AreEqual("changed 4!", untrackedA.B.C.ListOfD.First().Text);
+            Assert.AreEqual("changed 5!", untrackedA.B.C.ListOfD.Last().Text);
+            Assert.IsFalse(untrackedA.IsTrackable());
+            Assert.IsFalse(untrackedA.B.IsTrackable());
+            Assert.IsFalse(untrackedA.B.C.IsTrackable());
+            Assert.IsFalse(untrackedA.B.C.ListOfD.IsTrackable());
+            Assert.IsFalse(untrackedA.B.C.ListOfD.Any(i => i.IsTrackable()));
+        }
+
+        [TestMethod]
         public void CanGetOldAndCurrentValueAndCheckIfHasChanged()
         {
             const string initialValue = "hello world";

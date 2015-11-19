@@ -5,6 +5,7 @@
     using System.Diagnostics.Contracts;
     using System.Dynamic;
     using System.Reflection;
+    using Configuration;
 
     internal sealed class DynamicObjectInterceptor : MethodInterceptor
     {
@@ -23,6 +24,14 @@
                 {
                     IChangeTrackableObject trackableObject = invocation.Proxy as IChangeTrackableObject;
                     Contract.Assert(trackableObject != null);
+
+                    if (!invocation.Arguments[1].IsTrackable() && TrackerDogConfiguration.CanTrackType(invocation.Arguments[1].GetType()))
+                    {
+                        object trackableArgument = invocation.Arguments[1].AsTrackable();
+
+                        if (trackableObject is IChangeTrackableObject)
+                            trackableObject.SetDynamicMember(setBinder.Name, trackableArgument);
+                    }
 
                     trackableObject.RaisePropertyChanged(trackableObject, setBinder.Name);
                 }
