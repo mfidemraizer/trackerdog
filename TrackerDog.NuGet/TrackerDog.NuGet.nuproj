@@ -19,13 +19,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TrackerDog</Id>
-    <Version>1.0.10</Version>
+    <Version>1.0.11</Version>
     <Title>TrackerDog: A generic .NET object change tracker</Title>
     <Authors>Matías Fidemraizer</Authors>
     <Owners>Matías Fidemraizer</Owners>
     <Summary>Track changes of any .NET object and full object graphs</Summary>
     <Description>TrackerDog turns any .NET object or full object graph into a change-trackable object</Description>
-    <ReleaseNotes>Fixed NuGet package. Now FastMember dependency is installed when installing TrackerDog's NuGet package.</ReleaseNotes>
+    <ReleaseNotes>Fixed NuGet package. After the latest fix, TrackerDog assembly reference wasn't added to projects. This is fixed.</ReleaseNotes>
     <ProjectUrl>http://mfidemraizer.github.io/trackerdog/</ProjectUrl>
     <LicenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © Matías Fidemraizer</Copyright>
@@ -37,9 +37,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />
+    <Content Include="..\TrackerDog\bin\$(Configuration)\TrackerDog.dll">
+      <Link>lib\TrackerDog.dll</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="$(SolutionDir)TrackerDog\bin\$(Configuration)\TrackerDog.dll" />
   </ItemGroup>
   <ItemGroup>
     <Dependency Include="FastMember">
