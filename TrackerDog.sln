@@ -16,6 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{E0E234F7-08B
 	EndProjectSection
 EndProject
 Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "TrackerDog.NuGet", "TrackerDog.NuGet\TrackerDog.NuGet.nuproj", "{48F79414-05BF-437C-861D-CBC620EBD9B5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2600FECF-EF1A-4156-9108-D6C713F704F9} = {2600FECF-EF1A-4156-9108-D6C713F704F9}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
