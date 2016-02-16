@@ -8,7 +8,8 @@
     using System.Reflection;
     using TrackerDog.Configuration;
     using TrackerDog.Interceptors;
-
+    using TrackerDog;
+    using System.Linq;
     internal class ChangeTrackableObjectMixin : IChangeTrackableObject
     {
         private readonly static Guid _id = Guid.NewGuid();
@@ -31,12 +32,23 @@
             (
                 trackableObject.GetActualTypeIfTrackable()
             );
-            IEnumerable<PropertyInfo> trackableProperties;
+
+            HashSet<PropertyInfo> trackableProperties;
 
             if (trackableType != null && trackableType.IncludedProperties.Count > 0)
-                trackableProperties = trackableType.IncludedProperties;
+                trackableProperties = new HashSet<PropertyInfo>(trackableType.IncludedProperties);
             else
-                trackableProperties = trackableObject.GetType().GetProperties(DefaultBindingFlags);
+                trackableProperties = new HashSet<PropertyInfo>(trackableObject.GetType().GetProperties(DefaultBindingFlags));
+
+            IEnumerable<Type> baseTypes = trackableType.Type.GetAllBaseTypes();
+
+            if (baseTypes.Count() > 0)
+            {
+                foreach (Type baseType in baseTypes)
+                    if (TrackerDogConfiguration.CanTrackType(baseType))
+                        foreach (PropertyInfo property in TrackerDogConfiguration.GetTrackableType(baseType).IncludedProperties)
+                            trackableProperties.Add(property);
+            }
 
             foreach (PropertyInfo property in trackableProperties)
                 if (!property.IsIndexer() && !PropertyInterceptor.ChangeTrackingMembers.Contains(property.Name))

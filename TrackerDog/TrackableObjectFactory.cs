@@ -48,47 +48,50 @@
             Contract.Assert(some != null, "Either if a collection object is provided or not, a proxied instance of the whole collection type must be created");
 
             Type genericCollectionType = some.GetType().GetGenericArguments()[0];
+            bool canTrackCollectionType = TrackerDogConfiguration.CanTrackType(genericCollectionType);
 
-            if (TrackerDogConfiguration.CanTrackType(genericCollectionType))
-            {
-                ProxyGenerationOptions options = new ProxyGenerationOptions(new CollectionterceptionHook());
-                options.AddMixinInstance(new ChangeTrackableCollectionMixin());
+            ProxyGenerationOptions options = new ProxyGenerationOptions(new CollectionterceptionHook());
+            options.AddMixinInstance(new ChangeTrackableCollectionMixin());
 
-                KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail 
-                            = TrackerDogConfiguration.Collections.GetImplementation(parentObjectProperty.PropertyType);
+            KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail
+                        = TrackerDogConfiguration.Collections.GetImplementation(parentObjectProperty.PropertyType);
 
-                Contract.Assert(parentObjectProperty.PropertyType.GetGenericTypeDefinition().IsAssignableFrom(collectionImplementationDetail.Key), $"Trackable collection implementation of type '{collectionImplementationDetail.Key.AssemblyQualifiedName}' cannot be set to the target property '{parentObjectProperty.DeclaringType.FullName}.{parentObjectProperty.Name}' with type '{parentObjectProperty.PropertyType.AssemblyQualifiedName}'. This isn't supported because it might require a downcast. Please provide a collection change tracking configuration to work with the more concrete interface.");
+            Contract.Assert(parentObjectProperty.PropertyType.GetGenericTypeDefinition().IsAssignableFrom(collectionImplementationDetail.Key), $"Trackable collection implementation of type '{collectionImplementationDetail.Key.AssemblyQualifiedName}' cannot be set to the target property '{parentObjectProperty.DeclaringType.FullName}.{parentObjectProperty.Name}' with type '{parentObjectProperty.PropertyType.AssemblyQualifiedName}'. This isn't supported because it might require a downcast. Please provide a collection change tracking configuration to work with the more concrete interface.");
 
-                object targetList =
-                    collectionImplementationDetail.Value.Type.CreateInstanceWithGenericArgs
-                    (
-                        new[]
-                        {
+            object targetList;
+
+            if (!canTrackCollectionType)
+                targetList = some;
+            else
+                targetList = collectionImplementationDetail.Value.Type.CreateInstanceWithGenericArgs
+                (
+                    new[]
+                    {
                             typeof(EnumerableExtensions).GetMethod("MakeAllTrackable")
                                             .MakeGenericMethod(genericCollectionType)
                                             .Invoke(null, new[] { some, parentObjectProperty, parentObject })
-                        },
-                        genericCollectionType
-                    );
-
-                IChangeTrackableCollection proxy = (IChangeTrackableCollection)ProxyGenerator.CreateInterfaceProxyWithTarget
-                (
-                    collectionImplementationDetail.Key.MakeGenericType(genericCollectionType),
-                    new[] { typeof(IChangeTrackableCollection), typeof(IReadOnlyChangeTrackableCollection) },
-                    targetList,
-                    options,
-                    new CollectionPropertyInterceptor()
+                    },
+                    genericCollectionType
                 );
 
-                proxy.ParentObject = parentObject;
-                proxy.ParentObjectProperty = parentObjectProperty;
+            Contract.Assert(targetList != null, "List to proxy is mandatory");
 
-                proxy.CollectionChanged += (sender, e) =>
-                    parentObject.RaisePropertyChanged(parentObject, parentObjectProperty.Name);
+            IChangeTrackableCollection proxy = (IChangeTrackableCollection)ProxyGenerator.CreateInterfaceProxyWithTarget
+            (
+                collectionImplementationDetail.Key.MakeGenericType(genericCollectionType),
+                new[] { typeof(IChangeTrackableCollection), typeof(IReadOnlyChangeTrackableCollection) },
+                targetList,
+                options,
+                new CollectionPropertyInterceptor()
+            );
 
-                return proxy;
-            }
-            else return some;
+            proxy.ParentObject = parentObject;
+            proxy.ParentObjectProperty = parentObjectProperty;
+
+            proxy.CollectionChanged += (sender, e) =>
+                parentObject.RaisePropertyChanged(parentObject, parentObjectProperty.Name);
+
+            return proxy;
         }
 
         /// <summary>
@@ -148,11 +151,12 @@
                 IChangeTrackableObject trackableObject = (IChangeTrackableObject)proxy;
                 trackableObject.StartTracking(trackableObject, reusedTracker);
 
-                IEnumerable<PropertyInfo> propertiesToTrack =
-                    TrackerDogConfiguration.GetTrackableType(typeToTrack).IncludedProperties;
+                HashSet<PropertyInfo> propertiesToTrack =
+                    new HashSet<PropertyInfo>(TrackerDogConfiguration.GetTrackableType(typeToTrack).IncludedProperties);
 
                 if (propertiesToTrack.Count() == 0)
-                    propertiesToTrack = typeToTrack.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                    foreach (PropertyInfo property in typeToTrack.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                        propertiesToTrack.Add(property);
 
                 foreach (PropertyInfo property in propertiesToTrack)
                 {

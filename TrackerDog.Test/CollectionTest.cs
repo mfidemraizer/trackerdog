@@ -20,8 +20,23 @@
                 Track.ThisType<B>().IncludeProperty(b => b.Dogs),
                 Track.ThisType<C>().IncludeProperty(c => c.Dogs),
                 Track.ThisType<Dog>().IncludeProperty(d => d.Name),
-                Track.ThisType<D>()
+                Track.ThisType<D>(),
+                Track.ThisType<WhateverBase>().IncludeProperties(b => b.List2),
+                Track.ThisType<WhateverParent>().IncludeProperties(d => d.List)
             );
+        }
+
+        public class Whatever
+        {
+        }
+
+        public class WhateverParent : WhateverBase
+        {
+            public virtual IList<Whatever> List { get; set; } = new List<Whatever>();
+        }
+        public class WhateverBase
+        {
+            public virtual IList<string> List2 { get; set; } = new List<string>();
         }
 
         [DebuggerDisplay("{Name}")]
@@ -76,6 +91,15 @@
             d.Mask = new BitArray(38);
 
             Assert.IsTrue(d.PropertyHasChanged(o => o.Mask));
+        }
+
+        [TestMethod]
+        public void CanTrackCollectionPropertiesOfNonTrackableTypes()
+        {
+            WhateverParent parent = new WhateverParent().AsTrackable();
+            parent.List2.Add("hey");
+
+            Assert.AreEqual(1, parent.GetChangeTracker().ChangedProperties.Count);
         }
 
         [TestMethod]

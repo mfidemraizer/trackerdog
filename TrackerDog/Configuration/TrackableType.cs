@@ -13,11 +13,11 @@
     /// <typeparam name="T">The tracked object type</typeparam>
     public sealed class TrackableType<T> : ITrackableType
     {
-        private readonly ISet<PropertyInfo> _includedProperties = new HashSet<PropertyInfo>();
+        private readonly ISet<PropertyInfo> _includedProperties = new HashSet<PropertyInfo>(new PropertyInfoEqualityComparer());
 
         public Type Type { get; internal set; }
 
-        public IImmutableSet<PropertyInfo> IncludedProperties => _includedProperties.ToImmutableHashSet();
+        public IImmutableSet<PropertyInfo> IncludedProperties => _includedProperties.ToImmutableHashSet(new PropertyInfoEqualityComparer());
 
         /// <summary>
         /// Configures a property to be change-tracked for the current tracked type.

@@ -13,6 +13,27 @@
     internal static class ReflectionExtensions
     {
         /// <summary>
+        /// Gets all base types for a given derived type
+        /// </summary>
+        /// <param name="derivedType"></param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetAllBaseTypes(this Type derivedType)
+        {
+            Contract.Requires(derivedType != null, "Given derived type must be a non-null reference");
+            Contract.Ensures(Contract.Result<IEnumerable<Type>>() != null);
+
+            Type baseType = derivedType.BaseType;
+
+            IEnumerable<object> excludedBaseTypeValues = new object[] { null, typeof(object) };
+
+            yield return baseType;
+
+            while (baseType != null)
+                if (!excludedBaseTypeValues.Contains((baseType = baseType.BaseType)))
+                    yield return baseType;
+        }
+
+        /// <summary>
         /// Determines if given type implements <see cref="System.Collections.Generic.IEnumerable{T}"/>
         /// </summary>
         /// <param name="some">The whole type to check</param>
