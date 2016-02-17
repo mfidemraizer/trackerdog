@@ -11,11 +11,6 @@
     public interface IDeclaredObjectPropertyChangeTracking : IObjectPropertyChangeTracking, IEquatable<IDeclaredObjectPropertyChangeTracking>
     {
         /// <summary>
-        /// Gets the parent type owning the association with the tracked property
-        /// </summary>
-        PropertyInfo OwnerProperty { get; }
-
-        /// <summary>
         /// Gets the tracked property
         /// </summary>
         PropertyInfo Property { get; }

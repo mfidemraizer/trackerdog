@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
 
@@ -15,16 +16,21 @@
     {
         private readonly ISet<PropertyInfo> _includedProperties = new HashSet<PropertyInfo>(new PropertyInfoEqualityComparer());
         private readonly Type _type;
-        private readonly Lazy<IImmutableDictionary<IList<PropertyInfo>, PropertyInfo>> _objectPaths;
+        private readonly Lazy<IImmutableSet<IObjectPropertyInfo>> _objectPaths;
 
         public TrackableType()
         {
             _type = typeof(T);
-            _objectPaths = new Lazy<IImmutableDictionary<IList<PropertyInfo>, PropertyInfo>>(() => Type.BuildAllPropertyPaths(p => TrackerDogConfiguration.CanTrackType(p.DeclaringType)).ToImmutableDictionary());
+            _objectPaths = new Lazy<IImmutableSet<IObjectPropertyInfo>>
+            (
+                () => Type.BuildAllPropertyPaths(p => TrackerDogConfiguration.CanTrackType(p.DeclaringType))
+                            .Cast<IObjectPropertyInfo>()
+                            .ToImmutableHashSet()
+            );
         }
 
         public Type Type => _type;
-        public IImmutableDictionary<IList<PropertyInfo>, PropertyInfo> ObjectPaths => _objectPaths.Value;
+        public IImmutableSet<IObjectPropertyInfo> ObjectPaths => _objectPaths.Value;
         public IImmutableSet<PropertyInfo> IncludedProperties => _includedProperties.ToImmutableHashSet(new PropertyInfoEqualityComparer());
 
         /// <summary>

@@ -126,6 +126,7 @@
     <Compile Include="IDeclaredObjectPropertyChangeTrackingContract.cs" />
     <Compile Include="IObjectPropertyChangeTracking.cs" />
     <Compile Include="IObjectPropertyChangeTrackingContract.cs" />
+    <Compile Include="IObjectPropertyInfo.cs" />
     <Compile Include="IReadOnlyChangeTrackableCollection.cs" />
     <Compile Include="IHasParent.cs" />
     <Compile Include="Interceptors\MethodInterceptor.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="ObjectPropertyChangeTracking.cs" />
     <Compile Include="DeclaredObjectPropertyChangeTracking.cs" />
     <Compile Include="ObjectChangeTrackingExtensions.cs" />
+    <Compile Include="ObjectPropertyInfo.cs" />
     <Compile Include="Patterns\IObjectChangeUnitOfWork.cs" />
     <Compile Include="Interceptors\PropertyInterceptor.cs" />
     <Compile Include="Interceptors\SimplePropertyInterceptor.cs" />

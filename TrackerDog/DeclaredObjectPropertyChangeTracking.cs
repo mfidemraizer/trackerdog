@@ -17,13 +17,11 @@
         private object _currentValue;
         private IEnumerable _oldCollectionValue;
         private IEnumerable _currentCollectionValue;
-        private readonly PropertyInfo _ownerProperty;
 
         public DeclaredObjectPropertyChangeTracking(ObjectChangeTracker tracker, object targetObject, PropertyInfo ownerProperty, PropertyInfo property, object currentValue)
         {
             _tracker = tracker;
             _targetObject = targetObject;
-            _ownerProperty = ownerProperty;
             Property = property;
             OldValue = currentValue;
             CurrentValue = currentValue;
@@ -32,7 +30,6 @@
         public ObjectChangeTracker Tracker => _tracker;
         IObjectChangeTracker IObjectPropertyChangeTracking.Tracker => Tracker;
         public object TargetObject => _targetObject;
-        public PropertyInfo OwnerProperty => _ownerProperty;
         public PropertyInfo Property { get; private set; }
         public string PropertyName => Property.Name;
         private bool CollectionItemsAreTrackable { get; set; }

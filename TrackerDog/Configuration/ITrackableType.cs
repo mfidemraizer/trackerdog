@@ -1,7 +1,6 @@
 ﻿namespace TrackerDog.Configuration
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics.Contracts;
     using System.Reflection;
@@ -20,7 +19,7 @@
         /// <summary>
         /// Gets a map of full associated trackable objects.
         /// </summary>
-        IImmutableDictionary<IList<PropertyInfo>, PropertyInfo> ObjectPaths { get; }
+        IImmutableSet<IObjectPropertyInfo> ObjectPaths { get; }
 
         /// <summary>
         /// Gets which properties should be tracked for the tracked type.

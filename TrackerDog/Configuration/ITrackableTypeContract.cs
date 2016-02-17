@@ -17,7 +17,7 @@
             }
         }
 
-        public IImmutableDictionary<IList<PropertyInfo>, PropertyInfo> ObjectPaths
+        public IImmutableSet<IObjectPropertyInfo> ObjectPaths
         {
             get
             {

@@ -4,6 +4,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Linq.Expressions;
@@ -16,37 +17,42 @@
     /// </summary>
     public static class ObjectChangeTrackingExtensions
     {
-        public static IDictionary<IList<PropertyInfo>, PropertyInfo> BuildAllPropertyPaths(this Type someType, Func<PropertyInfo, bool> filter = null)
+        public static IImmutableSet<IObjectPropertyInfo> BuildAllPropertyPaths(this Type someType, Func<PropertyInfo, bool> filter = null)
             => BuildAllPropertyPathsInternal(someType, filter: filter);
 
-        private static IDictionary<IList<PropertyInfo>, PropertyInfo> BuildAllPropertyPathsInternal(this Type someType, IDictionary<IList<PropertyInfo>, PropertyInfo> paths = null, PropertyInfo ownerProperty = null, IList<PropertyInfo> accumulatedPath = null, Func<PropertyInfo, bool> filter = null)
+        private static IImmutableSet<IObjectPropertyInfo> BuildAllPropertyPathsInternal(this Type someType, ISet<ObjectPropertyInfo> paths = null, PropertyInfo ownerProperty = null, ObjectPropertyInfo currentPropertyInfo = null, Func<PropertyInfo, bool> filter = null)
         {
             Contract.Requires(someType != null, "Given type must be a non-null reference");
-            Contract.Ensures(Contract.Result<IDictionary<IList<PropertyInfo>, PropertyInfo>>() != null);
+            Contract.Ensures(Contract.Result<IImmutableSet<IObjectPropertyInfo>>() != null);
 
-            bool firstRun = paths == null;
-            paths = paths ?? new Dictionary<IList<PropertyInfo>, PropertyInfo>();
+            paths = paths ?? new HashSet<ObjectPropertyInfo>();
 
-            foreach (PropertyInfo property in someType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (PropertyInfo property in
+                someType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 if (filter == null || filter(property))
                 {
-                    if (firstRun)
+                    if (currentPropertyInfo == null || currentPropertyInfo.PathParts.First().DeclaringType == property.DeclaringType)
+                        currentPropertyInfo = new ObjectPropertyInfo(property);
+                    else
+                        currentPropertyInfo = currentPropertyInfo.Clone();
+
+                    if (currentPropertyInfo.PathParts.Count > 1 && currentPropertyInfo.PathParts.Last().DeclaringType == property.DeclaringType)
                     {
-                        paths.Add(new KeyValuePair<IList<PropertyInfo>, PropertyInfo>(new List<PropertyInfo>(), property));
-                        accumulatedPath = new List<PropertyInfo>();
+                        int lastItemIndex = currentPropertyInfo.PathParts.Count - 1;
+                        currentPropertyInfo.PathParts.RemoveAt(lastItemIndex);
+                        currentPropertyInfo.PathParts.Add(property);
                     }
                     else
-                    {
-                        accumulatedPath.Add(property);
-                        paths.Add(accumulatedPath, property);
-                    }
+                        currentPropertyInfo.PathParts.Add(property);
 
-                    BuildAllPropertyPathsInternal(property.PropertyType, paths, property, accumulatedPath, filter);
+                    paths.Add(currentPropertyInfo);
+
+                    BuildAllPropertyPathsInternal(property.PropertyType, paths, property, currentPropertyInfo, filter);
                 }
             }
 
-            return paths;
+            return paths.Cast<IObjectPropertyInfo>().ToImmutableHashSet();
         }
 
         /// <summary>
