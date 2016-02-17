@@ -1,6 +1,7 @@
 ﻿namespace TrackerDog.Configuration
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics.Contracts;
     using System.Reflection;
@@ -9,6 +10,14 @@
     public abstract class ITrackableTypeContract : ITrackableType
     {
         public IImmutableSet<PropertyInfo> IncludedProperties
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IImmutableDictionary<IList<PropertyInfo>, PropertyInfo> ObjectPaths
         {
             get
             {
@@ -29,6 +38,7 @@
         {
             Contract.Invariant(IncludedProperties != null, "Included properties cannot be null");
             Contract.Invariant(Type != null, "Type cannot be null");
+            Contract.Invariant(ObjectPaths != null, "Object paths must not be null");
         }
     }
 }

@@ -16,6 +16,47 @@
     /// </summary>
     public static class ObjectChangeTrackingExtensions
     {
+        public static IDictionary<IList<PropertyInfo>, PropertyInfo> BuildAllPropertyPaths(this Type someType, Func<PropertyInfo, bool> filter = null)
+            => BuildAllPropertyPathsInternal(someType, filter: filter);
+
+        private static IDictionary<IList<PropertyInfo>, PropertyInfo> BuildAllPropertyPathsInternal(this Type someType, IDictionary<IList<PropertyInfo>, PropertyInfo> paths = null, PropertyInfo ownerProperty = null, IList<PropertyInfo> accumulatedPath = null, Func<PropertyInfo, bool> filter = null)
+        {
+            Contract.Requires(someType != null, "Given type must be a non-null reference");
+            Contract.Ensures(Contract.Result<IDictionary<IList<PropertyInfo>, PropertyInfo>>() != null);
+
+            bool firstRun = paths == null;
+            paths = paths ?? new Dictionary<IList<PropertyInfo>, PropertyInfo>();
+
+            foreach (PropertyInfo property in someType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (filter == null || filter(property))
+                {
+                    if (firstRun)
+                    {
+                        paths.Add(new KeyValuePair<IList<PropertyInfo>, PropertyInfo>(new List<PropertyInfo>(), property));
+                        accumulatedPath = new List<PropertyInfo>();
+                    }
+                    else
+                    {
+                        accumulatedPath.Add(property);
+                        paths.Add(accumulatedPath, property);
+                    }
+
+                    BuildAllPropertyPathsInternal(property.PropertyType, paths, property, accumulatedPath, filter);
+                }
+            }
+
+            return paths;
+        }
+
+        /// <summary>
+        /// Gets a configured trackable type by type, or returns null if it's not already configured.
+        /// </summary>
+        /// <param name="someType">The whole type to get its tracking configuration</param>
+        /// <returns>The configured trackable type by type, or returns null if it's not already configured</returns>
+        public static ITrackableType GetTrackableType(this Type someType)
+            => TrackerDogConfiguration.GetTrackableType(someType);
+
         /// <summary>
         /// Determines if given type can be tracked as collection
         /// </summary>

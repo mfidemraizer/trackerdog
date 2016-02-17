@@ -98,8 +98,26 @@
         {
             WhateverParent parent = new WhateverParent().AsTrackable();
             parent.List2.Add("hey");
+            parent.List.Add(new Whatever());
 
-            Assert.AreEqual(1, parent.GetChangeTracker().ChangedProperties.Count);
+            Assert.AreEqual(2, parent.GetChangeTracker().ChangedProperties.Count);
+        }
+
+        [TestMethod]
+        public void CollectionItemsArePreservedWhenTurningParentObjectIntoTrackable()
+        {
+            A a = new A().AsTrackable();
+
+            Assert.AreEqual(3, a.Items.Count);
+
+            WhateverParent parent = new WhateverParent();
+            parent.List.Add(new Whatever());
+            parent.List2.Add("hey");
+
+            parent = parent.AsTrackable();
+
+            Assert.AreEqual(1, parent.List.Count);
+            Assert.AreEqual(1, parent.List2.Count);
         }
 
         [TestMethod]

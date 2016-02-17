@@ -16,7 +16,7 @@
         {
             Contract.Ensures(Contract.Result<TrackableType<T>>() != null);
 
-            return new TrackableType<T> { Type = typeof(T) };
+            return new TrackableType<T>();
         }
     }
 }

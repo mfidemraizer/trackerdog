@@ -57,7 +57,17 @@
             if (trackableType.IncludedProperties.Count == 0)
                 return true;
 
-            return trackableType.IncludedProperties.Any(p => p.GetMethod == methodInfo || p.SetMethod == methodInfo);
+            return trackableType.IncludedProperties
+                                .Concat
+                                (
+                                    TrackerDogConfiguration.GetAllTrackableBaseTypes(trackableType)
+                                                            .SelectMany(t => t.IncludedProperties)
+                                ).Any(p =>
+                                {
+                                    return new[] { p.GetMethod, p.SetMethod }
+                                                    .Select(m => m.GetBaseDefinition())
+                                                    .Contains(methodInfo.GetBaseDefinition());
+                                });
         }
 
         public override bool Equals(object obj)

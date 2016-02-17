@@ -5,6 +5,7 @@
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Reflection;
+    using TrackerDog;
 
     /// <summary>
     /// Represents the object change tracking configuration.
@@ -49,6 +50,17 @@
 
             lock (_syncLock)
                 return TrackableTypes.SingleOrDefault(t => t.Type == type);
+        }
+
+        internal static IEnumerable<ITrackableType> GetAllTrackableBaseTypes(ITrackableType trackableType)
+        {
+            Contract.Requires(trackableType != null, "Given trackable type must be a non-null reference");
+            Contract.Ensures(Contract.Result<IEnumerable<ITrackableType>>() != null);
+
+            lock (_syncLock)
+                return trackableType.Type.GetAllBaseTypes()
+                                        .Where(t => CanTrackType(t))
+                                        .Select(t => GetTrackableType(t));
         }
 
         /// <summary>

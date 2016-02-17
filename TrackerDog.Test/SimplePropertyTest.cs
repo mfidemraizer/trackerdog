@@ -56,7 +56,11 @@
             const string initialValue = "hello world";
             const string changedValue = "hello world 2";
 
+            var xxx = typeof(A).GetTrackableType();
+            var yyy = xxx.ObjectPaths;
+
             A a = new A { Text = initialValue }.AsTrackable();
+            
             a.Text = changedValue;
 
             Assert.AreNotEqual(initialValue, a.Text);

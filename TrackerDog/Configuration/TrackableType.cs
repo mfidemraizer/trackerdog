@@ -14,9 +14,17 @@
     public sealed class TrackableType<T> : ITrackableType
     {
         private readonly ISet<PropertyInfo> _includedProperties = new HashSet<PropertyInfo>(new PropertyInfoEqualityComparer());
+        private readonly Type _type;
+        private readonly Lazy<IImmutableDictionary<IList<PropertyInfo>, PropertyInfo>> _objectPaths;
 
-        public Type Type { get; internal set; }
+        public TrackableType()
+        {
+            _type = typeof(T);
+            _objectPaths = new Lazy<IImmutableDictionary<IList<PropertyInfo>, PropertyInfo>>(() => Type.BuildAllPropertyPaths(p => TrackerDogConfiguration.CanTrackType(p.DeclaringType)).ToImmutableDictionary());
+        }
 
+        public Type Type => _type;
+        public IImmutableDictionary<IList<PropertyInfo>, PropertyInfo> ObjectPaths => _objectPaths.Value;
         public IImmutableSet<PropertyInfo> IncludedProperties => _includedProperties.ToImmutableHashSet(new PropertyInfoEqualityComparer());
 
         /// <summary>

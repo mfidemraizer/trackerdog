@@ -47,7 +47,7 @@
             Contract.Requires(enumerable != null, "Given enumerable must be a non-null reference to turn its objects into trackable ones");
             Contract.Requires(parentObjectProperty != null, "A reference to property which holds the enumerable is mandatory");
             Contract.Requires(parentObject != null, "The instance of the object where the property holding the enumerable is declared is mandatory");
-            Contract.Requires(parentObjectProperty.DeclaringType.GetActualTypeIfTrackable() == parentObject.GetActualTypeIfTrackable(), "Given property holding the enumerable must be declared on the given parent object type");
+            Contract.Requires(parentObjectProperty.DeclaringType.GetActualTypeIfTrackable().IsAssignableFrom(parentObject.GetActualTypeIfTrackable()), "Given property holding the enumerable must be declared on the given parent object type");
 
             if (enumerable.Count() > 0 &&
                 TrackerDogConfiguration.CanTrackType(enumerable.First().GetType()))

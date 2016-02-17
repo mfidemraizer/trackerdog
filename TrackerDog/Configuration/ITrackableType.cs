@@ -1,6 +1,7 @@
 ﻿namespace TrackerDog.Configuration
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics.Contracts;
     using System.Reflection;
@@ -15,6 +16,11 @@
         /// Gets the type being tracked
         /// </summary>
         Type Type { get; }
+
+        /// <summary>
+        /// Gets a map of full associated trackable objects.
+        /// </summary>
+        IImmutableDictionary<IList<PropertyInfo>, PropertyInfo> ObjectPaths { get; }
 
         /// <summary>
         /// Gets which properties should be tracked for the tracked type.

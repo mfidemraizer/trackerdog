@@ -126,7 +126,7 @@
                     PropertyTrackings.Add
                     (
                         baseProperty,
-                        new DeclaredObjectPropertyChangeTracking(this, targetObject, property, currentValue)
+                        new DeclaredObjectPropertyChangeTracking(this, targetObject, baseProperty, property, currentValue)
                     );
                 else if (existingTracking != null)
                     existingTracking.CurrentValue = currentValue;

@@ -55,6 +55,14 @@
             }
         }
 
+        public PropertyInfo OwnerProperty
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         [ContractInvariantMethod]
         private void Invariants()
         {
