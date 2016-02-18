@@ -17,7 +17,11 @@
                 Track.ThisType<B>().IncludeProperties(b => b.Text, b => b.C),
                 Track.ThisType<C>().IncludeProperties(c => c.Text, c => c.ListOfD),
                 Track.ThisType<D>().IncludeProperty(d => d.Text),
-                Track.ThisType<E>().IncludeProperties(e => e.Text, e => e.Number)
+                Track.ThisType<E>().IncludeProperties(e => e.Text, e => e.Number),
+                Track.ThisType<Customer>().IncludeProperties(c => c.ContactInfo),
+                Track.ThisType<Contact>().IncludeProperties(c => c.Name),
+                Track.ThisType<EnhancedContact>().IncludeProperties(c => c.Default)
+
             );
         }
 
@@ -48,6 +52,28 @@
         {
             public string Text { get; set; }
             public int Number { get; set; }
+        }
+
+        public class Customer
+        {
+            public EnhancedContact ContactInfo { get; set; }
+        }
+
+        public class Contact
+        {
+            public string Name { get; set; }
+        }
+
+        public class EnhancedContact : Contact
+        {
+            public bool Default { get; set; }
+        }
+
+        [TestMethod]
+        public void CanGetTrackableTypeObjectPaths()
+        {
+            var xxx = typeof(Customer).GetTrackableType().ObjectPaths;
+            var yyy = typeof(A).GetTrackableType().ObjectPaths;
         }
 
         [TestMethod]

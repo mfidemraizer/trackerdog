@@ -33,11 +33,11 @@
                 if (filter == null || filter(property))
                 {
                     if (currentPropertyInfo == null || currentPropertyInfo.PathParts.First().DeclaringType == property.DeclaringType)
-                        currentPropertyInfo = new ObjectPropertyInfo(property);
+                        currentPropertyInfo = new ObjectPropertyInfo();
                     else
                         currentPropertyInfo = currentPropertyInfo.Clone();
 
-                    if (currentPropertyInfo.PathParts.Count > 1 && currentPropertyInfo.PathParts.Last().DeclaringType == property.DeclaringType)
+                    if (currentPropertyInfo.PathParts.Count > 1 && property.DeclaringType.IsAssignableFrom(currentPropertyInfo.PathParts.Last().DeclaringType))
                     {
                         int lastItemIndex = currentPropertyInfo.PathParts.Count - 1;
                         currentPropertyInfo.PathParts.RemoveAt(lastItemIndex);

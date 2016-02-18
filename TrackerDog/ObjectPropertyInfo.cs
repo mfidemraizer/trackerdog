@@ -10,14 +10,9 @@
     [DebuggerDisplay("{Path}")]
     internal sealed class ObjectPropertyInfo : IEquatable<ObjectPropertyInfo>, IObjectPropertyInfo
     {
-        public ObjectPropertyInfo(PropertyInfo property)
-        {
-            Property = property;
-        }
-
         public IList<PropertyInfo> PathParts { get; private set; } = new List<PropertyInfo>();
 
-        public PropertyInfo Property { get; private set; }
+        public PropertyInfo Property => PathParts.Last();
 
         public string Path => string.Join(".", PathParts.Select(p => p.Name));
 
@@ -25,7 +20,7 @@
 
         string IObjectPropertyInfo.Path => Path;
 
-        public ObjectPropertyInfo Clone() => new ObjectPropertyInfo(Property) { PathParts = PathParts.ToList() };
+        public ObjectPropertyInfo Clone() => new ObjectPropertyInfo() { PathParts = PathParts.ToList() };
 
         public bool Equals(ObjectPropertyInfo other)
         {
