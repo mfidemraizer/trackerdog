@@ -19,13 +19,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TrackerDog</Id>
-    <Version>1.0.11</Version>
+    <Version>1.1.0</Version>
     <Title>TrackerDog: A generic .NET object change tracker</Title>
     <Authors>Matías Fidemraizer</Authors>
     <Owners>Matías Fidemraizer</Owners>
     <Summary>Track changes of any .NET object and full object graphs</Summary>
     <Description>TrackerDog turns any .NET object or full object graph into a change-trackable object</Description>
-    <ReleaseNotes>Fixed NuGet package. After the latest fix, TrackerDog assembly reference wasn't added to projects. This is fixed.</ReleaseNotes>
+    <ReleaseNotes>Now TrackerDog exposes property paths as part of ITrackableType interface. Learn more here http://matiasfidemraizer.com/trackerdog/html/52e40f26-3dfe-47e0-adf1-09233e98f42e.htm#metadata</ReleaseNotes>
     <ProjectUrl>http://mfidemraizer.github.io/trackerdog/</ProjectUrl>
     <LicenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © Matías Fidemraizer</Copyright>

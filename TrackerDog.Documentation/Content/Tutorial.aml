@@ -45,6 +45,9 @@
             <link xlink:href="#dynamic">Track dynamic objects</link>
           </listItem>
           <listItem>
+            <link xlink:href="#metadata">Useful metadata</link>
+          </listItem>
+          <listItem>
             <link xlink:href="#test">Read the tests too</link>
           </listItem>
         </list>
@@ -191,8 +194,8 @@
         </alert>
         <alert class="warning">
           <para>
-              Be aware that calling both untracking methods will modify the tracked instance. That is, the tracked instance
-              will be still trackable but any trackable association will not be trackable anymore.
+            Be aware that calling both untracking methods will modify the tracked instance. That is, the tracked instance
+            will be still trackable but any trackable association will not be trackable anymore.
           </para>
         </alert>
       </content>
@@ -585,6 +588,68 @@
           ]]>
         </code>
       </content>
+    </section>
+
+    <section address="metadata">
+      <title>Useful metadata</title>
+      <content>
+        <para>
+          Once trackable types have been already configured, <token>projectName</token> can expose
+          useful metadata that is being used internally but it can be also required outside of the
+          project's code base.
+        </para>
+      </content>
+
+      <sections>
+        <section>
+          <title>Object paths</title>
+          <content>
+            <para>
+              Sometimes external tools and frameworks might require to know the full path to some
+              property part of a given trackable type.
+            </para>
+            <para>
+              For example, consider the following class hierarchy:
+            </para>
+            <code language="c#">
+              <![CDATA[
+              public class A
+              {
+                public string Text { get; set; }
+                public B B { get; set; }
+              }
+              
+              public class B
+              {
+                  public string Name { get; set; }
+                  public C C { get; set; }
+              } 
+              
+              public class C 
+              {
+                  public string Description { get; set; }
+              }
+              ]]>
+            </code>
+            <para>
+              Once trackable types have been already configured, it's very easy to get a trackable type metadata:
+            </para>
+            <code language="c#">
+              <![CDATA[ITrackableType metadata = typeof(A).GetTrackableType();]]>
+            </code>
+            <para>
+              What if some project needs to know the path to <codeInline>C.Description</codeInline> property
+              starting from <codeInline>A</codeInline> (i.e. <codeInline>A.B.C.Description)</codeInline>?
+            </para>
+            <para>
+              No problem, because <codeEntityReference>T:TrackerDog.Configuration.ITrackableType</codeEntityReference> has an <codeEntityReference>P:TrackerDog.Configuration.ITrackableType.ObjectPaths</codeEntityReference> property
+              which holds a collection of all properties of some given trackable type and its associations, and each property is represented
+              by the <codeEntityReference>T:TrackerDog.IObjectPropertyInfo</codeEntityReference> interface, which has, for example, <codeEntityReference>P:TrackerDog.IObjectPropertyInfo.Path</codeEntityReference> property
+              that gives the path to some particular property starting from the trackable type. For example, the so-called <codeInline>A.B.C.Description)</codeInline>
+            </para>
+          </content>
+        </section>
+      </sections>
     </section>
 
     <section address="test">
