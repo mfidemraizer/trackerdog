@@ -20,6 +20,7 @@
         {
             AddImplementation(typeof(ISet<>), typeof(HashSet<>), typeof(SetChangeInterceptor<>));
             AddImplementation(typeof(IList<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
+            AddImplementation(typeof(IDictionary<,>), typeof(Dictionary<,>), typeof(DefaultCollectionChangeInterceptor<>));
             AddImplementation(typeof(ICollection<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
             AddImplementation(typeof(IEnumerable<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
         }

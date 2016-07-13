@@ -23,9 +23,21 @@
             Type collectionType = TrackerDogConfiguration.Collections.GetImplementation(enumerable.GetType()).Value.Type;
             Type collectionItemType = enumerable.GetCollectionItemType();
 
+            List<Type> collectionTypeArguments = new List<Type>();
+
+            if (collectionItemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+                collectionTypeArguments.AddRange(collectionItemType.GenericTypeArguments);
+            else
+                collectionTypeArguments.Add(enumerable.GetCollectionItemType());
+
             IEnumerable collectionClone = (IEnumerable)collectionType
-                                            .CreateInstanceWithGenericArgs(null, new[] { collectionItemType });
-            MethodInfo addMethod = collectionClone.GetType().GetMethod("Add");
+                                            .CreateInstanceWithGenericArgs(null, collectionTypeArguments.ToArray());
+
+            Type collectionInterface = collectionClone.GetType()
+                                                .GetInterfaces()
+                                                .Single(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(ICollection<>));
+
+            MethodInfo addMethod = collectionInterface.GetMethod("Add", BindingFlags.Instance | BindingFlags.Public);
 
             foreach (object item in enumerable)
                 addMethod.Invoke(collectionClone, new[] { item });

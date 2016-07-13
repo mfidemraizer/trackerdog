@@ -47,7 +47,7 @@
 
             Contract.Assert(some != null, "Either if a collection object is provided or not, a proxied instance of the whole collection type must be created");
 
-            Type genericCollectionType = some.GetType().GetGenericArguments()[0];
+            Type genericCollectionType = some.GetType().GetGenericArguments().Last();
             bool canTrackCollectionType = TrackerDogConfiguration.CanTrackType(genericCollectionType);
 
             ProxyGenerationOptions options = new ProxyGenerationOptions(new CollectionterceptionHook());
@@ -78,7 +78,7 @@
 
             IChangeTrackableCollection proxy = (IChangeTrackableCollection)ProxyGenerator.CreateInterfaceProxyWithTarget
             (
-                collectionImplementationDetail.Key.MakeGenericType(genericCollectionType),
+                collectionImplementationDetail.Key.MakeGenericType(some.GetType().GetGenericArguments()),
                 new[] { typeof(IChangeTrackableCollection), typeof(IReadOnlyChangeTrackableCollection) },
                 targetList,
                 options,

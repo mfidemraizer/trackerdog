@@ -21,6 +21,7 @@
                 Track.ThisType<C>().IncludeProperty(c => c.Dogs),
                 Track.ThisType<Dog>().IncludeProperty(d => d.Name),
                 Track.ThisType<D>(),
+                Track.ThisType<E>().IncludeProperty(e => e.Dictionary),
                 Track.ThisType<WhateverBase>().IncludeProperties(b => b.List2),
                 Track.ThisType<WhateverParent>().IncludeProperties(d => d.List)
             );
@@ -82,6 +83,11 @@
         public class D
         {
             public virtual BitArray Mask { get; set; } = new BitArray(2);
+        }
+
+        public class E
+        {
+            public virtual IDictionary<string, string> Dictionary { get; set; } = new Dictionary<string, string>();
         }
 
         [TestMethod]
@@ -200,6 +206,17 @@
             Assert.AreEqual(0, c.Dogs.Count);
             Assert.AreEqual(2, trackableCollection.RemovedItems.Count);
             Assert.AreEqual(0, trackableCollection.AddedItems.Count);
+        }
+
+        [TestMethod]
+        public void CanTrackDictionaryChanges()
+        {
+            E e = new E();
+            e.Dictionary.Add("hello", "world");
+            e = e.AsTrackable();
+            e.Dictionary.Add("bye", "bye");
+
+            Assert.IsTrue(e.PropertyHasChanged(o => o.Dictionary));
         }
     }
 }
