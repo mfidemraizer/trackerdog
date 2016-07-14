@@ -25,7 +25,7 @@
 
             List<Type> collectionTypeArguments = new List<Type>();
 
-            if (collectionItemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+            if (collectionItemType.IsGenericType && collectionItemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
                 collectionTypeArguments.AddRange(collectionItemType.GenericTypeArguments);
             else
                 collectionTypeArguments.Add(enumerable.GetCollectionItemType());
