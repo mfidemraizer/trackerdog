@@ -32,7 +32,7 @@
             {
                 if (filter == null || filter(property))
                 {
-                    if (currentPropertyInfo == null || currentPropertyInfo.PathParts.First().DeclaringType == property.DeclaringType)
+                    if (currentPropertyInfo == null || property.DeclaringType.IsAssignableFrom(currentPropertyInfo.PathParts[0].DeclaringType))
                         currentPropertyInfo = new ObjectPropertyInfo();
                     else
                         currentPropertyInfo = currentPropertyInfo.Clone();
@@ -324,13 +324,28 @@
             {
                 Type collectionItemType = enumerable.GetCollectionItemType();
 
+                List<Type> collectionTypeArguments = new List<Type>();
+
+                if (collectionItemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+                    collectionTypeArguments.AddRange(collectionItemType.GenericTypeArguments);
+                else
+                    collectionTypeArguments.Add(enumerable.GetCollectionItemType());
+
                 IEnumerable enumerableCopy =
                     (IEnumerable)TrackerDogConfiguration.Collections.GetImplementation(targetCollectionType)
-                        .Value.Type.CreateInstanceWithGenericArgs(null, collectionItemType);
+                        .Value.Type.CreateInstanceWithGenericArgs(null, collectionTypeArguments.ToArray());
+
+                Type collectionInterface = enumerableCopy.GetType()
+                                                .GetInterfaces()
+                                                .Single(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(ICollection<>));
+
+                MethodInfo addMethod = collectionInterface.GetMethod("Add", BindingFlags.Instance | BindingFlags.Public);
+
+                Contract.Assert(addMethod != null);
 
                 foreach (object item in enumerable)
                 {
-                    enumerableCopy.CallMethod("Add", new[] { item.ToUntracked() });
+                    addMethod.Invoke(enumerableCopy, new[] { item.ToUntracked() });
                 }
 
                 return enumerableCopy;
