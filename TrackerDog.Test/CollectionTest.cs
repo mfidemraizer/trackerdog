@@ -22,6 +22,8 @@
                 Track.ThisType<Dog>().IncludeProperty(d => d.Name),
                 Track.ThisType<D>(),
                 Track.ThisType<E>().IncludeProperty(e => e.Dictionary),
+                Track.ThisType<F>().IncludeProperties(f => f.ListOfF),
+                Track.ThisType<G>().IncludeProperties(g => g.Buffer),
                 Track.ThisType<WhateverBase>().IncludeProperties(b => b.List2),
                 Track.ThisType<WhateverParent>().IncludeProperties(d => d.List)
             );
@@ -88,6 +90,16 @@
         public class E
         {
             public virtual IDictionary<string, string> Dictionary { get; set; } = new Dictionary<string, string>();
+        }
+
+        public class F
+        {
+            public virtual IList<F> ListOfF { get; set; } = new List<F>();
+        }
+
+        public class G
+        {
+            public virtual byte[] Buffer { get; set; }
         }
 
         [TestMethod]
@@ -217,6 +229,27 @@
             e.Dictionary.Add("bye", "bye");
 
             Assert.IsTrue(e.PropertyHasChanged(o => o.Dictionary));
+        }
+
+        [TestMethod]
+        public void CanTrackChangesOfCollectionOfEnclosingType()
+        {
+            F f = new F().AsTrackable();
+
+            f.ListOfF.Add(new F());
+
+            Assert.IsTrue(f.PropertyHasChanged(o => o.ListOfF));
+            Assert.AreEqual(1, ((IReadOnlyChangeTrackableCollection)f.ListOfF).AddedItems.Count);
+        }
+
+        [TestMethod]
+        public void ArrayMustNotBeTrackedAsCollections()
+        {
+            G g = new G().AsTrackable();
+            g.Buffer = new byte[] { };
+            
+            Assert.IsTrue(g.PropertyHasChanged(o => o.Buffer));
+            Assert.IsNotInstanceOfType(g.Buffer, typeof(IReadOnlyChangeTrackableCollection));
         }
     }
 }

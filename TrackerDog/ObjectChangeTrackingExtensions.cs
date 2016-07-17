@@ -138,8 +138,12 @@
             Contract.Requires(property != null, "Cannot turn the object held by the property because the given property is null");
             Contract.Requires(parentObject != null, "A non-null reference to the object owning given property is mandatory");
 
-            if (property.IsEnumerable() && property.CanBeTrackedAsCollection())
-                property.SetValue(parentObject, TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property));
+            if (property.IsEnumerable() && !property.PropertyType.IsArray && property.CanBeTrackedAsCollection())
+            {
+                object proxiedCollection = TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property);
+
+                property.SetValue(parentObject, proxiedCollection);
+            }
         }
 
         /// <summary>
@@ -326,7 +330,7 @@
 
                 List<Type> collectionTypeArguments = new List<Type>();
 
-                if (collectionItemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+                if (collectionItemType.IsGenericType && collectionItemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
                     collectionTypeArguments.AddRange(collectionItemType.GenericTypeArguments);
                 else
                     collectionTypeArguments.Add(enumerable.GetCollectionItemType());

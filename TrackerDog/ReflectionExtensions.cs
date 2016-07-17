@@ -290,5 +290,7 @@
         {
             return some.GetType().GetMethod(name, bindingFlags).Invoke(some, args?.ToArray());
         }
+
+        public static bool IsArray(this Type some) => some.BaseType == typeof(Array);
     }
 }

@@ -40,10 +40,28 @@
             if (some.IsTrackable())
                 return some;
 
+            Type collectionType = TrackerDogConfiguration.Collections
+                            .GetImplementation(parentObjectProperty.PropertyType).Key;
+
+            Type collectionImplementation;
+
+            if (parentObjectProperty.PropertyType.IsGenericType && parentObjectProperty.PropertyType == collectionType.MakeGenericType(parentObjectProperty.PropertyType.GenericTypeArguments))
+                collectionImplementation = collectionType.MakeGenericType(parentObjectProperty.PropertyType.GenericTypeArguments);
+            else
+                collectionImplementation = parentObjectProperty.PropertyType.GetInterfaces().SingleOrDefault
+                (
+                    i =>
+                    {
+                        return i.IsGenericType && i == collectionType.MakeGenericType(i.GenericTypeArguments[0]);
+                    }
+                );
+
+            Contract.Assert(collectionImplementation != null);
+
             if (some == null)
                 some = TrackerDogConfiguration.Collections
                                 .GetImplementation(parentObjectProperty.PropertyType).Value.Type
-                                .CreateInstanceWithGenericArgs(null, parentObjectProperty.PropertyType.GetGenericArguments()[0]);
+                                .CreateInstanceWithGenericArgs(null, collectionImplementation.GenericTypeArguments[0]);
 
             Contract.Assert(some != null, "Either if a collection object is provided or not, a proxied instance of the whole collection type must be created");
 
@@ -56,7 +74,7 @@
             KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail
                         = TrackerDogConfiguration.Collections.GetImplementation(parentObjectProperty.PropertyType);
 
-            Contract.Assert(parentObjectProperty.PropertyType.GetGenericTypeDefinition().IsAssignableFrom(collectionImplementationDetail.Key), $"Trackable collection implementation of type '{collectionImplementationDetail.Key.AssemblyQualifiedName}' cannot be set to the target property '{parentObjectProperty.DeclaringType.FullName}.{parentObjectProperty.Name}' with type '{parentObjectProperty.PropertyType.AssemblyQualifiedName}'. This isn't supported because it might require a downcast. Please provide a collection change tracking configuration to work with the more concrete interface.");
+            Contract.Assert(collectionImplementationDetail.Key.MakeGenericType(collectionImplementation.GenericTypeArguments).IsAssignableFrom(parentObjectProperty.PropertyType), $"Trackable collection implementation of type '{collectionImplementationDetail.Key.AssemblyQualifiedName}' cannot be set to the target property '{parentObjectProperty.DeclaringType.FullName}.{parentObjectProperty.Name}' with type '{parentObjectProperty.PropertyType.AssemblyQualifiedName}'. This isn't supported because it might require a downcast. Please provide a collection change tracking configuration to work with the more concrete interface.");
 
             object targetList;
 
