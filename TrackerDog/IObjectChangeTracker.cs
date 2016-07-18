@@ -13,6 +13,8 @@
     [ContractClass(typeof(IObjectChangeTrackerContract))]
     public interface IObjectChangeTracker : IEnumerable<IObjectPropertyChangeTracking>
     {
+        event EventHandler<ObjectChangeEventArgs> Changed;
+
         /// <summary>
         /// Gets a set of already changed properties
         /// </summary>

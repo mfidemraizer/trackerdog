@@ -25,6 +25,14 @@
         private readonly Type _targetObjectType;
         private readonly object _syncLock = new object();
 
+        private event EventHandler<ObjectChangeEventArgs> _Changed;
+
+        public event EventHandler<ObjectChangeEventArgs> Changed
+        {
+            add { _Changed += value; }
+            remove { _Changed -= value; }
+        }
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -122,14 +130,23 @@
 
                 PropertyInfo baseProperty = property.GetBaseProperty();
 
+                IObjectPropertyChangeTracking tracking = null;
+
                 if (TrackerDogConfiguration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(baseProperty, out existingTracking))
-                    PropertyTrackings.Add
-                    (
-                        baseProperty,
-                        new DeclaredObjectPropertyChangeTracking(this, targetObject, baseProperty, property, currentValue)
-                    );
+                {
+                    DeclaredObjectPropertyChangeTracking declaredTracking = new DeclaredObjectPropertyChangeTracking(this, targetObject, baseProperty, property, currentValue);
+                    tracking = declaredTracking;
+
+                    PropertyTrackings.Add(baseProperty, declaredTracking);
+                }
                 else if (existingTracking != null)
+                {
                     existingTracking.CurrentValue = currentValue;
+                    tracking = existingTracking;
+                }
+
+                if (tracking.HasChanged)
+                    _Changed?.Invoke(this, new ObjectChangeEventArgs(tracking));
             }
         }
 
@@ -154,14 +171,22 @@
 
                 Contract.Assert(DynamicPropertyTrackings != null, "Cannot add a property tracking if tracking collection is null");
 
+                IObjectPropertyChangeTracking tracking = null;
+
                 if (!DynamicPropertyTrackings.TryGetValue(propertyName, out existingTracking))
-                    DynamicPropertyTrackings.Add
-                    (
-                        propertyName,
-                        new ObjectPropertyChangeTracking(this, targetObject, propertyName, currentValue)
-                    );
+                {
+                    ObjectPropertyChangeTracking propertyTracking = new ObjectPropertyChangeTracking(this, targetObject, propertyName, currentValue);
+                    DynamicPropertyTrackings.Add(propertyName, propertyTracking);
+                    tracking = propertyTracking;
+                }
                 else if (existingTracking != null)
+                {
                     existingTracking.CurrentValue = currentValue;
+                    tracking = existingTracking;
+                }
+
+                if (tracking.HasChanged)
+                    _Changed?.Invoke(this, new ObjectChangeEventArgs(tracking));
             }
         }
 
@@ -177,7 +202,7 @@
         {
             Contract.Requires(!string.IsNullOrEmpty(propertyName), "Property name cannot be null or empty");
 
-            lock(_syncLock)
+            lock (_syncLock)
             {
                 return DynamicPropertyTrackings[propertyName];
             }
@@ -188,7 +213,7 @@
             Contract.Assert(property != null, "Selected member is not a property");
             Contract.Assert(PropertyTrackings != null, "Cannot get the property tracking if tracking collection is null");
 
-            lock(_syncLock)
+            lock (_syncLock)
             {
                 return PropertyTrackings.Single(t => t.Key.DeclaringType.GetActualTypeIfTrackable().GetProperty(t.Key.Name) == property)
                                 .Value;

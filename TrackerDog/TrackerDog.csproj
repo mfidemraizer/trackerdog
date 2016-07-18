@@ -137,6 +137,7 @@
     <Compile Include="Interceptors\CollectionPropertyInterceptor.cs" />
     <Compile Include="IObjectChangeTracker.cs" />
     <Compile Include="IDeclaredObjectPropertyChangeTracking.cs" />
+    <Compile Include="ObjectChangeEventArgs.cs" />
     <Compile Include="ObjectChangeTracker.cs" />
     <Compile Include="ObjectPropertyChangeTracking.cs" />
     <Compile Include="DeclaredObjectPropertyChangeTracking.cs" />

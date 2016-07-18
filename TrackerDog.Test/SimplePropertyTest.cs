@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using TrackerDog.Configuration;
 
@@ -258,14 +259,21 @@
                 }
             }.AsTrackable();
 
+            IObjectChangeTracker tracker = a.GetChangeTracker();
+            int changeCount = 0;
+
+            tracker.Changed += (s, e) =>
+            {
+                changeCount++;
+            };
+
             a.B.C.Text = "changed 1!";
             a.B.Text = "changed 2!";
             a.Text = "changed 3!";
             a.B.C.ListOfD.First().Text = "changed 4!";
             a.B.C.ListOfD.Add(new D { Text = "changed 5!" });
 
-            IObjectChangeTracker tracker = a.GetChangeTracker();
-
+            Assert.AreEqual(5, changeCount);
             Assert.AreEqual(4, tracker.ChangedProperties.Count);
             Assert.AreEqual(2, tracker.UnchangedProperties.Count);
             Assert.AreEqual("changed 1!", a.B.C.Text);

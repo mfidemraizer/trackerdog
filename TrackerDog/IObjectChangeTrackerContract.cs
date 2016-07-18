@@ -16,6 +16,7 @@
 
         public IImmutableSet<IObjectPropertyChangeTracking> UnchangedProperties { get; set; }
 
+        public event EventHandler<ObjectChangeEventArgs> Changed;
 
         [ContractInvariantMethod, SuppressMessage("CC", "CC1036", Justification = "ChangedProperties and UnchangedProperties must be intersected to check that they don't have shared items")]
         private void Invariants()
