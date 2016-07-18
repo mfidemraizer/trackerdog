@@ -146,7 +146,7 @@
                 }
 
                 if (tracking.HasChanged)
-                    _Changed?.Invoke(this, new ObjectChangeEventArgs(tracking));
+                    _Changed?.Invoke(this, new ObjectChangeEventArgs(targetObject, tracking));
             }
         }
 
@@ -186,7 +186,7 @@
                 }
 
                 if (tracking.HasChanged)
-                    _Changed?.Invoke(this, new ObjectChangeEventArgs(tracking));
+                    _Changed?.Invoke(this, new ObjectChangeEventArgs(targetObject, tracking));
             }
         }
 
