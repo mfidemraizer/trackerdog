@@ -232,6 +232,16 @@
         }
 
         [TestMethod]
+        public void CanCallMethodOfDictionary()
+        {
+            E e = new E();
+            e.Dictionary.Add("hello", "world");
+            e = e.AsTrackable();
+
+            e.Dictionary.ContainsKey("hello");
+        }
+
+        [TestMethod]
         public void CanTrackChangesOfCollectionOfEnclosingType()
         {
             F f = new F().AsTrackable();

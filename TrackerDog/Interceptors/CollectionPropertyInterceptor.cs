@@ -2,6 +2,7 @@
 {
     using Castle.DynamicProxy;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Linq;
@@ -23,25 +24,34 @@
                 IChangeTrackableObject changedItem =
                     invocation.Arguments[0] as IChangeTrackableObject
                     ?? invocation.Arguments[0].AsTrackable() as IChangeTrackableObject;
-                IEnumerable<object> currentItems = ((IEnumerable<object>)withParent).ToList();
+
+                IEnumerable<object> currentItems;
+                Type collectionItemType = withParent.GetCollectionItemType();
+                bool itemsAreKeyValuePair = collectionItemType.IsGenericType && collectionItemType == typeof(KeyValuePair<,>).MakeGenericType(collectionItemType.GenericTypeArguments);
+
+                if (itemsAreKeyValuePair)
+                    currentItems = ((IEnumerable)withParent).Cast<object>();
+                else
+                    currentItems = ((IEnumerable<object>)withParent).ToList();
 
                 invocation.Arguments[0] = changedItem ?? invocation.Arguments[0];
                 invocation.Proceed();
 
                 KeyValuePair<Type, CollectionImplementation> implementation =
                     TrackerDogConfiguration.Collections.GetImplementation(collectionType);
-                
+
                 CollectionChangeContext changeContext = new CollectionChangeContext
                 (
-                    (IEnumerable<object>)trackableCollection,
+                    !itemsAreKeyValuePair ? (IEnumerable<object>)trackableCollection : Enumerable.Empty<object>(),
                     currentItems,
                     trackableCollection.ParentObjectProperty,
                     trackableCollection.AddedItems,
                     trackableCollection.RemovedItems
                 );
 
-                Activator.CreateInstance(implementation.Value.ChangeInterceptor.MakeGenericType(trackableCollection.GetCollectionItemType()), changeContext)
-                            .CallMethod(invocation.Method.Name, invocation.Arguments);
+                if (!itemsAreKeyValuePair)
+                    Activator.CreateInstance(implementation.Value.ChangeInterceptor.MakeGenericType(trackableCollection.GetCollectionItemType()), changeContext)
+                                .CallMethod(invocation.Method.Name, invocation.Arguments);
 
                 switch (changeContext.Change)
                 {
