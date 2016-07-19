@@ -145,7 +145,7 @@
                     tracking = existingTracking;
                 }
 
-                if (tracking.HasChanged)
+                if (tracking != null && tracking.HasChanged)
                     _Changed?.Invoke(this, new ObjectChangeEventArgs(targetObject, tracking));
             }
         }
@@ -185,7 +185,7 @@
                     tracking = existingTracking;
                 }
 
-                if (tracking.HasChanged)
+                if (tracking != null && tracking.HasChanged)
                     _Changed?.Invoke(this, new ObjectChangeEventArgs(targetObject, tracking));
             }
         }
