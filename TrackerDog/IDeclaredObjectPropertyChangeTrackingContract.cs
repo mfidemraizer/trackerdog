@@ -63,6 +63,14 @@
             }
         }
 
+        public object TargetObject
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         [ContractInvariantMethod]
         private void Invariants()
         {

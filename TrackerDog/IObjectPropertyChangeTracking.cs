@@ -5,16 +5,18 @@
 
     [ContractClass(typeof(IObjectPropertyChangeTrackingContract))]
     public interface IObjectPropertyChangeTracking : IEquatable<IObjectPropertyChangeTracking>
-    {      
+    {
         /// <summary>
         /// Gets the associated tracker
         /// </summary>
         IObjectChangeTracker Tracker { get; }
 
+        object TargetObject { get; }
+
         /// <summary>
         /// Gets the tracked property name
         /// </summary>
-        string PropertyName{ get; }
+        string PropertyName { get; }
 
         /// <summary>
         /// Gets the value that had the whole tracked property when the tracking was started
