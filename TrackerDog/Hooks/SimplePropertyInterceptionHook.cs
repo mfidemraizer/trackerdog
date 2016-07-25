@@ -43,7 +43,9 @@
 
         public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
         {
-            if (_skippedMethods.Contains(methodInfo))
+            bool isDynamicObject = type.IsDynamicObject();
+
+            if ((!isDynamicObject && !methodInfo.IsPropertyGetterOrSetter()) || _skippedMethods.Contains(methodInfo))
                 return false;
 
             ITrackableType trackableType = TrackerDogConfiguration.TrackableTypes.SingleOrDefault(t => t.Type == type);
@@ -51,7 +53,7 @@
             if (trackableType == null)
                 return false;
 
-            if (type.IsDynamicObject() && methodInfo.IsMethodOfDynamicObject())
+            if (isDynamicObject && methodInfo.IsMethodOfDynamicObject())
                 return _dynamicObjectGetterSetterMethods.Contains(methodInfo.GetRuntimeBaseDefinition());
 
             if (trackableType.IncludedProperties.Count == 0)
