@@ -19,18 +19,11 @@
 
         private Dictionary<string, PropertyInfo> CachedProperties => _cachedProperties;
 
-        private ObjectChangeTracker ChangeTracker { get; set; }
-        private ISet<PropertyInfo> CollectionProperties { get; set; } = new HashSet<PropertyInfo>();
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public virtual ObjectChangeTracker ChangeTracker { get; set; }
 
-        ObjectChangeTracker IChangeTrackableObject.ChangeTracker
-        {
-            get { return ChangeTracker; }
-        }
-
-        ISet<PropertyInfo> IChangeTrackableObject.CollectionProperties
-        {
-            get { return CollectionProperties; }
-        }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public virtual ISet<PropertyInfo> CollectionProperties { get; } = new HashSet<PropertyInfo>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
