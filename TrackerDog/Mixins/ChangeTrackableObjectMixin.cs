@@ -5,11 +5,12 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Dynamic;
+    using System.Linq;
     using System.Reflection;
+    using TrackerDog;
     using TrackerDog.Configuration;
     using TrackerDog.Interceptors;
-    using TrackerDog;
-    using System.Linq;
+
     internal class ChangeTrackableObjectMixin : IChangeTrackableObject
     {
         private readonly static Guid _id = Guid.NewGuid();
@@ -17,8 +18,20 @@
         private readonly Dictionary<string, PropertyInfo> _cachedProperties = new Dictionary<string, PropertyInfo>();
 
         private Dictionary<string, PropertyInfo> CachedProperties => _cachedProperties;
-        public virtual ObjectChangeTracker ChangeTracker { get; set; }
-        public virtual ISet<PropertyInfo> CollectionProperties { get; } = new HashSet<PropertyInfo>();
+
+        private ObjectChangeTracker ChangeTracker { get; set; }
+        private ISet<PropertyInfo> CollectionProperties { get; set; } = new HashSet<PropertyInfo>();
+
+        ObjectChangeTracker IChangeTrackableObject.ChangeTracker
+        {
+            get { return ChangeTracker; }
+        }
+
+        ISet<PropertyInfo> IChangeTrackableObject.CollectionProperties
+        {
+            get { return CollectionProperties; }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         internal Guid Id => _id;
