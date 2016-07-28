@@ -98,7 +98,7 @@
                         {
                             IChangeTrackableObject trackable = o as IChangeTrackableObject;
 
-                            if (trackable != null) return trackable.ChangeTracker.ChangedProperties.Count > 0;
+                            if (trackable != null) return trackable.GetChangeTrackingInfo().ChangeTracker.ChangedProperties.Count > 0;
                             else return false;
                         });
                     else

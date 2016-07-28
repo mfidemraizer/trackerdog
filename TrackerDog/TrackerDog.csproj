@@ -141,6 +141,7 @@
     <Compile Include="IDeclaredObjectPropertyChangeTracking.cs" />
     <Compile Include="ObjectChangeEventArgs.cs" />
     <Compile Include="ObjectChangeTracker.cs" />
+    <Compile Include="ObjectChangeTrackingInfo.cs" />
     <Compile Include="ObjectGraphTrackingInfo.cs" />
     <Compile Include="ObjectPropertyChangeTracking.cs" />
     <Compile Include="DeclaredObjectPropertyChangeTracking.cs" />

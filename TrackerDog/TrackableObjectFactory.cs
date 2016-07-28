@@ -186,9 +186,9 @@
                         object propertyValue = property.GetValue(trackableObject);
 
                         if (propertyValue != null)
-                            Create(propertyValue, trackableObject.ChangeTracker, proxy, property);
+                            Create(propertyValue, trackableObject.GetChangeTrackingInfo().ChangeTracker, proxy, property);
                         else
-                            Create(property.PropertyType, trackableObject.ChangeTracker, proxy, property);
+                            Create(property.PropertyType, trackableObject.GetChangeTrackingInfo().ChangeTracker, proxy, property);
                     }
                 }
 

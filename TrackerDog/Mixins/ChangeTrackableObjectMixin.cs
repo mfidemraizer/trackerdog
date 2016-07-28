@@ -15,15 +15,12 @@
     {
         private readonly static Guid _id = Guid.NewGuid();
         private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
-        private readonly Dictionary<string, PropertyInfo> _cachedProperties = new Dictionary<string, PropertyInfo>();
 
-        private Dictionary<string, PropertyInfo> CachedProperties => _cachedProperties;
+        private Dictionary<string, PropertyInfo> CachedProperties { get; } = new Dictionary<string, PropertyInfo>();
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual ObjectChangeTracker ChangeTracker { get; set; }
+        private ObjectChangeTrackingInfo ChangeTrackingInfo { get; } = new ObjectChangeTrackingInfo();
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual ISet<PropertyInfo> CollectionProperties { get; } = new HashSet<PropertyInfo>();
+        public ObjectChangeTrackingInfo GetChangeTrackingInfo() => ChangeTrackingInfo;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -31,7 +28,7 @@
 
         public void StartTracking(IChangeTrackableObject trackableObject, ObjectChangeTracker currentTracker = null)
         {
-            ChangeTracker = currentTracker ?? new ObjectChangeTracker(trackableObject);
+            ChangeTrackingInfo.ChangeTracker = currentTracker ?? new ObjectChangeTracker(trackableObject);
             PropertyChanged += (sender, e) => TrackProperty(trackableObject, e.PropertyName);
 
             ITrackableType trackableType = TrackerDogConfiguration.GetTrackableType
@@ -62,7 +59,7 @@
                     if (property.IsEnumerable())
                     {
                         property.AsTrackableCollection(trackableObject);
-                        CollectionProperties.Add(property);
+                        ChangeTrackingInfo.CollectionProperties.Add(property);
                     }
 
                     TrackProperty(trackableObject, property.Name);
@@ -71,7 +68,7 @@
 
         private void TrackProperty(IChangeTrackableObject trackableObject, string propertyName = null, PropertyInfo property = null)
         {
-            Contract.Assert(ChangeTracker != null);
+            Contract.Assert(ChangeTrackingInfo.ChangeTracker != null);
 
             DynamicObject dynamicObject = trackableObject as DynamicObject;
             property = property ?? trackableObject.GetType().GetProperty(propertyName, DefaultBindingFlags);
@@ -87,10 +84,10 @@
                         property
                     );
 
-                ChangeTracker.AddOrUpdateTracking(cachedProperty ?? property, trackableObject);
+                ChangeTrackingInfo.ChangeTracker.AddOrUpdateTracking(cachedProperty ?? property, trackableObject);
             }
             else
-                ChangeTracker.AddOrUpdateTracking(propertyName, dynamicObject);
+                ChangeTrackingInfo.ChangeTracker.AddOrUpdateTracking(propertyName, dynamicObject);
         }
 
         public void RaisePropertyChanged(IChangeTrackableObject trackableObject, string propertyName)

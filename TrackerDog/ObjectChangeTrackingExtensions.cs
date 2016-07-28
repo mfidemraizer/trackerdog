@@ -218,7 +218,7 @@
 
             Contract.Assert(trackableObject != null, "An object must be trackable in order to get its change tracker");
 
-            return trackableObject.ChangeTracker;
+            return trackableObject.GetChangeTrackingInfo().ChangeTracker;
         }
 
         /// <summary>
@@ -295,7 +295,7 @@
 
             Contract.Assert(trackableObject != null, "Given object must be trackable to accept its changes");
 
-            trackableObject.ChangeTracker.Complete();
+            trackableObject.GetChangeTrackingInfo().ChangeTracker.Complete();
         }
 
         /// <summary>
@@ -310,7 +310,7 @@
 
             Contract.Assert(trackableObject != null, "Given object must be trackable to undo its changes");
 
-            trackableObject.ChangeTracker.Discard();
+            trackableObject.GetChangeTrackingInfo().ChangeTracker.Discard();
         }
 
         /// <summary>
@@ -380,9 +380,9 @@
 
                 ObjectChangeTracker changeTracker = (ObjectChangeTracker)trackable.GetChangeTracker();
 
-                if (trackable.CollectionProperties.Count > 0)
+                if (trackable.GetChangeTrackingInfo().CollectionProperties.Count > 0)
                 {
-                    foreach (PropertyInfo property in trackable.CollectionProperties)
+                    foreach (PropertyInfo property in trackable.GetChangeTrackingInfo().CollectionProperties)
                     {
                         if (property.CanWrite)
                         {
