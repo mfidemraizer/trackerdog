@@ -112,6 +112,7 @@
     <Compile Include="Configuration\ITrackableTypeEqualityComparer.cs" />
     <Compile Include="Configuration\TrackerDogConfiguration.cs" />
     <Compile Include="CollectionHandling\DefaultCollectionChangeInterceptor.cs" />
+    <Compile Include="DeclaredObjectPropertyChangeEventArgs.cs" />
     <Compile Include="DynamicObjectExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ExpressionExtensions.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Interceptors\DynamicObjectInterceptor.cs" />
     <Compile Include="IObjectChangeTrackerContract.cs" />
     <Compile Include="IDeclaredObjectPropertyChangeTrackingContract.cs" />
+    <Compile Include="IObjectGraphTrackingInfo.cs" />
     <Compile Include="IObjectPropertyChangeTracking.cs" />
     <Compile Include="IObjectPropertyChangeTrackingContract.cs" />
     <Compile Include="IObjectPropertyInfo.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="IDeclaredObjectPropertyChangeTracking.cs" />
     <Compile Include="ObjectChangeEventArgs.cs" />
     <Compile Include="ObjectChangeTracker.cs" />
+    <Compile Include="ObjectGraphTrackingInfo.cs" />
     <Compile Include="ObjectPropertyChangeTracking.cs" />
     <Compile Include="DeclaredObjectPropertyChangeTracking.cs" />
     <Compile Include="ObjectChangeTrackingExtensions.cs" />

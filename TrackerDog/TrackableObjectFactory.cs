@@ -1,8 +1,10 @@
 ﻿namespace TrackerDog
 {
     using Castle.DynamicProxy;
+    using Castle.DynamicProxy.Internal;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Reflection;
@@ -135,6 +137,7 @@
 
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new SimplePropertyInterceptionHook());
                 options.AddMixinInstance(new ChangeTrackableObjectMixin());
+                options.AdditionalAttributes.Add(AttributeUtil.CreateBuilder(typeof(DebuggerDisplayAttribute), new[] { $"{typeToTrack.FullName}Proxy" }));
 
                 List<IInterceptor> interceptors = new List<IInterceptor>
                 {

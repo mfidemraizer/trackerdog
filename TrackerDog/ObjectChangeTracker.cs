@@ -107,6 +107,43 @@
             }
         }
 
+        public IObjectGraphTrackingInfo GetTrackingGraphFromProperty(PropertyInfo property)
+        {
+            DeclaredObjectPropertyChangeTracking propertyTracking = null;
+            PropertyTrackings.TryGetValue(property.GetBaseProperty(), out propertyTracking);
+
+            List<IDeclaredObjectPropertyChangeTracking> hierarchy = new List<IDeclaredObjectPropertyChangeTracking>();
+
+            bool searchTracking = true;
+
+            while (searchTracking)
+            {
+                hierarchy.Add(propertyTracking);
+
+                var result = PropertyTrackings.SingleOrDefault
+                (
+                    t => t.Value.CurrentValue == propertyTracking.TargetObject
+                        && t.Value.Property.PropertyType.GetProperty(propertyTracking.Property.Name) == propertyTracking.Property.GetBaseProperty()
+                );
+
+                if (result.Value != null)
+                {
+                    propertyTracking = result.Value;
+                    property = propertyTracking.Property;
+                }
+                else
+                    searchTracking = false;
+            }
+
+            Contract.Assert(propertyTracking != null);
+
+            return new ObjectGraphTrackingInfo
+            (
+                propertyTracking.TargetObject, 
+                hierarchy.Reverse<IDeclaredObjectPropertyChangeTracking>().ToImmutableList()
+            );
+        }
+
         /// <summary>
         /// Adds or updates a tracked property state.
         /// </summary>
@@ -130,7 +167,7 @@
 
                 PropertyInfo baseProperty = property.GetBaseProperty();
 
-                IObjectPropertyChangeTracking tracking = null;
+                DeclaredObjectPropertyChangeTracking tracking = null;
 
                 if (TrackerDogConfiguration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(baseProperty, out existingTracking))
                 {
@@ -146,7 +183,7 @@
                 }
 
                 if (tracking != null && tracking.HasChanged)
-                    _Changed?.Invoke(this, new ObjectChangeEventArgs(targetObject, tracking));
+                    _Changed?.Invoke(this, new DeclaredObjectPropertyChangeEventArgs(targetObject, tracking));
             }
         }
 

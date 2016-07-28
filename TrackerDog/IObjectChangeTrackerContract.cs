@@ -57,5 +57,10 @@
             Contract.Ensures(Contract.Result<IDeclaredObjectPropertyChangeTracking>() != null);
             throw new NotImplementedException();
         }
+
+        public IObjectGraphTrackingInfo GetTrackingGraphFromProperty(PropertyInfo property)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

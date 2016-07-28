@@ -47,5 +47,7 @@
         /// <param name="propertyName">The dynamic property name</param>
         /// <returns>The object property tracking</returns>
         IObjectPropertyChangeTracking GetDynamicTrackingByProperty(string propertyName);
+
+        IObjectGraphTrackingInfo GetTrackingGraphFromProperty(PropertyInfo property);
     }
 }

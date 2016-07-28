@@ -2,7 +2,7 @@
 
 namespace TrackerDog
 {
-    public sealed class ObjectChangeEventArgs : EventArgs
+    public class ObjectChangeEventArgs : EventArgs
     {
         public ObjectChangeEventArgs(object targetObject, IObjectPropertyChangeTracking propertyChangeTracking)
         {

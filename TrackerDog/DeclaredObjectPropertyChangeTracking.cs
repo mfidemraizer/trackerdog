@@ -8,7 +8,7 @@
     using System.Linq;
     using System.Reflection;
 
-    [DebuggerDisplay("{Property.DeclaringType.Name}.{Property.Name} = {CurrentValue} (Has changed? {HasChanged})")]
+    [DebuggerDisplay("{Property.DeclaringType}.{Property.Name} = {CurrentValue} (Has changed? {HasChanged})")]
     internal sealed class DeclaredObjectPropertyChangeTracking : IDeclaredObjectPropertyChangeTracking
     {
         private readonly ObjectChangeTracker _tracker;

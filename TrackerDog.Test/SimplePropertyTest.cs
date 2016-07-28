@@ -21,7 +21,6 @@
                 Track.ThisType<Customer>().IncludeProperties(c => c.ContactInfo),
                 Track.ThisType<Contact>().IncludeProperties(c => c.Name),
                 Track.ThisType<EnhancedContact>().IncludeProperties(c => c.Default)
-
             );
         }
 
@@ -123,6 +122,45 @@
             Assert.AreEqual(0, changeTracker.ChangedProperties.Count);
             Assert.AreEqual(2, changeTracker.UnchangedProperties.Count);
             Assert.AreEqual(initialValue, a.Text);
+        }
+
+        [TestMethod]
+        public void CanGetTrackingObjectGraph()
+        {
+            A a = new A
+            {
+                Text = "hey",
+                B = new B
+                {
+                    Text = "hurray",
+                    C = new C
+                    {
+                        Text = "uhm",
+                        ListOfD = new List<D> { new D { Text = "ohm" } }
+                    }
+                }
+            }.AsTrackable();
+
+            IObjectChangeTracker changeTracker = a.GetChangeTracker();
+
+            var C_ListOfDGraph = changeTracker.GetTrackingGraphFromProperty(typeof(C).GetProperty("ListOfD"));
+            Assert.AreEqual(typeof(C).GetProperty("ListOfD"), C_ListOfDGraph.AggregateHierarchy[2].Property.GetBaseProperty());
+            Assert.AreEqual(typeof(B).GetProperty("C"), C_ListOfDGraph.AggregateHierarchy[1].Property.GetBaseProperty());
+            Assert.AreEqual(typeof(A).GetProperty("B"), C_ListOfDGraph.AggregateHierarchy[0].Property.GetBaseProperty());
+            Assert.AreEqual(a, C_ListOfDGraph.Parent);
+
+            changeTracker.Changed += (s, e) =>
+            {
+                DeclaredObjectPropertyChangeEventArgs declaredArgs = e as DeclaredObjectPropertyChangeEventArgs;
+
+                IObjectGraphTrackingInfo graphInfo = declaredArgs.GraphTrackingInfo;
+
+                Assert.AreEqual(typeof(B).GetProperty("Text"), graphInfo.AggregateHierarchy[1].Property.GetBaseProperty());
+                Assert.AreEqual(typeof(A).GetProperty("B"), graphInfo.AggregateHierarchy[0].Property.GetBaseProperty());
+                Assert.AreEqual(a, graphInfo.Parent);
+            };
+
+            a.B.Text = "hello world";
         }
 
         [TestMethod]
@@ -314,7 +352,7 @@
             a.B.C.ListOfD.Add(new D { Text = "changed 5!" });
 
             A untrackedA = a.ToUntracked();
-            
+
             Assert.AreEqual("changed 1!", untrackedA.B.C.Text);
             Assert.AreEqual("changed 2!", untrackedA.B.Text);
             Assert.AreEqual("changed 3!", untrackedA.Text);
