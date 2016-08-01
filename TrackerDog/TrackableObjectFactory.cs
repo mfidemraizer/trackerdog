@@ -4,6 +4,7 @@
     using Castle.DynamicProxy.Internal;
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -131,8 +132,18 @@
 
             typeToTrack = typeToTrack ?? some.GetType();
 
-            if (TrackerDogConfiguration.CanTrackType(typeToTrack) && !typeToTrack.IsTrackable())
+            ITrackableType interfaceTrackableType = null;
+
+            if ((TrackerDogConfiguration.CanTrackType(typeToTrack) || TrackerDogConfiguration.ImplementsBaseType(typeToTrack, out interfaceTrackableType)) && !typeToTrack.IsTrackable())
             {
+                if (interfaceTrackableType != null)
+                {
+                    IImmutableList<TrackableType> trackableTypes = Track.ThisTypeRecursive(typeToTrack);
+                    trackableTypes[0].IncludeProperties(interfaceTrackableType.IncludedProperties.ToArray());
+
+                    TrackerDogConfiguration.TrackTheseTypes(trackableTypes.ToArray());
+                }
+
                 Contract.Assert(typeToTrack.IsClass && !typeToTrack.IsAbstract && !typeToTrack.IsSealed, "The object type to track must be a non-abstract, non-sealed class");
 
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new SimplePropertyInterceptionHook());

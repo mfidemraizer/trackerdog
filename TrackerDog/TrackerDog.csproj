@@ -104,12 +104,14 @@
     <Compile Include="CollectionHandling\CollectionChange.cs" />
     <Compile Include="CollectionHandling\CollectionChangeContext.cs" />
     <Compile Include="Configuration\CollectionImplementation.cs" />
+    <Compile Include="Configuration\ICanConfigureTrackableType.cs" />
     <Compile Include="Configuration\ITrackableType.cs" />
     <Compile Include="Configuration\ITrackableTypeContract.cs" />
     <Compile Include="Configuration\Track.cs" />
     <Compile Include="Configuration\TrackableCollectionConfiguration.cs" />
-    <Compile Include="Configuration\TrackableType.cs" />
+    <Compile Include="Configuration\GenericTrackableType.cs" />
     <Compile Include="Configuration\ITrackableTypeEqualityComparer.cs" />
+    <Compile Include="Configuration\TrackableType.cs" />
     <Compile Include="Configuration\TrackerDogConfiguration.cs" />
     <Compile Include="CollectionHandling\DefaultCollectionChangeInterceptor.cs" />
     <Compile Include="DeclaredObjectPropertyChangeEventArgs.cs" />

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Diagnostics.Contracts;
     using System.Dynamic;
     using System.Linq;
@@ -12,6 +13,28 @@
     /// </summary>
     internal static class ReflectionExtensions
     {
+        public static IImmutableSet<Type> GetAllPropertyTypesRecursive(this Type parent, Func<PropertyInfo, bool> filter = null)
+        {
+            return GetAllPropertyTypesRecursiveInternal(parent, filter);
+        }
+
+        private static IImmutableSet<Type> GetAllPropertyTypesRecursiveInternal(Type parent, Func<PropertyInfo, bool> filter = null, List<Type> accumulatedResult = null, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        {
+            accumulatedResult = accumulatedResult ?? new List<Type>();
+
+            foreach (PropertyInfo property in parent.GetProperties(bindingFlags))
+            {
+                if (filter != null && filter(property))
+                {
+                    accumulatedResult.Add(property.PropertyType);
+
+                    GetAllPropertyTypesRecursiveInternal(property.PropertyType, filter, accumulatedResult, bindingFlags);
+                }
+            }
+
+            return accumulatedResult.ToImmutableHashSet();
+        }
+
         /// <summary>
         /// Gets all base types for a given derived type
         /// </summary>

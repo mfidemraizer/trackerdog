@@ -66,9 +66,10 @@
                                                             .SelectMany(t => t.IncludedProperties)
                                 ).Any(p =>
                                 {
-                                    return new[] { p.GetMethod, p.SetMethod }
-                                                    .Select(m => m.GetBaseDefinition())
-                                                    .Contains(methodInfo.GetBaseDefinition());
+                                    var accessorMethods = new[] { p.GetMethod.GetBaseDefinition(), p.SetMethod.GetBaseDefinition() };
+
+                                    return accessorMethods.Contains(methodInfo.GetBaseDefinition())
+                                            || accessorMethods.Any(m => m.DeclaringType.IsAssignableFrom(methodInfo.GetBaseDefinition().DeclaringType) && m.Name == methodInfo.Name);
                                 });
         }
 

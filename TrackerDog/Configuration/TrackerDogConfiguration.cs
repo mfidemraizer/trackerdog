@@ -20,6 +20,11 @@
         internal static HashSet<ITrackableType> TrackableTypes { get; } = new HashSet<ITrackableType>(new ITrackableTypeEqualityComparer());
 
         /// <summary>
+        /// Gets current white list of types to which its instances will support change tracking.
+        /// </summary>
+        internal static HashSet<ITrackableType> TrackableInterfaceTypes { get; } = new HashSet<ITrackableType>(new ITrackableTypeEqualityComparer());
+
+        /// <summary>
         /// Gets current trackable collection configuration
         /// </summary>
         public static TrackableCollectionConfiguration Collections { get; } = new TrackableCollectionConfiguration();
@@ -35,7 +40,15 @@
             lock (_syncLock)
             {
                 foreach (ITrackableType type in types)
-                    Contract.Assert(TrackableTypes.Add(type), "Type can only be configured to be tracked once");
+                    if (!type.Type.IsInterface)
+                        Contract.Assert(TrackableTypes.Add(type), "Type can only be configured to be tracked once");
+                    else
+                    {
+                        ICanConfigureTrackableType<ITrackableType> trackableType = type as ICanConfigureTrackableType<ITrackableType>;
+                        trackableType.IncludeProperties(type.Type.GetProperties());
+
+                        Contract.Assert(TrackableInterfaceTypes.Add(type), "Interface type can only be configured to be tracked once");
+                    }
             }
         }
 
@@ -76,6 +89,13 @@
                 return TrackableTypes.Any(t => t.Type == someType.GetActualTypeIfTrackable());
         }
 
+        public static bool ImplementsBaseType(Type someType, out ITrackableType baseType)
+        {
+            baseType = TrackableInterfaceTypes.SingleOrDefault(t => t.Type.IsAssignableFrom(someType.GetActualTypeIfTrackable()));
+
+            return baseType != null;
+        }
+
         /// <summary>
         /// Determines if a given property holds an object type configured as a trackable type
         /// </summary>
@@ -93,7 +113,8 @@
                 ITrackableType trackableType = GetTrackableType(property.GetBaseProperty().DeclaringType);
 
                 return trackableType.IncludedProperties.Count == 0
-                            || trackableType.IncludedProperties.Contains(property.GetBaseProperty());
+                            || trackableType.IncludedProperties.Contains(property.GetBaseProperty())
+                            || trackableType.IncludedProperties.Any(p => p.DeclaringType.IsAssignableFrom(property.DeclaringType) && p.Name == property.Name);
             }
         }
     }
