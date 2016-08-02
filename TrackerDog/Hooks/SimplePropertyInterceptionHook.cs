@@ -1,19 +1,24 @@
-﻿namespace TrackerDog.Hooks
-{
-    using Castle.DynamicProxy;
-    using System;
-    using System.Collections.Generic;
-    using System.Dynamic;
-    using System.Linq;
-    using System.Reflection;
-    using TrackerDog.Configuration;
+﻿using Castle.DynamicProxy;
+using TrackerDog.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Reflection;
 
+namespace TrackerDog.Hooks
+{
     internal sealed class SimplePropertyInterceptionHook : IProxyGenerationHook
     {
         private readonly static Guid _id = Guid.NewGuid();
         private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
         private static readonly HashSet<MethodInfo> _skippedMethods;
         private static readonly HashSet<MethodInfo> _dynamicObjectGetterSetterMethods;
+
+        public SimplePropertyInterceptionHook(IObjectChangeTrackingConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         static SimplePropertyInterceptionHook()
         {
@@ -29,6 +34,8 @@
                 typeof(DynamicObject).GetMethod("TrySetMember")
             };
         }
+
+        public IObjectChangeTrackingConfiguration Configuration { get; }
 
         internal Guid Id => _id;
         private static HashSet<MethodInfo> SkippedMethods => _skippedMethods;
@@ -48,7 +55,7 @@
             if ((!isDynamicObject && !methodInfo.IsPropertyGetterOrSetter()) || _skippedMethods.Contains(methodInfo))
                 return false;
 
-            ITrackableType trackableType = TrackerDogConfiguration.TrackableTypes.SingleOrDefault(t => t.Type == type);
+            ITrackableType trackableType = Configuration.TrackableTypes.SingleOrDefault(t => t.Type == type);
 
             if (trackableType == null)
                 return false;
@@ -62,7 +69,7 @@
             return trackableType.IncludedProperties
                                 .Concat
                                 (
-                                    TrackerDogConfiguration.GetAllTrackableBaseTypes(trackableType)
+                                    Configuration.GetAllTrackableBaseTypes(trackableType)
                                                             .SelectMany(t => t.IncludedProperties)
                                 ).Any(p =>
                                 {

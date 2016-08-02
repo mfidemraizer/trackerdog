@@ -1,9 +1,9 @@
-﻿namespace TrackerDog
-{
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics.Contracts;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics.Contracts;
 
+namespace TrackerDog
+{
     [ContractClassFor(typeof(IChangeTrackableObject))]
     internal abstract class IChangeTrackableObjectContract : IChangeTrackableObject
     {

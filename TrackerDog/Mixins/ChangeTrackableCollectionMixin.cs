@@ -1,11 +1,11 @@
-﻿namespace TrackerDog.Mixins
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Collections.Specialized;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Collections.Specialized;
+using System.Reflection;
 
+namespace TrackerDog.Mixins
+{
     internal class ChangeTrackableCollectionMixin : IChangeTrackableCollection, IReadOnlyChangeTrackableCollection
     {
         private readonly static Guid _id = Guid.NewGuid();

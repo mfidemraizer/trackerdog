@@ -1,10 +1,10 @@
-﻿namespace TrackerDog
-{
-    using FastMember;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
+﻿using FastMember;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
+namespace TrackerDog
+{
     /// <summary>
     /// Represents a set of <see cref="System.Dynamic.DynamicObject"/> extension methods.
     /// </summary>

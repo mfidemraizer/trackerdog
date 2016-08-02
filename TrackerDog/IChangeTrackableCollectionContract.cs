@@ -1,11 +1,11 @@
-﻿namespace TrackerDog
-{
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Reflection;
 
+namespace TrackerDog
+{
     [ContractClassFor(typeof(IChangeTrackableCollection))]
     internal abstract class IChangeTrackableCollectionContract : IChangeTrackableCollection
     {

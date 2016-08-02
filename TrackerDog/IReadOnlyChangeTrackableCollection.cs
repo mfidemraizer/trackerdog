@@ -1,8 +1,8 @@
-﻿namespace TrackerDog
-{
-    using System.Collections.Immutable;
-    using System.Diagnostics.Contracts;
+﻿using System.Collections.Immutable;
+using System.Diagnostics.Contracts;
 
+namespace TrackerDog
+{
     /// <summary>
     /// Defines a collection that can track changes of itself and its items where the state can be read but not written.
     /// </summary>

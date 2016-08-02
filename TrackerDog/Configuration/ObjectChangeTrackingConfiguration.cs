@@ -1,39 +1,43 @@
-﻿namespace TrackerDog.Configuration
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Reflection;
-    using TrackerDog;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Reflection;
 
+namespace TrackerDog.Configuration
+{
     /// <summary>
     /// Represents the object change tracking configuration.
     /// </summary>
-    public static class TrackerDogConfiguration
+    internal sealed class ObjectChangeTrackingConfiguration : IObjectChangeTrackingConfiguration
     {
         private readonly static object _syncLock = new object();
 
-        /// <summary>
-        /// Gets current white list of types to which its instances will support change tracking.
-        /// </summary>
-        internal static HashSet<ITrackableType> TrackableTypes { get; } = new HashSet<ITrackableType>(new ITrackableTypeEqualityComparer());
+        public ObjectChangeTrackingConfiguration(ICollectionChangeTrackingConfiguration collectionConfiguration)
+        {
+            Collections = collectionConfiguration;
+        }
+
+        public ICollectionChangeTrackingConfiguration Collections { get; }
 
         /// <summary>
         /// Gets current white list of types to which its instances will support change tracking.
         /// </summary>
-        internal static HashSet<ITrackableType> TrackableInterfaceTypes { get; } = new HashSet<ITrackableType>(new ITrackableTypeEqualityComparer());
+        internal HashSet<ITrackableType> TrackableTypes { get; } = new HashSet<ITrackableType>(new ITrackableTypeEqualityComparer());
 
         /// <summary>
-        /// Gets current trackable collection configuration
+        /// Gets current white list of types to which its instances will support change tracking.
         /// </summary>
-        public static TrackableCollectionConfiguration Collections { get; } = new TrackableCollectionConfiguration();
+        internal HashSet<ITrackableType> TrackableInterfaceTypes { get; } = new HashSet<ITrackableType>(new ITrackableTypeEqualityComparer());
+
+        IImmutableSet<ITrackableType> IObjectChangeTrackingConfiguration.TrackableTypes => TrackableTypes.ToImmutableHashSet();
 
         /// <summary>
         /// Configures which types will support change tracking on current <see cref="AppDomain"/>.
         /// </summary>
         /// <param name="types">The types to track its changes</param>
-        public static void TrackTheseTypes(params ITrackableType[] types)
+        public void TrackTheseTypes(params ITrackableType[] types)
         {
             Contract.Requires(types != null && types.Length > 0 && types.All(t => t != null), "Given types cannot be null");
 
@@ -57,7 +61,7 @@
         /// </summary>
         /// <param name="type">The whole type to get its tracking configuration</param>
         /// <returns>The configured trackable type by type, or returns null if it's not already configured</returns>
-        internal static ITrackableType GetTrackableType(Type type)
+        public ITrackableType GetTrackableType(Type type)
         {
             Contract.Requires(type != null, "Given type cannot be null");
 
@@ -65,7 +69,7 @@
                 return TrackableTypes.SingleOrDefault(t => t.Type == type);
         }
 
-        internal static IEnumerable<ITrackableType> GetAllTrackableBaseTypes(ITrackableType trackableType)
+        public IEnumerable<ITrackableType> GetAllTrackableBaseTypes(ITrackableType trackableType)
         {
             Contract.Requires(trackableType != null, "Given trackable type must be a non-null reference");
             Contract.Ensures(Contract.Result<IEnumerable<ITrackableType>>() != null);
@@ -81,7 +85,7 @@
         /// </summary>
         /// <param name="someType">The whole type to check</param>
         /// <returns><literal>true</literal> if it can be tracked, <literal>false</literal> if it can't be tracked</returns>
-        public static bool CanTrackType(Type someType)
+        public bool CanTrackType(Type someType)
         {
             Contract.Requires(someType != null, "Given type cannot be null");
 
@@ -89,7 +93,7 @@
                 return TrackableTypes.Any(t => t.Type == someType.GetActualTypeIfTrackable());
         }
 
-        public static bool ImplementsBaseType(Type someType, out ITrackableType baseType)
+        public bool ImplementsBaseType(Type someType, out ITrackableType baseType)
         {
             baseType = TrackableInterfaceTypes.SingleOrDefault(t => t.Type.IsAssignableFrom(someType.GetActualTypeIfTrackable()));
 
@@ -101,7 +105,7 @@
         /// </summary>
         /// <param name="property">The whole property to check</param>
         /// <returns><literal>true</literal> if helds an object type configured as a trackable type, <literal>false</literal> if not </returns>
-        public static bool CanTrackProperty(PropertyInfo property)
+        public bool CanTrackProperty(PropertyInfo property)
         {
             Contract.Requires(property != null, "Property to check cannot be null");
             Contract.Requires(CanTrackType(property.ReflectedType), "Declaring type must be configured as trackable");
@@ -117,5 +121,74 @@
                             || trackableType.IncludedProperties.Any(p => p.DeclaringType.IsAssignableFrom(property.DeclaringType) && p.Name == property.Name);
             }
         }
+
+        public IObjectChangeTrackingConfiguration TrackThisType<T>(Action<TrackableType<T>> configure = null)
+        {
+            TrackableType<T> trackableType = new TrackableType<T>(this);
+            configure?.Invoke(trackableType);
+
+            if (!trackableType.Type.IsInterface)
+                TrackableTypes.Add(trackableType);
+            else
+                TrackableInterfaceTypes.Add(trackableType);
+
+            return this;
+        }
+
+        public IObjectChangeTrackingConfiguration TrackThisType(Type type, Action<ITrackableType> configure = null)
+        {
+            TrackableType trackableType = new TrackableType(this, type);
+            configure?.Invoke(trackableType);
+
+            if (!trackableType.Type.IsInterface)
+                TrackableTypes.Add(trackableType);
+            else
+                TrackableInterfaceTypes.Add(trackableType);
+
+            return this;
+        }
+
+        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive<TRoot>(Action<ITrackableType> configure = null, Func<Type, bool> filter = null)
+        {
+            return TrackThisTypeRecursive(typeof(TRoot), configure, filter);
+        }
+
+        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive(Type rootType, Action<ITrackableType> configure = null, Func<Type, bool> filter = null)
+        {
+            TrackableType trackableRoot = new TrackableType(this, rootType);
+            List<TrackableType> trackableTypes = null;
+
+            if (filter == null)
+            {
+                Assembly rootTypeAssembly = rootType.Assembly;
+                filter = t => t.Assembly == rootTypeAssembly;
+            }
+
+            trackableTypes = new List<TrackableType>
+            (
+                rootType.GetAllPropertyTypesRecursive(p => filter(p.PropertyType)).Select
+                (
+                    t =>
+                    {
+                        TrackableType trackableType = new TrackableType(this, t);
+                        configure?.Invoke(trackableType);
+
+                        return trackableType;
+                    }
+                )
+            );
+
+            trackableTypes.Insert(0, new TrackableType(this, rootType));
+
+            foreach (ITrackableType trackableType in trackableTypes)
+                if (!trackableType.Type.IsInterface)
+                    TrackableTypes.Add(trackableType);
+                else
+                    TrackableInterfaceTypes.Add(trackableType);
+
+            return this;
+        }
+
+        public ITrackableObjectFactory CreateTrackableObjectFactory() => new TrackableObjectFactoryInternal(this);
     }
 }

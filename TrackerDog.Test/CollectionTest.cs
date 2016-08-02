@@ -11,22 +11,23 @@
     [TestClass]
     public class CollectionTest
     {
+        private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            TrackerDogConfiguration.TrackTheseTypes
-            (
-                Track.ThisType<A>().IncludeProperty(a => a.Items),
-                Track.ThisType<B>().IncludeProperty(b => b.Dogs),
-                Track.ThisType<C>().IncludeProperty(c => c.Dogs),
-                Track.ThisType<Dog>().IncludeProperty(d => d.Name),
-                Track.ThisType<D>(),
-                Track.ThisType<E>().IncludeProperty(e => e.Dictionary),
-                Track.ThisType<F>().IncludeProperties(f => f.ListOfF),
-                Track.ThisType<G>().IncludeProperties(g => g.Buffer),
-                Track.ThisType<WhateverBase>().IncludeProperties(b => b.List2),
-                Track.ThisType<WhateverParent>().IncludeProperties(d => d.List)
-            );
+            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration()
+                    .TrackThisType<A>(t => t.IncludeProperty(a => a.Items))
+                    .TrackThisType<B>(t => t.IncludeProperty(b => b.Dogs))
+                    .TrackThisType<C>(t => t.IncludeProperty(c => c.Dogs))
+                    .TrackThisType<Dog>(t => t.IncludeProperty(d => d.Name))
+                    .TrackThisType<D>()
+                    .TrackThisType<E>(t => t.IncludeProperty(e => e.Dictionary))
+                    .TrackThisType<F>(t => t.IncludeProperty(f => f.ListOfF))
+                    .TrackThisType<G>(t => t.IncludeProperty(g => g.Buffer))
+                    .TrackThisType<WhateverBase>(t => t.IncludeProperty(w => w.List2))
+                    .TrackThisType<WhateverParent>(t => t.IncludeProperty(w => w.List));
+
+            TrackableObjectFactory = config.CreateTrackableObjectFactory();
         }
 
         public class Whatever
@@ -105,7 +106,7 @@
         [TestMethod]
         public void TrackingTypeWithNonTrackableCollectionWontCrash()
         {
-            D d = new D().AsTrackable();
+            D d = TrackableObjectFactory.CreateFrom(new D());
             d.Mask = new BitArray(38);
 
             Assert.IsTrue(d.PropertyHasChanged(o => o.Mask));
@@ -114,7 +115,7 @@
         [TestMethod]
         public void CanTrackCollectionPropertiesOfNonTrackableTypes()
         {
-            WhateverParent parent = new WhateverParent().AsTrackable();
+            WhateverParent parent = TrackableObjectFactory.CreateFrom(new WhateverParent());
             parent.List2.Add("hey");
             parent.List.Add(new Whatever());
 
@@ -124,7 +125,7 @@
         [TestMethod]
         public void CollectionItemsArePreservedWhenTurningParentObjectIntoTrackable()
         {
-            A a = new A().AsTrackable();
+            A a = TrackableObjectFactory.CreateFrom(new A());
 
             Assert.AreEqual(3, a.Items.Count);
 
@@ -132,7 +133,7 @@
             parent.List.Add(new Whatever());
             parent.List2.Add("hey");
 
-            parent = parent.AsTrackable();
+            parent = TrackableObjectFactory.CreateFrom(parent);
 
             Assert.AreEqual(1, parent.List.Count);
             Assert.AreEqual(1, parent.List2.Count);
@@ -141,14 +142,14 @@
         [TestMethod]
         public void CanTrackListPropertyChanges()
         {
-            A a = new A().AsTrackable();
+            A a = TrackableObjectFactory.CreateFrom(new A());
             a.Items.Add("hola");
 
-            B b = new B().AsTrackable();
+            B b = TrackableObjectFactory.CreateFrom(new B());
             b.Dogs.First().Name = "Rex";
             b.Dogs.Add(new Dog { Name = "Rex" });
 
-            C c = new C().AsTrackable();
+            C c = TrackableObjectFactory.CreateFrom(new C());
             c.Dogs.Add(new Dog { Name = "Rex" });
 
             IObjectChangeTracker Atracking = a.GetChangeTracker();
@@ -163,11 +164,11 @@
         [TestMethod]
         public void CanTurnCollectionItemsToUntracked()
         {
-            B b = new B().AsTrackable();
+            B b = TrackableObjectFactory.CreateFrom(new B());
             b.Dogs.First().Name = "Rex";
             b.Dogs.Add(new Dog { Name = "Rex" });
 
-            b = b.ToUntracked();
+            b = b.ToUntracked(null);
 
             Assert.IsFalse(b.IsTrackable());
             Assert.IsFalse(b.Dogs.Any(dog => dog.IsTrackable()));
@@ -176,7 +177,7 @@
         [TestMethod]
         public void CanTrackSetPropertyChanges()
         {
-            C c = new C().AsTrackable();
+            C c = TrackableObjectFactory.CreateFrom(new C());
 
             IObjectChangeTracker Ctracking = c.GetChangeTracker();
             IReadOnlyChangeTrackableCollection trackableCollection = (IReadOnlyChangeTrackableCollection)c.Dogs;
@@ -189,7 +190,7 @@
         [TestMethod]
         public void CanTrackSetIntersections()
         {
-            C c = new C().AsTrackable();
+            C c = TrackableObjectFactory.CreateFrom(new C());
             c.Dogs.Add(new Dog { Name = "Rex" });
 
             IReadOnlyChangeTrackableCollection trackableCollection = (IReadOnlyChangeTrackableCollection)c.Dogs;
@@ -204,7 +205,7 @@
         [TestMethod]
         public void CanTrackSetExcept()
         {
-            C c = new C().AsTrackable();
+            C c = TrackableObjectFactory.CreateFrom(new C());
             c.Dogs.Add(new Dog { Name = "Rex" });
 
             IReadOnlyChangeTrackableCollection trackableCollection = (IReadOnlyChangeTrackableCollection)c.Dogs;
@@ -225,7 +226,7 @@
         {
             E e = new E();
             e.Dictionary.Add("hello", "world");
-            e = e.AsTrackable();
+            e = TrackableObjectFactory.CreateFrom(e);
             e.Dictionary.Add("bye", "bye");
 
             Assert.IsTrue(e.PropertyHasChanged(o => o.Dictionary));
@@ -236,7 +237,7 @@
         {
             E e = new E();
             e.Dictionary.Add("hello", "world");
-            e = e.AsTrackable();
+            e = TrackableObjectFactory.CreateFrom(e);
 
             e.Dictionary.ContainsKey("hello");
         }
@@ -244,7 +245,7 @@
         [TestMethod]
         public void CanTrackChangesOfCollectionOfEnclosingType()
         {
-            F f = new F().AsTrackable();
+            F f = TrackableObjectFactory.CreateFrom(new F());
 
             f.ListOfF.Add(new F());
 
@@ -255,7 +256,7 @@
         [TestMethod]
         public void ArrayMustNotBeTrackedAsCollections()
         {
-            G g = new G().AsTrackable();
+            G g = TrackableObjectFactory.CreateFrom(new G());
             g.Buffer = new byte[] { };
             
             Assert.IsTrue(g.PropertyHasChanged(o => o.Buffer));

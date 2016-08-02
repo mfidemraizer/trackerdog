@@ -1,10 +1,11 @@
-﻿namespace TrackerDog
-{
-    using Castle.DynamicProxy;
-    using System.Collections;
-    using System.Diagnostics;
-    using System.Linq;
+﻿using Castle.DynamicProxy;
+using System.Collections;
+using System.Diagnostics;
+using System.Linq;
+using TrackerDog.Configuration;
 
+namespace TrackerDog
+{
     [DebuggerDisplay("{PropertyName} = {CurrentValue} (Has changed? {HasChanged})")]
     internal sealed class ObjectPropertyChangeTracking : IObjectPropertyChangeTracking
     {
@@ -15,14 +16,19 @@
         private IEnumerable _oldCollectionValue;
         private IEnumerable _currentCollectionValue;
 
-        public ObjectPropertyChangeTracking(ObjectChangeTracker tracker, object targetObject, string propertyName, object currentValue)
+        public ObjectPropertyChangeTracking(IObjectChangeTrackingConfiguration configuration, ITrackableObjectFactoryInternal trackableObjectFactory, ObjectChangeTracker tracker, object targetObject, string propertyName, object currentValue)
         {
+            Configuration = configuration;
+            TrackableObjectFactory = trackableObjectFactory;
             _tracker = tracker;
             _targetObject = targetObject;
             PropertyName = propertyName;
             OldValue = currentValue;
             CurrentValue = currentValue;
         }
+
+        private IObjectChangeTrackingConfiguration Configuration { get; }
+        private ITrackableObjectFactoryInternal TrackableObjectFactory { get; }
 
         public ObjectChangeTracker Tracker => _tracker;
         IObjectChangeTracker IObjectPropertyChangeTracking.Tracker => Tracker;
@@ -42,7 +48,7 @@
 
                     if (enumerable != null)
                     {
-                        _oldCollectionValue = enumerable.CloneEnumerable();
+                        _oldCollectionValue = enumerable.CloneEnumerable(Configuration);
 
                         if (_oldValue is IProxyTargetAccessor)
                             _oldCollectionValue = (IEnumerable)TrackableObjectFactory.CreateForCollection

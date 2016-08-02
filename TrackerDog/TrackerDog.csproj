@@ -105,14 +105,15 @@
     <Compile Include="CollectionHandling\CollectionChangeContext.cs" />
     <Compile Include="Configuration\CollectionImplementation.cs" />
     <Compile Include="Configuration\ICanConfigureTrackableType.cs" />
+    <Compile Include="Configuration\IObjectChangeTrackingConfiguration.cs" />
+    <Compile Include="Configuration\ICollectionChangeTrackingConfiguration.cs" />
     <Compile Include="Configuration\ITrackableType.cs" />
     <Compile Include="Configuration\ITrackableTypeContract.cs" />
-    <Compile Include="Configuration\Track.cs" />
     <Compile Include="Configuration\TrackableCollectionConfiguration.cs" />
     <Compile Include="Configuration\GenericTrackableType.cs" />
     <Compile Include="Configuration\ITrackableTypeEqualityComparer.cs" />
     <Compile Include="Configuration\TrackableType.cs" />
-    <Compile Include="Configuration\TrackerDogConfiguration.cs" />
+    <Compile Include="Configuration\ObjectChangeTrackingConfiguration.cs" />
     <Compile Include="CollectionHandling\DefaultCollectionChangeInterceptor.cs" />
     <Compile Include="DeclaredObjectPropertyChangeEventArgs.cs" />
     <Compile Include="DynamicObjectExtensions.cs" />
@@ -135,6 +136,8 @@
     <Compile Include="IHasParent.cs" />
     <Compile Include="Interceptors\MethodInterceptor.cs" />
     <Compile Include="IReadOnlyChangeTrackableCollectionContract.cs" />
+    <Compile Include="ITrackableObjectFactory.cs" />
+    <Compile Include="ITrackableObjectFactoryInternal.cs" />
     <Compile Include="Mixins\ChangeTrackableCollectionMixin.cs" />
     <Compile Include="Mixins\ChangeTrackableObjectMixin.cs" />
     <Compile Include="IChangeTrackableObject.cs" />
@@ -156,8 +159,8 @@
     <Compile Include="PropertyInfoEqualityComparer.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="CollectionHandling\SetChangeInterceptor.cs" />
-    <Compile Include="Trackable.cs" />
-    <Compile Include="TrackableObjectFactory.cs" />
+    <Compile Include="TrackableObjectFactoryInternal.cs" />
+    <Compile Include="ObjectChangeTracking.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

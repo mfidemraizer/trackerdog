@@ -1,9 +1,9 @@
-﻿namespace TrackerDog.CollectionHandling
-{
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Reflection;
 
+namespace TrackerDog.CollectionHandling
+{
     /// <summary>
     /// Represents a set of available information to collection change handling participants like 
     /// collection change interceptors.

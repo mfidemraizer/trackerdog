@@ -1,14 +1,14 @@
-﻿namespace TrackerDog
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
-    using System.Linq.Expressions;
-    using System.Reflection;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
+using System.Linq.Expressions;
+using System.Reflection;
 
+namespace TrackerDog
+{
     [ContractClassFor(typeof(IObjectChangeTracker))]
     public abstract class IObjectChangeTrackerContract : IObjectChangeTracker
     {

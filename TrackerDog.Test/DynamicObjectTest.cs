@@ -33,20 +33,22 @@
             public string Text { get; set; }
         }
 
+        private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
+
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            TrackerDogConfiguration.TrackTheseTypes
-            (
-                Track.ThisType<A>(),
-                Track.ThisType<TestDynamicObject>()
-            );
+            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration()
+                .TrackThisType<A>()
+                .TrackThisType<TestDynamicObject>();
+
+            TrackableObjectFactory = config.CreateTrackableObjectFactory();
         }
 
         [TestMethod]
         public void CanTrackDynamicObjectPropertyChanges()
         {
-            dynamic dynamicObject = new TestDynamicObject().AsTrackable();
+            dynamic dynamicObject = TrackableObjectFactory.CreateFrom(new TestDynamicObject());
 
             dynamicObject.Text = "hello world 1";
             dynamicObject.Text = "hello world 2";
@@ -75,15 +77,19 @@
             const string text1 = "hello";
             const string text2 = "world";
 
-            dynamic a = new TestDynamicObject
-            {
-                DeclaredText = text1
-            }.AsTrackable();
+            dynamic a = TrackableObjectFactory.CreateFrom
+            (
+                new TestDynamicObject
+                {
+                    DeclaredText = text1
+                }
+            );
 
             a.DynamicText = text2;
             a.A = new A();
 
-            TestDynamicObject untrackedA = ((TestDynamicObject)a).ToUntracked();
+            // TODO:
+            TestDynamicObject untrackedA = ((TestDynamicObject)a).ToUntracked(null);
 
             Assert.AreEqual(text1, untrackedA.DeclaredText);
             Assert.AreEqual(text2, ((dynamic)untrackedA).DynamicText);

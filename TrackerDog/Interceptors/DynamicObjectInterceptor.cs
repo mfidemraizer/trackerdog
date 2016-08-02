@@ -1,15 +1,25 @@
-﻿namespace TrackerDog.Interceptors
-{
-    using Castle.DynamicProxy;
-    using System;
-    using System.Diagnostics.Contracts;
-    using System.Dynamic;
-    using System.Reflection;
-    using Configuration;
+﻿using Castle.DynamicProxy;
+using System;
+using System.Diagnostics.Contracts;
+using System.Dynamic;
+using System.Reflection;
+using TrackerDog.Configuration;
 
+namespace TrackerDog.Interceptors
+{
     internal sealed class DynamicObjectInterceptor : MethodInterceptor
     {
         private readonly static Guid _id = Guid.NewGuid();
+
+        public DynamicObjectInterceptor(IObjectChangeTrackingConfiguration configuration, ITrackableObjectFactory trackableObjectFactory)
+        {
+            Configuration = configuration;
+            TrackableObjectFactory = trackableObjectFactory;
+        }
+
+        private IObjectChangeTrackingConfiguration Configuration { get; }
+        private ITrackableObjectFactory TrackableObjectFactory { get; }
+
         internal Guid Id => _id;
 
         protected override void InterceptMethod(IInvocation invocation)
@@ -25,9 +35,9 @@
                     IChangeTrackableObject trackableObject = invocation.Proxy as IChangeTrackableObject;
                     Contract.Assert(trackableObject != null);
 
-                    if (!invocation.Arguments[1].IsTrackable() && TrackerDogConfiguration.CanTrackType(invocation.Arguments[1].GetType()))
+                    if (!invocation.Arguments[1].IsTrackable() && Configuration.CanTrackType(invocation.Arguments[1].GetType()))
                     {
-                        object trackableArgument = invocation.Arguments[1].AsTrackable();
+                        object trackableArgument = TrackableObjectFactory.CreateFrom(invocation.Arguments[1]);
 
                         if (trackableObject is IChangeTrackableObject)
                             trackableObject.SetDynamicMember(setBinder.Name, trackableArgument);

@@ -1,9 +1,9 @@
-﻿namespace TrackerDog.Interceptors
-{
-    using Castle.DynamicProxy;
-    using System.Diagnostics.Contracts;
-    using System.Reflection;
+﻿using Castle.DynamicProxy;
+using System.Diagnostics.Contracts;
+using System.Reflection;
 
+namespace TrackerDog.Interceptors
+{
     internal abstract class MethodInterceptor : IInterceptor
     {
         private const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance;

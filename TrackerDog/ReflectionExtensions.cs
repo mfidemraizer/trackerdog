@@ -1,13 +1,13 @@
-﻿namespace TrackerDog
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Diagnostics.Contracts;
-    using System.Dynamic;
-    using System.Linq;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.Contracts;
+using System.Dynamic;
+using System.Linq;
+using System.Reflection;
 
+namespace TrackerDog
+{
     /// <summary>
     /// Represents a set of reflection related operations
     /// </summary>

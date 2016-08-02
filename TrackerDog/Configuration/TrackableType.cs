@@ -1,12 +1,12 @@
-﻿namespace TrackerDog.Configuration
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Reflection;
 
+namespace TrackerDog.Configuration
+{
     /// <summary>
     /// Represents the default implementation to a fluent trackable type configuration.
     /// </summary>
@@ -16,12 +16,12 @@
         private readonly Type _type;
         private readonly Lazy<IImmutableSet<IObjectPropertyInfo>> _objectPaths;
 
-        public TrackableType(Type type)
+        public TrackableType(IObjectChangeTrackingConfiguration configuration, Type type)
         {
             _type = type;
             _objectPaths = new Lazy<IImmutableSet<IObjectPropertyInfo>>
             (
-                () => Type.BuildAllPropertyPaths(p => TrackerDogConfiguration.CanTrackType(p.DeclaringType))
+                () => Type.BuildAllPropertyPaths(p => configuration.CanTrackType(p.DeclaringType))
                             .Cast<IObjectPropertyInfo>()
                             .ToImmutableHashSet()
             );

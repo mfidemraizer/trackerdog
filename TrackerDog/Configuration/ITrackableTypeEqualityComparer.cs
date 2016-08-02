@@ -1,7 +1,7 @@
-﻿namespace TrackerDog.Configuration
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace TrackerDog.Configuration
+{
     /// <summary>
     /// Represents the default equality comparer to <see cref="ITrackableType"/> implementations. The equality
     /// is based on <see cref="ITrackableType.Type"/> property.

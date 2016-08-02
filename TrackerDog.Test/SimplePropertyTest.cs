@@ -8,20 +8,22 @@
     [TestClass]
     public class SimplePropertyTest
     {
+        private static IObjectChangeTrackingConfiguration Configuration { get; set; }
+        private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            TrackerDogConfiguration.TrackTheseTypes
-            (
-                Track.ThisType<A>().IncludeProperties(a => a.Text, a => a.B),
-                Track.ThisType<B>().IncludeProperties(b => b.Text, b => b.C),
-                Track.ThisType<C>().IncludeProperties(c => c.Text, c => c.ListOfD),
-                Track.ThisType<D>().IncludeProperty(d => d.Text),
-                Track.ThisType<E>().IncludeProperties(e => e.Text, e => e.Number),
-                Track.ThisType<Customer>().IncludeProperties(c => c.ContactInfo),
-                Track.ThisType<Contact>().IncludeProperties(c => c.Name),
-                Track.ThisType<EnhancedContact>().IncludeProperties(c => c.Default)
-            );
+            Configuration = ObjectChangeTracking.CreateConfiguration()
+                    .TrackThisType<A>(t => t.IncludeProperties(a => a.Text, a => a.B))
+                    .TrackThisType<B>(t => t.IncludeProperties(b => b.Text, b => b.C))
+                    .TrackThisType<C>(t => t.IncludeProperties(c => c.Text, c => c.ListOfD))
+                    .TrackThisType<D>(t => t.IncludeProperty(d => d.Text))
+                    .TrackThisType<E>(t => t.IncludeProperties(e => e.Text, e => e.Number))
+                    .TrackThisType<Customer>(t => t.IncludeProperty(c => c.ContactInfo))
+                    .TrackThisType<Contact>(t => t.IncludeProperty(c => c.Name))
+                    .TrackThisType<EnhancedContact>(t => t.IncludeProperty(c => c.Default));
+
+            TrackableObjectFactory = Configuration.CreateTrackableObjectFactory();
         }
 
         public class A
@@ -71,8 +73,9 @@
         [TestMethod]
         public void CanGetTrackableTypeObjectPaths()
         {
-            var xxx = typeof(Customer).GetTrackableType().ObjectPaths;
-            var yyy = typeof(A).GetTrackableType().ObjectPaths;
+
+            var xxx = Configuration.GetTrackableType(typeof(Customer)).ObjectPaths;
+            var yyy = Configuration.GetTrackableType(typeof(A)).ObjectPaths;
         }
 
         [TestMethod]
@@ -81,7 +84,7 @@
             const string initialValue = "hello world";
             const string changedValue = "hello world 2";
 
-            A a = new A { Text = initialValue }.AsTrackable();
+            A a = TrackableObjectFactory.CreateFrom(new A { Text = initialValue });
             a.Text = changedValue;
 
             Assert.AreNotEqual(initialValue, a.Text);
@@ -103,7 +106,7 @@
         public void CanTrackBothReferenceAndValueTypeProperties()
         {
             // It should not throw an exception ;)
-            E e = new E().AsTrackable();
+            E e = TrackableObjectFactory.CreateFrom(new E());
         }
 
         [TestMethod]
@@ -113,7 +116,7 @@
             const string changedValue = "hello world 2";
 
 
-            A a = new A { Text = initialValue }.AsTrackable();
+            A a = TrackableObjectFactory.CreateFrom(new A { Text = initialValue });
             a.Text = changedValue;
 
             IObjectChangeTracker changeTracker = a.GetChangeTracker();
@@ -127,19 +130,22 @@
         [TestMethod]
         public void CanGetTrackingObjectGraph()
         {
-            A a = new A
-            {
-                Text = "hey",
-                B = new B
+            A a = TrackableObjectFactory.CreateFrom
+            (
+                new A
                 {
-                    Text = "hurray",
-                    C = new C
+                    Text = "hey",
+                    B = new B
                     {
-                        Text = "uhm",
-                        ListOfD = new List<D> { new D { Text = "ohm" } }
+                        Text = "hurray",
+                        C = new C
+                        {
+                            Text = "uhm",
+                            ListOfD = new List<D> { new D { Text = "ohm" } }
+                        }
                     }
                 }
-            }.AsTrackable();
+            );
 
             IObjectChangeTracker changeTracker = a.GetChangeTracker();
 
@@ -169,19 +175,22 @@
             const string initialValue = "hello world";
             const string changedValue = "hello world 2";
 
-            A a = new A
-            {
-                Text = initialValue,
-                B = new B
+            A a = TrackableObjectFactory.CreateFrom
+            (
+                new A
                 {
                     Text = initialValue,
-                    C = new C
+                    B = new B
                     {
                         Text = initialValue,
-                        ListOfD = new List<D> { new D { Text = "initialValue" } }
+                        C = new C
+                        {
+                            Text = initialValue,
+                            ListOfD = new List<D> { new D { Text = "initialValue" } }
+                        }
                     }
                 }
-            }.AsTrackable();
+            );
 
             a.Text = changedValue;
             a.B.Text = changedValue;
@@ -203,19 +212,21 @@
             const string initialValue = "hello world";
             const string changedValue = "hello world 2";
 
-            A a = new A
-            {
-                Text = initialValue,
-                B = new B
+            A a = TrackableObjectFactory.CreateFrom(
+                new A
                 {
                     Text = initialValue,
-                    C = new C
+                    B = new B
                     {
                         Text = initialValue,
-                        ListOfD = new List<D> { new D { Text = "initialValue" } }
+                        C = new C
+                        {
+                            Text = initialValue,
+                            ListOfD = new List<D> { new D { Text = "initialValue" } }
+                        }
                     }
                 }
-            }.AsTrackable();
+            );
 
             a.Text = changedValue;
             a.B.Text = changedValue;
@@ -237,7 +248,7 @@
             const string initialValue = "hello world";
             const string changedValue = "hello world 2";
 
-            A a = new A { Text = initialValue }.AsTrackable();
+            A a = TrackableObjectFactory.CreateFrom(new A { Text = initialValue });
             a.Text = changedValue;
 
             IObjectChangeTracker changeTracker = a.GetChangeTracker();
@@ -260,7 +271,7 @@
             const string initialValue = "hello world";
             const string changedValue = "hello world 2";
 
-            A a = new A { Text = initialValue }.AsTrackable();
+            A a = TrackableObjectFactory.CreateFrom(new A { Text = initialValue });
             a.Text = changedValue;
 
             IObjectChangeTracker changeTracker = a.GetChangeTracker();
@@ -279,22 +290,25 @@
             const string initialCText = "!";
             const string initialDText = "boh!";
 
-            A a = new A
-            {
-                Text = initialAText,
-                B = new B
+            A a = TrackableObjectFactory.CreateFrom
+            (
+                new A
                 {
-                    Text = initialBText,
-                    C = new C
+                    Text = initialAText,
+                    B = new B
                     {
-                        Text = initialCText,
-                        ListOfD = new List<D>
+                        Text = initialBText,
+                        C = new C
+                        {
+                            Text = initialCText,
+                            ListOfD = new List<D>
                         {
                             new D { Text = initialDText }
                         }
+                        }
                     }
                 }
-            }.AsTrackable();
+            );
 
             IObjectChangeTracker tracker = a.GetChangeTracker();
             int changeCount = 0;
@@ -328,22 +342,25 @@
             const string initialCText = "!";
             const string initialDText = "boh!";
 
-            A a = new A
-            {
-                Text = initialAText,
-                B = new B
+            A a = TrackableObjectFactory.CreateFrom
+            (
+                new A
                 {
-                    Text = initialBText,
-                    C = new C
+                    Text = initialAText,
+                    B = new B
                     {
-                        Text = initialCText,
-                        ListOfD = new List<D>
+                        Text = initialBText,
+                        C = new C
+                        {
+                            Text = initialCText,
+                            ListOfD = new List<D>
                         {
                             new D { Text = initialDText }
                         }
+                        }
                     }
                 }
-            }.AsTrackable();
+            );
 
             a.B.C.Text = "changed 1!";
             a.B.Text = "changed 2!";
@@ -351,7 +368,7 @@
             a.B.C.ListOfD.First().Text = "changed 4!";
             a.B.C.ListOfD.Add(new D { Text = "changed 5!" });
 
-            A untrackedA = a.ToUntracked();
+            A untrackedA = a.ToUntracked(null);
 
             Assert.AreEqual("changed 1!", untrackedA.B.C.Text);
             Assert.AreEqual("changed 2!", untrackedA.B.Text);
@@ -371,7 +388,7 @@
             const string initialValue = "hello world";
             const string changedValue = "hello world 2";
 
-            A a = new A { Text = initialValue }.AsTrackable();
+            A a = TrackableObjectFactory.CreateFrom(new A { Text = initialValue });
             a.Text = changedValue;
 
             Assert.AreEqual(initialValue, a.OldPropertyValue(i => i.Text));

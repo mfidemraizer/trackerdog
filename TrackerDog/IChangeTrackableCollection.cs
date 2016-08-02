@@ -1,10 +1,9 @@
-﻿namespace TrackerDog
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Diagnostics.Contracts;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics.Contracts;
 
+namespace TrackerDog
+{
     /// <summary>
     /// Defines a collection that can track changes of itself and its items.
     /// </summary>

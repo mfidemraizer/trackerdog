@@ -1,9 +1,9 @@
-﻿namespace TrackerDog.Interceptors
-{
-    using Castle.DynamicProxy;
-    using System;
-    using System.Reflection;
+﻿using Castle.DynamicProxy;
+using System;
+using System.Reflection;
 
+namespace TrackerDog.Interceptors
+{
     internal sealed class SimplePropertyInterceptor : PropertyInterceptor
     {
         private readonly static Guid _id = Guid.NewGuid();

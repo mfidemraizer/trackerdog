@@ -1,8 +1,8 @@
-﻿namespace TrackerDog
-{
-    using System.Diagnostics.Contracts;
-    using System.Reflection;
+﻿using System.Diagnostics.Contracts;
+using System.Reflection;
 
+namespace TrackerDog
+{
     /// <summary>
     /// Defines an object that has a 1-1 association with some parent object that is already change-trackable
     /// </summary>

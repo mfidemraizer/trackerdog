@@ -1,18 +1,18 @@
-﻿namespace TrackerDog
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Diagnostics;
-    using System.Diagnostics.Contracts;
-    using System.Dynamic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Reflection;
-    using TrackerDog.Configuration;
-    using TrackerDog.Patterns;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
+using System.Dynamic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using TrackerDog.Configuration;
+using TrackerDog.Patterns;
 
+namespace TrackerDog
+{
     /// <summary>
     /// Represents an in-memory object property change tracker.
     /// </summary>
@@ -37,12 +37,18 @@
         /// Default constructor
         /// </summary>
         /// <param name="targetObject">The object to track its changes</param>
-        public ObjectChangeTracker(object targetObject)
+        public ObjectChangeTracker(IObjectChangeTrackingConfiguration configuration, ITrackableObjectFactoryInternal trackableObjectFactory, object targetObject)
         {
             Contract.Requires(targetObject != null);
+
+            Configuration = configuration;
+            TrackableObjectFactory = trackableObjectFactory;
             _targetObject = targetObject;
             _targetObjectType = targetObject.GetType();
         }
+
+        private IObjectChangeTrackingConfiguration Configuration { get; }
+        private ITrackableObjectFactoryInternal TrackableObjectFactory { get; }
 
         /// <summary>
         /// Gets the object to track its changes by current tracker
@@ -169,9 +175,9 @@
 
                 DeclaredObjectPropertyChangeTracking tracking = null;
 
-                if (TrackerDogConfiguration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(baseProperty, out existingTracking))
+                if (Configuration.CanTrackProperty(property) && !PropertyTrackings.TryGetValue(baseProperty, out existingTracking))
                 {
-                    DeclaredObjectPropertyChangeTracking declaredTracking = new DeclaredObjectPropertyChangeTracking(this, targetObject, baseProperty, property, currentValue);
+                    DeclaredObjectPropertyChangeTracking declaredTracking = new DeclaredObjectPropertyChangeTracking(Configuration, TrackableObjectFactory, this, targetObject, baseProperty, property, currentValue);
                     tracking = declaredTracking;
 
                     PropertyTrackings.Add(baseProperty, declaredTracking);
@@ -212,7 +218,7 @@
 
                 if (!DynamicPropertyTrackings.TryGetValue(propertyName, out existingTracking))
                 {
-                    ObjectPropertyChangeTracking propertyTracking = new ObjectPropertyChangeTracking(this, targetObject, propertyName, currentValue);
+                    ObjectPropertyChangeTracking propertyTracking = new ObjectPropertyChangeTracking(Configuration, TrackableObjectFactory, this, targetObject, propertyName, currentValue);
                     DynamicPropertyTrackings.Add(propertyName, propertyTracking);
                     tracking = propertyTracking;
                 }

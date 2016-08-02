@@ -1,12 +1,11 @@
-﻿namespace TrackerDog.Configuration
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Diagnostics.Contracts;
-    using System.Linq.Expressions;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq.Expressions;
+using System.Reflection;
 
+namespace TrackerDog.Configuration
+{
     /// <summary>
     /// Represents the default implementation to a fluent trackable type configuration.
     /// </summary>
@@ -14,11 +13,9 @@
     public sealed class TrackableType<T> : TrackableType, ICanConfigureTrackableType<TrackableType<T>>
     {
         private readonly ISet<PropertyInfo> _includedProperties = new HashSet<PropertyInfo>(new PropertyInfoEqualityComparer());
-        private readonly Type _type;
-        private readonly Lazy<IImmutableSet<IObjectPropertyInfo>> _objectPaths;
 
-        public TrackableType()
-            : base(typeof(T))
+        public TrackableType(IObjectChangeTrackingConfiguration configuration)
+            : base(configuration, typeof(T))
         {
         }
 

@@ -1,8 +1,8 @@
-﻿namespace TrackerDog
-{
-    using System;
-    using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 
+namespace TrackerDog
+{
     [ContractClassFor(typeof(IObjectPropertyChangeTracking))]
     public abstract class IObjectPropertyChangeTrackingContract : IObjectPropertyChangeTracking
     {

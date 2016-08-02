@@ -1,10 +1,10 @@
-﻿namespace TrackerDog
-{
-    using System;
-    using System.Diagnostics.Contracts;
-    using System.Linq.Expressions;
-    using System.Reflection;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Linq.Expressions;
+using System.Reflection;
 
+namespace TrackerDog
+{
     internal static class ExpressionExtensions
     {
         public static PropertyInfo ExtractProperty<T, TProperty>(this Expression<Func<T, TProperty>> propertySelector)

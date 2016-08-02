@@ -1,13 +1,13 @@
-﻿namespace TrackerDog
-{
-    using Castle.DynamicProxy;
-    using Configuration;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Reflection;
+﻿using Castle.DynamicProxy;
+using TrackerDog.Configuration;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 
+namespace TrackerDog
+{
     [DebuggerDisplay("{Property.DeclaringType}.{Property.Name} = {CurrentValue} (Has changed? {HasChanged})")]
     internal sealed class DeclaredObjectPropertyChangeTracking : IDeclaredObjectPropertyChangeTracking
     {
@@ -18,14 +18,20 @@
         private IEnumerable _oldCollectionValue;
         private IEnumerable _currentCollectionValue;
 
-        public DeclaredObjectPropertyChangeTracking(ObjectChangeTracker tracker, object targetObject, PropertyInfo ownerProperty, PropertyInfo property, object currentValue)
+        public DeclaredObjectPropertyChangeTracking(IObjectChangeTrackingConfiguration configuration, ITrackableObjectFactoryInternal trackableObjectFactory, ObjectChangeTracker tracker, object targetObject, PropertyInfo ownerProperty, PropertyInfo property, object currentValue)
         {
+            Configuration = configuration;
+            TrackableObjectFactory = trackableObjectFactory;
             _tracker = tracker;
             _targetObject = targetObject;
             Property = property;
             OldValue = currentValue;
             CurrentValue = currentValue;
         }
+
+        private IObjectChangeTrackingConfiguration Configuration { get; }
+
+        private ITrackableObjectFactoryInternal TrackableObjectFactory { get; }
 
         public ObjectChangeTracker Tracker => _tracker;
         IObjectChangeTracker IObjectPropertyChangeTracking.Tracker => Tracker;
@@ -41,13 +47,13 @@
             {
                 _oldValue = value;
 
-                if (_oldValue != null && _oldValue.CanBeTrackedAsCollection())
+                if (_oldValue != null && Configuration.Collections.CanTrack(_oldValue.GetType()))
                 {
                     IEnumerable enumerable = _oldValue as IEnumerable;
 
                     if (enumerable != null)
                     {
-                        _oldCollectionValue = enumerable.CloneEnumerable();
+                        _oldCollectionValue = enumerable.CloneEnumerable(Configuration);
 
                         if (_oldValue is IProxyTargetAccessor)
                             _oldCollectionValue = (IEnumerable)TrackableObjectFactory.CreateForCollection
@@ -57,7 +63,7 @@
 
                         _oldValue = _oldCollectionValue;
 
-                        CollectionItemsAreTrackable = TrackerDogConfiguration.CanTrackType(_oldValue.GetCollectionItemType());
+                        CollectionItemsAreTrackable = Configuration.CanTrackType(_oldValue.GetCollectionItemType());
                     }
                 }
             }

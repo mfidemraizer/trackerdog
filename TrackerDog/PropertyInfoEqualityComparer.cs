@@ -1,8 +1,8 @@
-﻿namespace TrackerDog
-{
-    using System.Collections.Generic;
-    using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 
+namespace TrackerDog
+{
     public sealed class PropertyInfoEqualityComparer : IEqualityComparer<PropertyInfo>
     {
         public bool Equals(PropertyInfo x, PropertyInfo y) =>

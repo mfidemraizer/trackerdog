@@ -1,16 +1,16 @@
-﻿namespace TrackerDog
-{
-    using Castle.DynamicProxy;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Reflection;
-    using TrackerDog.Configuration;
+﻿using Castle.DynamicProxy;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using TrackerDog.Configuration;
 
+namespace TrackerDog
+{
     /// <summary>
     /// Represents a set of object change-tracking related operations that work as façades to simplify the work
     /// with change tracking.
@@ -53,97 +53,6 @@
             }
 
             return paths.Cast<IObjectPropertyInfo>().ToImmutableHashSet();
-        }
-
-        /// <summary>
-        /// Gets a configured trackable type by type, or returns null if it's not already configured.
-        /// </summary>
-        /// <param name="someType">The whole type to get its tracking configuration</param>
-        /// <returns>The configured trackable type by type, or returns null if it's not already configured</returns>
-        public static ITrackableType GetTrackableType(this Type someType)
-            => TrackerDogConfiguration.GetTrackableType(someType);
-
-        /// <summary>
-        /// Determines if given type can be tracked as collection
-        /// </summary>
-        /// <param name="some">The whole type to check</param>
-        /// <returns><literal>true</literal> if can be tracked as collection, <literal>false</literal> if it can't be tracked as collection</returns>
-        internal static bool CanBeTrackedAsCollection(this Type some)
-        {
-            Contract.Requires(some != null, "Given type must be a non-null reference");
-
-            return TrackerDogConfiguration.Collections.CanTrack(some);
-        }
-
-        /// <summary>
-        /// Determines if given property can be tracked as collection
-        /// </summary>
-        /// <param name="some">The whole property to check</param>
-        /// <returns><literal>true</literal> if can be tracked as collection, <literal>false</literal> if it can't be tracked as collection</returns>
-        internal static bool CanBeTrackedAsCollection(this PropertyInfo some)
-        {
-            Contract.Requires(some != null, "Given property must be a non-null reference");
-
-            return some.PropertyType.CanBeTrackedAsCollection();
-        }
-
-        /// <summary>
-        /// Determines if given object type can be tracked as collection
-        /// </summary>
-        /// <param name="some">The whole object to check its type</param>
-        /// <returns><literal>true</literal> if can be tracked as collection, <literal>false</literal> if it can't be tracked as collection</returns>
-        internal static bool CanBeTrackedAsCollection(this object some)
-        {
-            Contract.Requires(some != null, "Given object must be a non-null reference");
-
-            return some.GetType().CanBeTrackedAsCollection();
-        }
-
-        /// <summary>
-        /// Turns some object into a trackable object.
-        /// </summary>
-        /// <typeparam name="TObject">The type of the object to track changes</typeparam>
-        /// <param name="some">The object to track its changes</param>
-        /// <returns>A proxy of the given object to track its changes</returns>
-        public static TObject AsTrackable<TObject>(this TObject some)
-            where TObject : class
-        {
-            Contract.Requires(some != null, "Reference must not be null to turn an object into a trackable one");
-
-            return TrackableObjectFactory.Create(some: some);
-        }
-
-        /// <summary>
-        /// Turns some object into a trackable object.
-        /// </summary>
-        /// <typeparam name="TObject">The type of the object to track changes</typeparam>
-        /// <param name="some">The object to track its changes</param>
-        /// <param name="propertyToSet">The property to which the proxy must be set to</param>
-        /// <returns>A proxy of the given object to track its changes</returns>
-        internal static TObject AsTrackable<TObject>(this TObject some, PropertyInfo propertyToSet)
-            where TObject : class
-        {
-            Contract.Requires(some != null, "Reference must not be null to turn an object into a trackable one");
-
-            return TrackableObjectFactory.Create(some: some, propertyToSet: propertyToSet);
-        }
-
-        /// <summary>
-        /// Turns an object held by a property into a change-trackable one.
-        /// </summary>
-        /// <param name="property">The whole property</param>
-        /// <param name="parentObject">The object owning the property</param>
-        internal static void AsTrackableCollection(this PropertyInfo property, IChangeTrackableObject parentObject)
-        {
-            Contract.Requires(property != null, "Cannot turn the object held by the property because the given property is null");
-            Contract.Requires(parentObject != null, "A non-null reference to the object owning given property is mandatory");
-
-            if (property.IsEnumerable() && !property.PropertyType.IsArray && property.CanBeTrackedAsCollection())
-            {
-                object proxiedCollection = TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property);
-
-                property.SetValue(parentObject, proxiedCollection);
-            }
         }
 
         /// <summary>
@@ -320,7 +229,7 @@
         /// <param name="enumerable">The whole enumerable to untrack</param>
         /// <param name="targetCollectionType">The whole target collection type. This type should be a supported trackable collection type</param>
         /// <returns>A copy of source enumerable turned into an untracked collection</returns>
-        public static IEnumerable ToUntrackedEnumerable(this IEnumerable enumerable, Type targetCollectionType)
+        public static IEnumerable ToUntrackedEnumerable(this IEnumerable enumerable, Type targetCollectionType, IObjectChangeTrackingConfiguration configuration)
         {
             Contract.Requires(targetCollectionType != null, "Target collection type cannot be a non-null reference");
 
@@ -336,7 +245,7 @@
                     collectionTypeArguments.Add(enumerable.GetCollectionItemType());
 
                 IEnumerable enumerableCopy =
-                    (IEnumerable)TrackerDogConfiguration.Collections.GetImplementation(targetCollectionType)
+                    (IEnumerable)configuration.Collections.GetImplementation(targetCollectionType)
                         .Value.Type.CreateInstanceWithGenericArgs(null, collectionTypeArguments.ToArray());
 
                 Type collectionInterface = enumerableCopy.GetType()
@@ -349,7 +258,7 @@
 
                 foreach (object item in enumerable)
                 {
-                    addMethod.Invoke(enumerableCopy, new[] { item.ToUntracked() });
+                    addMethod.Invoke(enumerableCopy, new[] { item.ToUntracked(configuration) });
                 }
 
                 return enumerableCopy;
@@ -363,7 +272,7 @@
         /// <typeparam name="TObject">The type of the whole object to untrack</typeparam>
         /// <param name="some">The whole object to untrack</param>
         /// <returns>The untracked version of given object</returns>
-        public static TObject ToUntracked<TObject>(this TObject some)
+        public static TObject ToUntracked<TObject>(this TObject some, IObjectChangeTrackingConfiguration configuration)
             where TObject : class
         {
             Contract.Ensures(!(Contract.Result<TObject>() is IProxyTargetAccessor), "To convert a tracked object to untracked one the whole tracked object must be created from a pre-existing object");
@@ -400,7 +309,7 @@
                                     unwrappedProperty.SetValue
                                     (
                                         unwrapped,
-                                        enumerablePropertyValue.ToUntrackedEnumerable(unwrappedProperty.PropertyType)
+                                        enumerablePropertyValue.ToUntrackedEnumerable(unwrappedProperty.PropertyType, configuration)
                                     );
                                 }
                             }
@@ -412,7 +321,7 @@
                     if (declaredProperty.DeclaringType == unwrapped.GetType() && declaredProperty.CanWrite)
                         declaredProperty.SetValue
                         (
-                            unwrapped, declaredProperty.GetValue(unwrapped).ToUntracked()
+                            unwrapped, declaredProperty.GetValue(unwrapped).ToUntracked(configuration)
                         );
 
                 foreach (KeyValuePair<string, ObjectPropertyChangeTracking> dynamicProperty in changeTracker.DynamicPropertyTrackings)
@@ -422,11 +331,11 @@
 
                     if (trackableCollection != null)
                     {
-                        propertyValueToSet = ((IEnumerable)trackableCollection).ToUntrackedEnumerable(trackableCollection.GetType());
+                        propertyValueToSet = ((IEnumerable)trackableCollection).ToUntrackedEnumerable(trackableCollection.GetType(), configuration);
                     }
                     else
                     {
-                        propertyValueToSet = dynamicProperty.Value.CurrentValue.ToUntracked();
+                        propertyValueToSet = dynamicProperty.Value.CurrentValue.ToUntracked(configuration);
                     }
 
                     unwrapped.SetDynamicMember

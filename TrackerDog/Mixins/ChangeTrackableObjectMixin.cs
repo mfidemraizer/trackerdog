@@ -1,20 +1,30 @@
-﻿namespace TrackerDog.Mixins
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics.Contracts;
-    using System.Dynamic;
-    using System.Linq;
-    using System.Reflection;
-    using TrackerDog;
-    using TrackerDog.Configuration;
-    using TrackerDog.Interceptors;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.Contracts;
+using System.Dynamic;
+using System.Linq;
+using System.Reflection;
+using TrackerDog;
+using TrackerDog.Configuration;
+using TrackerDog.Interceptors;
 
+namespace TrackerDog.Mixins
+{
     internal class ChangeTrackableObjectMixin : IChangeTrackableObject
     {
+        public ChangeTrackableObjectMixin(IObjectChangeTrackingConfiguration configuration, ITrackableObjectFactoryInternal trackableObjectFactory)
+        {
+            Configuration = configuration;
+            TrackableObjectFactory = trackableObjectFactory;
+        }
+
         private readonly static Guid _id = Guid.NewGuid();
         private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
+
+        private IObjectChangeTrackingConfiguration Configuration { get; }
+
+        private ITrackableObjectFactoryInternal TrackableObjectFactory { get; }
 
         private Dictionary<string, PropertyInfo> CachedProperties { get; } = new Dictionary<string, PropertyInfo>();
 
@@ -26,12 +36,25 @@
 
         internal Guid Id => _id;
 
+        private void ToTrackableCollection(PropertyInfo property, IChangeTrackableObject parentObject)
+        {
+            Contract.Requires(property != null, "Cannot turn the object held by the property because the given property is null");
+            Contract.Requires(parentObject != null, "A non-null reference to the object owning given property is mandatory");
+
+            if (property.IsEnumerable() && !property.PropertyType.IsArray && Configuration.Collections.CanTrack(property.PropertyType))
+            {
+                object proxiedCollection = TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property);
+
+                property.SetValue(parentObject, proxiedCollection);
+            }
+        }
+
         public void StartTracking(IChangeTrackableObject trackableObject, ObjectChangeTracker currentTracker = null)
         {
-            ChangeTrackingInfo.ChangeTracker = currentTracker ?? new ObjectChangeTracker(trackableObject);
+            ChangeTrackingInfo.ChangeTracker = currentTracker ?? new ObjectChangeTracker(Configuration, TrackableObjectFactory, trackableObject);
             PropertyChanged += (sender, e) => TrackProperty(trackableObject, e.PropertyName);
 
-            ITrackableType trackableType = TrackerDogConfiguration.GetTrackableType
+            ITrackableType trackableType = Configuration.GetTrackableType
             (
                 trackableObject.GetActualTypeIfTrackable()
             );
@@ -48,8 +71,8 @@
             if (baseTypes.Count() > 0)
             {
                 foreach (Type baseType in baseTypes)
-                    if (TrackerDogConfiguration.CanTrackType(baseType))
-                        foreach (PropertyInfo property in TrackerDogConfiguration.GetTrackableType(baseType).IncludedProperties)
+                    if (Configuration.CanTrackType(baseType))
+                        foreach (PropertyInfo property in Configuration.GetTrackableType(baseType).IncludedProperties)
                             trackableProperties.Add(property);
             }
 
@@ -58,7 +81,7 @@
                 {
                     if (property.IsEnumerable())
                     {
-                        property.AsTrackableCollection(trackableObject);
+                        ToTrackableCollection(property, trackableObject);
                         ChangeTrackingInfo.CollectionProperties.Add(property);
                     }
 

@@ -1,8 +1,8 @@
-﻿namespace TrackerDog
-{
-    using System.Diagnostics.Contracts;
-    using System.Reflection;
+﻿using System.Diagnostics.Contracts;
+using System.Reflection;
 
+namespace TrackerDog
+{
     [ContractClassFor(typeof(IHasParent))]
     internal abstract class IHasParentContract : IHasParent
     {

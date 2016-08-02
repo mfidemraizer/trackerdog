@@ -1,8 +1,8 @@
-﻿namespace TrackerDog.Configuration
-{
-    using System;
-    using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 
+namespace TrackerDog.Configuration
+{
     /// <summary>
     /// Represents a collection implementation information
     /// </summary>

@@ -1,11 +1,11 @@
-﻿namespace TrackerDog.Interceptors
-{
-    using Castle.DynamicProxy;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Reflection;
+﻿using Castle.DynamicProxy;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Reflection;
 
+namespace TrackerDog.Interceptors
+{
     internal abstract class PropertyInterceptor : IInterceptor
     {
         private readonly static HashSet<string> _changeTrackingMembers;

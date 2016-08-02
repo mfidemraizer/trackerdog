@@ -1,8 +1,8 @@
-﻿namespace TrackerDog
-{
-    using System.Collections.Immutable;
-    using System.Reflection;
+﻿using System.Collections.Immutable;
+using System.Reflection;
 
+namespace TrackerDog
+{
     /// <summary>
     /// Defines a type which holds metadata about a given type property.
     /// </summary>

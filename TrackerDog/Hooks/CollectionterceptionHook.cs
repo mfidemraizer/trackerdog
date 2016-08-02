@@ -1,12 +1,12 @@
-﻿namespace TrackerDog.Hooks
-{
-    using Castle.DynamicProxy;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using System.Reflection;
+﻿using Castle.DynamicProxy;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Reflection;
 
+namespace TrackerDog.Hooks
+{
     internal sealed class CollectionterceptionHook : IProxyGenerationHook
     {
         private readonly static Guid _id = Guid.NewGuid();

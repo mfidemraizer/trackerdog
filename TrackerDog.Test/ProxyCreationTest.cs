@@ -1,8 +1,8 @@
-﻿namespace TrackerDog.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using TrackerDog.Configuration;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TrackerDog.Configuration;
 
+namespace TrackerDog.Test
+{
     [TestClass]
     public class ProxyCreationTest
     {
@@ -25,19 +25,27 @@
             public virtual string Text { get; set; }
         }
 
+        private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
+
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            TrackerDogConfiguration.TrackTheseTypes(Track.ThisType<A>(), Track.ThisType<B>(), Track.ThisType<C>());
+            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration()
+                .TrackThisType<A>()
+                .TrackThisType<B>()
+                .TrackThisType<C>();
+
+            TrackableObjectFactory = config.CreateTrackableObjectFactory();
         }
 
         [TestMethod]
         public void CanExtractProxyTargetWithChanges()
         {
-            C c = new C { Text = "hello world" }.AsTrackable();
+            C c = TrackableObjectFactory.CreateFrom(new C { Text = "hello world" });
             c.Text = "hello world 2";
 
-            C noProxy = c.ToUntracked();
+            // TODO:
+            C noProxy = c.ToUntracked(null);
 
             Assert.AreEqual("hello world 2", noProxy.Text);
         }
@@ -47,8 +55,8 @@
         public void AllProxiesAreOfSameProxyType()
         {
 
-            A a1 = new A().AsTrackable();
-            A a2 = new A().AsTrackable();
+            A a1 = TrackableObjectFactory.CreateFrom(new A());
+            A a2 = TrackableObjectFactory.CreateFrom(new A());
 
             Assert.AreEqual(a1.GetType(), a2.GetType());
         }
@@ -56,7 +64,7 @@
         [TestMethod]
         public void CanCreateProxyWithConstructorArguments()
         {
-            B b = Trackable.Of<B>(1, 2);
+            B b = TrackableObjectFactory.CreateOf<B>(1, 2);
 
             Assert.IsTrue(b.IsTrackable());
 

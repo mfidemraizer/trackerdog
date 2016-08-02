@@ -1,17 +1,27 @@
-﻿namespace TrackerDog.Interceptors
-{
-    using Castle.DynamicProxy;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using TrackerDog.CollectionHandling;
-    using TrackerDog.Configuration;
+﻿using Castle.DynamicProxy;
+using TrackerDog.CollectionHandling;
+using TrackerDog.Configuration;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 
+namespace TrackerDog.Interceptors
+{
     internal sealed class CollectionPropertyInterceptor : MethodInterceptor
     {
         private readonly static Guid _id = Guid.NewGuid();
+
+        public CollectionPropertyInterceptor(IObjectChangeTrackingConfiguration configuration, ITrackableObjectFactory trackableObjectFactory)
+        {
+            Configuration = configuration;
+            TrackableObjectFactory = trackableObjectFactory;
+        }
+
+        private IObjectChangeTrackingConfiguration Configuration { get; }
+        private ITrackableObjectFactory TrackableObjectFactory { get; }
+
         internal Guid Id => _id;
 
         protected override void InterceptMethod(IInvocation invocation, IHasParent withParent)
@@ -23,7 +33,7 @@
                 IChangeTrackableCollection trackableCollection = (IChangeTrackableCollection)withParent;
                 IChangeTrackableObject changedItem =
                     invocation.Arguments[0] as IChangeTrackableObject
-                    ?? invocation.Arguments[0].AsTrackable() as IChangeTrackableObject;
+                    ?? TrackableObjectFactory.CreateFrom(invocation.Arguments[0]) as IChangeTrackableObject;
 
                 IEnumerable<object> currentItems;
                 Type collectionItemType = withParent.GetCollectionItemType();
@@ -38,7 +48,7 @@
                 invocation.Proceed();
 
                 KeyValuePair<Type, CollectionImplementation> implementation =
-                    TrackerDogConfiguration.Collections.GetImplementation(collectionType);
+                    Configuration.Collections.GetImplementation(collectionType);
 
                 CollectionChangeContext changeContext = new CollectionChangeContext
                 (

@@ -1,11 +1,11 @@
-﻿namespace TrackerDog.Configuration
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Diagnostics.Contracts;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.Contracts;
+using System.Reflection;
 
+namespace TrackerDog.Configuration
+{
     [ContractClassFor(typeof(ITrackableType))]
     public abstract class ITrackableTypeContract : ITrackableType
     {

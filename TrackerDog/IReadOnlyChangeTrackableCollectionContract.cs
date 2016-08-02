@@ -1,9 +1,9 @@
-﻿namespace TrackerDog
-{
-    using System;
-    using System.Collections.Immutable;
-    using System.Diagnostics.Contracts;
+﻿using System;
+using System.Collections.Immutable;
+using System.Diagnostics.Contracts;
 
+namespace TrackerDog
+{
     [ContractClassFor(typeof(IReadOnlyChangeTrackableCollection))]
     public abstract class IReadOnlyChangeTrackableCollectionContract : IReadOnlyChangeTrackableCollection
     {

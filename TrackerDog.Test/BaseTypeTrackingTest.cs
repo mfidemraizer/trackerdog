@@ -24,10 +24,16 @@ namespace TrackerDog.Test
             public virtual string Text { get; set; }
         }
 
+        private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
+
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            TrackerDogConfiguration.TrackTheseTypes(Track.ThisType<IWhatever>());
+            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+
+            config.TrackThisType<IWhatever>();
+
+            TrackableObjectFactory = config.CreateTrackableObjectFactory();
         }
 
         [TestMethod]
@@ -37,7 +43,7 @@ namespace TrackerDog.Test
             whatever.Text = "hello world";
             whatever.A = new A();
 
-            whatever = whatever.AsTrackable();
+            whatever = TrackableObjectFactory.CreateFrom(whatever);
         }
     }
 }

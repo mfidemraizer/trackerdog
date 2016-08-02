@@ -1,15 +1,15 @@
-﻿namespace TrackerDog.Configuration
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using TrackerDog.CollectionHandling;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using TrackerDog.CollectionHandling;
 
+namespace TrackerDog.Configuration
+{
     /// <summary>
     /// Represents a configuration to setup how collection change tracking will behave.
     /// </summary>
-    public sealed class TrackableCollectionConfiguration
+    internal sealed class TrackableCollectionConfiguration : ICollectionChangeTrackingConfiguration
     {
         private readonly static object _syncLock = new object();
 

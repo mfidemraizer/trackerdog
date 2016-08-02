@@ -1,8 +1,9 @@
-﻿namespace TrackerDog.CollectionHandling
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TrackerDog.CollectionHandling
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
     /// <summary>
     /// Represents the default collection change interceptor. It intercepts any implementation of
     /// <see cref="ICollection{T}"/> interface.

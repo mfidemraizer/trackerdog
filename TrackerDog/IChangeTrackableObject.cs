@@ -1,8 +1,8 @@
-﻿namespace TrackerDog
-{
-    using System.ComponentModel;
-    using System.Diagnostics.Contracts;
+﻿using System.ComponentModel;
+using System.Diagnostics.Contracts;
 
+namespace TrackerDog
+{
     /// <summary>
     /// Defines an object that allows its changes to be tracked.
     /// </summary>
