@@ -54,39 +54,39 @@ namespace TrackerDog
         /// <param name="parentObjectProperty">The collection property representing the association to some object</param>
         /// <param name="parentObject">The parent object that owns the association of the collection</param>
         /// <returns>The already converted objects into change-trackable ones</returns>
-        //public static IEnumerable<T> MakeAllTrackable<T>(this IEnumerable<T> enumerable, IObjectChangeTrackingConfiguration configuration, PropertyInfo parentObjectProperty, IChangeTrackableObject parentObject)
-        //    where T : class
-        //{
-        //    Contract.Requires(enumerable != null, "Given enumerable must be a non-null reference to turn its objects into trackable ones");
-        //    Contract.Requires(parentObjectProperty != null, "A reference to property which holds the enumerable is mandatory");
-        //    Contract.Requires(parentObject != null, "The instance of the object where the property holding the enumerable is declared is mandatory");
-        //    Contract.Requires(parentObjectProperty.DeclaringType.GetActualTypeIfTrackable().IsAssignableFrom(parentObject.GetActualTypeIfTrackable()), "Given property holding the enumerable must be declared on the given parent object type");
+        public static IEnumerable<T> MakeAllTrackable<T>(this IEnumerable<T> enumerable, IObjectChangeTrackingConfiguration configuration, ITrackableObjectFactory trackableObjectFactory, PropertyInfo parentObjectProperty, IChangeTrackableObject parentObject)
+            where T : class
+        {
+            Contract.Requires(enumerable != null, "Given enumerable must be a non-null reference to turn its objects into trackable ones");
+            Contract.Requires(parentObjectProperty != null, "A reference to property which holds the enumerable is mandatory");
+            Contract.Requires(parentObject != null, "The instance of the object where the property holding the enumerable is declared is mandatory");
+            Contract.Requires(parentObjectProperty.DeclaringType.GetActualTypeIfTrackable().IsAssignableFrom(parentObject.GetActualTypeIfTrackable()), "Given property holding the enumerable must be declared on the given parent object type");
 
-        //    if (enumerable.Count() > 0 &&
-        //        configuration.CanTrackType(enumerable.First().GetType()))
-        //    {
-        //        List<T> result = new List<T>();
+            if (enumerable.Count() > 0 &&
+                configuration.CanTrackType(enumerable.First().GetType()))
+            {
+                List<T> result = new List<T>();
 
-        //        foreach (T item in enumerable)
-        //        {
-        //            IChangeTrackableObject trackableObject = item as IChangeTrackableObject;
+                foreach (T item in enumerable)
+                {
+                    IChangeTrackableObject trackableObject = item as IChangeTrackableObject;
 
-        //            if (trackableObject == null)
-        //            {
-        //                trackableObject = (IChangeTrackableObject)Configuration item.AsTrackable();
+                    if (trackableObject == null)
+                    {
+                        trackableObject = (IChangeTrackableObject)trackableObjectFactory.CreateFrom(item);
 
-        //                trackableObject.PropertyChanged += (sender, e) =>
-        //                    parentObject.RaisePropertyChanged(parentObject, parentObjectProperty.Name);
-        //            }
+                        trackableObject.PropertyChanged += (sender, e) =>
+                            parentObject.RaisePropertyChanged(parentObject, parentObjectProperty.Name);
+                    }
 
-        //            result.Add((T)trackableObject);
-        //        }
+                    result.Add((T)trackableObject);
+                }
 
-        //        Contract.Assert(result.Count == enumerable.Count(), "New sequence with objects turned into trackable ones must match the count of source sequence");
+                Contract.Assert(result.Count == enumerable.Count(), "New sequence with objects turned into trackable ones must match the count of source sequence");
 
-        //        return result;
-        //    }
-        //    else return enumerable;
-        //}
+                return result;
+            }
+            else return enumerable;
+        }
     }
 }

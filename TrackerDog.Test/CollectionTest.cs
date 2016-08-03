@@ -12,10 +12,12 @@
     public class CollectionTest
     {
         private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
+        private static IObjectChangeTrackingConfiguration Configuration { get; set; }
+
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration()
+            Configuration = ObjectChangeTracking.CreateConfiguration()
                     .TrackThisType<A>(t => t.IncludeProperty(a => a.Items))
                     .TrackThisType<B>(t => t.IncludeProperty(b => b.Dogs))
                     .TrackThisType<C>(t => t.IncludeProperty(c => c.Dogs))
@@ -27,7 +29,7 @@
                     .TrackThisType<WhateverBase>(t => t.IncludeProperty(w => w.List2))
                     .TrackThisType<WhateverParent>(t => t.IncludeProperty(w => w.List));
 
-            TrackableObjectFactory = config.CreateTrackableObjectFactory();
+            TrackableObjectFactory = Configuration.CreateTrackableObjectFactory();
         }
 
         public class Whatever
@@ -168,7 +170,7 @@
             b.Dogs.First().Name = "Rex";
             b.Dogs.Add(new Dog { Name = "Rex" });
 
-            b = b.ToUntracked(null);
+            b = b.ToUntracked();
 
             Assert.IsFalse(b.IsTrackable());
             Assert.IsFalse(b.Dogs.Any(dog => dog.IsTrackable()));

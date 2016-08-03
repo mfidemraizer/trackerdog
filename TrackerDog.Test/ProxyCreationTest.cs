@@ -27,15 +27,17 @@ namespace TrackerDog.Test
 
         private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
 
+        private static IObjectChangeTrackingConfiguration Configuration { get; set; }
+
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration()
+            Configuration = ObjectChangeTracking.CreateConfiguration()
                 .TrackThisType<A>()
                 .TrackThisType<B>()
                 .TrackThisType<C>();
 
-            TrackableObjectFactory = config.CreateTrackableObjectFactory();
+            TrackableObjectFactory = Configuration.CreateTrackableObjectFactory();
         }
 
         [TestMethod]
@@ -43,9 +45,8 @@ namespace TrackerDog.Test
         {
             C c = TrackableObjectFactory.CreateFrom(new C { Text = "hello world" });
             c.Text = "hello world 2";
-
-            // TODO:
-            C noProxy = c.ToUntracked(null);
+            
+            C noProxy = c.ToUntracked();
 
             Assert.AreEqual("hello world 2", noProxy.Text);
         }

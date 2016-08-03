@@ -34,15 +34,16 @@
         }
 
         private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
+        private static IObjectChangeTrackingConfiguration Configuration { get; set; }
 
         [ClassInitialize]
         public static void Init(TestContext context)
         {
-            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration()
+            Configuration = ObjectChangeTracking.CreateConfiguration()
                 .TrackThisType<A>()
                 .TrackThisType<TestDynamicObject>();
 
-            TrackableObjectFactory = config.CreateTrackableObjectFactory();
+            TrackableObjectFactory = Configuration.CreateTrackableObjectFactory();
         }
 
         [TestMethod]
@@ -87,9 +88,8 @@
 
             a.DynamicText = text2;
             a.A = new A();
-
-            // TODO:
-            TestDynamicObject untrackedA = ((TestDynamicObject)a).ToUntracked(null);
+            
+            TestDynamicObject untrackedA = ((TestDynamicObject)a).ToUntracked();
 
             Assert.AreEqual(text1, untrackedA.DeclaredText);
             Assert.AreEqual(text2, ((dynamic)untrackedA).DynamicText);

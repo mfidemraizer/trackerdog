@@ -9,7 +9,7 @@ namespace TrackerDog
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ObjectChangeTrackingInfo GetChangeTrackingInfo()
+        public ObjectChangeTrackingContext GetChangeTrackingContext()
         {
             throw new NotImplementedException();
         }

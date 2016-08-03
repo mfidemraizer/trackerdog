@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using TrackerDog.Configuration;
 
 namespace TrackerDog
 {
-    internal sealed class ObjectChangeTrackingInfo
+    internal sealed class ObjectChangeTrackingContext
     {
+        public IObjectChangeTrackingConfiguration Configuration { get; set; }
+
         /// <summary>
         /// Gets the change tracker tracking this object
         /// </summary>

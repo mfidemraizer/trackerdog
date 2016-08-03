@@ -9,7 +9,7 @@ namespace TrackerDog
     [ContractClass(typeof(IChangeTrackableObjectContract))]
     internal interface IChangeTrackableObject : INotifyPropertyChanged
     {
-        ObjectChangeTrackingInfo GetChangeTrackingInfo();
+        ObjectChangeTrackingContext GetChangeTrackingContext();
         /// <summary>
         /// Starts tracking this object.
         /// </summary>

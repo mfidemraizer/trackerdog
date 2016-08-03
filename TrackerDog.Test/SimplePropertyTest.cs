@@ -368,7 +368,7 @@
             a.B.C.ListOfD.First().Text = "changed 4!";
             a.B.C.ListOfD.Add(new D { Text = "changed 5!" });
 
-            A untrackedA = a.ToUntracked(null);
+            A untrackedA = a.ToUntracked();
 
             Assert.AreEqual("changed 1!", untrackedA.B.C.Text);
             Assert.AreEqual("changed 2!", untrackedA.B.Text);

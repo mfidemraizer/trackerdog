@@ -104,9 +104,9 @@ namespace TrackerDog
                         object propertyValue = property.GetValue(trackableObject);
 
                         if (propertyValue != null)
-                            Create(propertyValue, trackableObject.GetChangeTrackingInfo().ChangeTracker, proxy, property);
+                            Create(propertyValue, trackableObject.GetChangeTrackingContext().ChangeTracker, proxy, property);
                         else
-                            Create(property.PropertyType, trackableObject.GetChangeTrackingInfo().ChangeTracker, proxy, property);
+                            Create(property.PropertyType, trackableObject.GetChangeTrackingContext().ChangeTracker, proxy, property);
                     }
                 }
 
@@ -178,7 +178,7 @@ namespace TrackerDog
                     {
                             typeof(EnumerableExtensions).GetMethod("MakeAllTrackable")
                                             .MakeGenericMethod(genericCollectionType)
-                                            .Invoke(null, new[] { some, parentObjectProperty, parentObject })
+                                            .Invoke(null, new[] { some, Configuration, this, parentObjectProperty, parentObject })
                     },
                     genericCollectionType
                 );
