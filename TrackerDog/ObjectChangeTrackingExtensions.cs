@@ -1,13 +1,16 @@
 ﻿using Castle.DynamicProxy;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.Contracts;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using TrackerDog.Configuration;
+using TrackerDog.Serialization.Json;
 
 namespace TrackerDog
 {
@@ -289,45 +292,19 @@ namespace TrackerDog
             if (trackable != null)
             {
                 IProxyTargetAccessor proxyTargetAccessor = (IProxyTargetAccessor)trackable;
-                TObject unwrapped = (TObject)proxyTargetAccessor.DynProxyGetTarget();
+                TObject target = (TObject)proxyTargetAccessor.DynProxyGetTarget();
+
+                JsonSerializerSettings serializerSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+
+                if (target is IDynamicMetaObjectProvider)
+                    serializerSettings.Converters.Add(new DynamicObjectWithDeclaredPropertiesConverter());
+
+                TObject unwrapped = JsonConvert.DeserializeObject<TObject>
+                (
+                    JsonConvert.SerializeObject(target, serializerSettings)
+                );
 
                 ObjectChangeTracker changeTracker = (ObjectChangeTracker)trackable.GetChangeTracker();
-                IObjectChangeTrackingConfiguration configuration = trackable.GetChangeTrackingContext().Configuration;
-
-                if (trackable.GetChangeTrackingContext().CollectionProperties.Count > 0)
-                {
-                    foreach (PropertyInfo property in trackable.GetChangeTrackingContext().CollectionProperties)
-                    {
-                        if (property.CanWrite)
-                        {
-                            PropertyInfo unwrappedProperty = property.GetBaseProperty();
-                            object propertyValue = property.GetValue(some);
-
-                            IProxyTargetAccessor propertyValueProxyAccessor = propertyValue as IProxyTargetAccessor;
-
-                            if (propertyValueProxyAccessor != null)
-                            {
-                                IEnumerable enumerablePropertyValue = propertyValue as IEnumerable;
-
-                                if (enumerablePropertyValue != null)
-                                {
-                                    unwrappedProperty.SetValue
-                                    (
-                                        unwrapped,
-                                        enumerablePropertyValue.ToUntrackedEnumerable(unwrappedProperty.PropertyType)
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
-
-                foreach (PropertyInfo declaredProperty in changeTracker.PropertyTrackings.Select(t => t.Key.GetBaseProperty()))
-                    if (declaredProperty.DeclaringType == unwrapped.GetType() && declaredProperty.CanWrite)
-                        declaredProperty.SetValue
-                        (
-                            unwrapped, declaredProperty.GetValue(unwrapped).ToUntracked()
-                        );
 
                 foreach (KeyValuePair<string, ObjectPropertyChangeTracking> dynamicProperty in changeTracker.DynamicPropertyTrackings)
                 {

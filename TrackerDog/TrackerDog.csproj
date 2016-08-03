@@ -87,6 +87,10 @@
       <HintPath>..\packages\FastMember.1.0.0.11\lib\net40\FastMember.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
@@ -159,6 +163,7 @@
     <Compile Include="PropertyInfoEqualityComparer.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="CollectionHandling\SetChangeInterceptor.cs" />
+    <Compile Include="Serialization\Json\DynamicObjectWithDeclaredPropertiesConverter.cs" />
     <Compile Include="TrackableObjectFactoryInternal.cs" />
     <Compile Include="ObjectChangeTracking.cs" />
   </ItemGroup>

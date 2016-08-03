@@ -302,9 +302,9 @@
                         {
                             Text = initialCText,
                             ListOfD = new List<D>
-                        {
-                            new D { Text = initialDText }
-                        }
+                            {
+                                new D { Text = initialDText }
+                            }
                         }
                     }
                 }
