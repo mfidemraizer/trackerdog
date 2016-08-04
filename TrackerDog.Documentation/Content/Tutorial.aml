@@ -78,7 +78,9 @@
           your class (i.e. <phrase>the type</phrase>) can be trackable:
         </para>
         <code language="c#">
-          <![CDATA[TrackerDogConfiguration.TrackTheseTypes(Track.ThisType<User>());]]>
+          <![CDATA[
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<User>();]]>
         </code>
         <para>
           Above configuration will tell <tokenName>TrackerDog</tokenName> to track all property changes for the given type. <legacyBold>
@@ -90,32 +92,37 @@
           <![CDATA[
           // This will avoid some overhead since TrackerDog won't need to intercept absolutely all
           // property changes
-          TrackerDogConfiguration.TrackTheseTypes
-          (
-              Track.ThisType<User>().TrackProperties(u => u.Name, u => u.Age)
-          );
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          
+          config.TrackThisType<User>(t => t.IncludeProperties(u => u.Name, u => u.Age));
           ]]>
         </code>
         <para>
           Now, to track an instance of <codeInline>User</codeInline> you need to
-          use <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.AsTrackable``1(``0)</codeEntityReference> extension method:
+          use <codeEntityReference>M:TrackerDog.ITrackableObjectFactory.CreateFrom``1(``0)</codeEntityReference> method after getting
+          <codeEntityReference>T:TrackerDog.ITrackableObjectFactory</codeEntityReference>'s implementation calling <codeEntityReference>M:TrackerDog.ObjectChangeTracking.CreateConfiguration</codeEntityReference> method:
         </para>
         <code language="c#">
           <![CDATA[
-              User user = new User().AsTrackable();
+              IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+              config.TrackThisType<User>();
+              
+              ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+              
+              User user = trackableObjectFactory.CreateFrom(new User());
               
               // or...
               User user = new User();
-              user = user.AsTrackable();
+              user = trackableObjectFactory.CreateFrom(user);
               
-              // Also you can create a trackable object from the type directly:
-              User user2 = Trackable.Of<User>();
+              // Also you can create a trackable object from the type directly without requiring an instance:
+              User user2 = trackableObjectFactory.CreateOf<User>();
               ]]>
         </code>
         <para>
-          Note that you won't be able to create trackable objects using <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.AsTrackable``1(``0)</codeEntityReference>
+          Note that you won't be able to create trackable objects using <codeEntityReference>M:TrackerDog.ITrackableObjectFactory.CreateFrom``1(``0)</codeEntityReference>
           extension method if the whole object type has no paramterless constructor. Either if it has both a parameterless constructor or a one with parameters, and you want to create a trackable
-          object with constructor arguments, you'll need to use <codeEntityReference>M:TrackerDog.Trackable.Of``1(System.Object[])</codeEntityReference> method:
+          object with constructor arguments, you'll need to use <codeEntityReference>M:TrackerDog.ITrackableObjectFactory.CreateOf``1(System.Object[])</codeEntityReference> method:
         </para>
         <code language="c#">
           <![CDATA[
@@ -125,11 +132,14 @@
               public A(int a, string b) { }
             }
             
-            TrackerDogConfiguration.TrackTheseTypes(Track.ThisType<User>());
+            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+            config.TrackThisType<A>();
+              
+            ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
             
-            A a1 = new A().AsTrackable(); // Regular way
-            A a2 = Trackable.Of<A>(); // From type with parameterless constructor
-            A a3 = Trackable.Of<A>(101, "hello world"); // From type with constructor which has parameters
+            A a1 = trackableObjectFactory.CreateFrom(new A()); // Regular way
+            A a2 = trackacbleObjectFactory.CreateOf<A>(); // From type with parameterless constructor
+            A a3 = trackacbleObjectFactory.CreateOf<A>(101, "hello world"); // From type with constructor which has parameters
           ]]>
         </code>
         <para>Now you can produce changes to the trackable object:</para>
@@ -181,7 +191,13 @@
               public virtual List<A> ListOfA { get; set; } = new List<A>();
           }
           
-          B b = new B().AsTrackable();
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<A>()
+                .TrackThisType<B>();
+              
+          ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+          
+          B b = trackableObjectFactory.CreateFrom(new B());
           
           IList<A> list = b.ListOfA.ToUntrackedEnumerable(typeof(IList<>));
           ]]>
@@ -190,12 +206,6 @@
           <para>
             The whole method to convert a collection to an untracked one requires a type, where the
             type is a collection type that must be configured. <link xlink:href="1e03762d-b9f5-44af-a4b0-c23c36064c24#configuration">Follow this link to learn more.</link>
-          </para>
-        </alert>
-        <alert class="warning">
-          <para>
-            Be aware that calling both untracking methods will modify the tracked instance. That is, the tracked instance
-            will be still trackable but any trackable association will not be trackable anymore.
           </para>
         </alert>
       </content>
@@ -343,7 +353,13 @@
               public byte Age { get; set; }
           }
           
-          App app = new App().AsTrackable();
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<App>(t => t.IncludeProperty(app => app.Users))
+                .TrackThisType<User>(t => t.IncludeProperties(u => u.Name, u => u.Age));
+              
+          ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+          
+          App app = trackableObjectFactory.CreateFrom(new App());
           app.Users.Add(new User { Name = "Matías", Age = 30 });
           
           IReadOnlyChangeTrackableCollection trackableCollection =
@@ -355,19 +371,6 @@
           // If you need typed items...
           IEnumerable<User> typedAddedUsers = addedItems.Cast<User>();
           IEnumerable<User> typedRemovedUsers = removedItems.Cast<User>();
-          ]]>
-        </code>
-        <para>
-          Don't forget to add both <codeInline>App</codeInline> and <codeInline>User</codeInline> class as
-          trackable types:
-        </para>
-        <code language="c#">
-          <![CDATA[
-          TrackerDogConfiguration.TrackTheseTypes
-          (
-              Track.ThisType<App>().IncludeProperty(app => app.Users),
-              Track.ThisType<User>().IncludeProperties(user => user.Name, user => user.Age)
-          );
           ]]>
         </code>
       </content>
@@ -403,35 +406,32 @@
           public class D
           {
               public virtual string Text { get; set; }
-          }
+          }          
+          
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<A>(t => t.IncludeProperties(a => a.Text, a => a.B))
+                .TrackThisType<B>(t => t.IncludeProperties(b => b.Text, b => b.C))
+                .TrackThisType<C>(t => t.IncludeProperties(c => c.Text, c => c.ListOfD))
+                .TrackThisType<D>(t => t.IncludeProperty(d => d.Text));
+              
+          ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
           
           // It will track the full object graph changes!
-          A a = new A
-          {
-            Text = initialValue,
-            B = new B
-            {
-                Text = initialValue,
-                C = new C
-                {
-                    Text = initialValue,
-                    ListOfD = new List<D> { new D { Text = "initialValue" } }
-                }
-            }
-          }.AsTrackable();
-          ]]>
-        </code>
-        <para>
-          Don't forget to add all types as trackable types:
-        </para>
-        <code language="c#">
-          <![CDATA[
-          TrackerDogConfiguration.TrackTheseTypes
+          A a = trackableObjectFactory.CreateFrom
           (
-              Track.ThisType<A>().IncludeProperties(a => a.Text, a => a.B),
-              Track.ThisType<B>().IncludeProperties(b => b.Text, b => b.C),
-              Track.ThisType<C>().IncludeProperties(c => c.Text, c => c.ListOfD),
-              Track.ThisType<D>().IncludeProperty(d => d.Text)
+            new A
+            {
+              Text = initialValue,
+              B = new B
+              {
+                  Text = initialValue,
+                  C = new C
+                  {
+                      Text = initialValue,
+                      ListOfD = new List<D> { new D { Text = "initialValue" } }
+                  }
+              }
+            }
           );
           ]]>
         </code>
@@ -465,7 +465,13 @@
               public virtual byte Age { get; set; }
           }
           
-          App app = new App().AsTrackable();
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<App>(t => t.IncludeProperty(app => app.Users))
+                .TrackThisType<User>(t => t.IncludeProperties(u => u.Name, u => u.Age));
+              
+          ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+          
+          App app = trackableObjectFactory.CreateFrom(new App());
           
           ((INotifyPropertyChanged)app).PropertyChanged += (sender, e) =>
           {
@@ -482,18 +488,6 @@
            // This will both trigger a CollectionChanged event on app.Users and a PropertyChanged event on
            // app.
           app.Users.Add(new User { Name = "Matías" });
-          ]]>
-        </code>
-        <para>
-          Don't forget to add all types as trackable types:
-        </para>
-        <code language="c#">
-          <![CDATA[
-          TrackerDogConfiguration.TrackTheseTypes
-          (
-              Track.ThisType<App>().IncludeProperty(app => app.Name, app => app.Users),
-              Track.ThisType<User>().IncludeProperties(user => user.Name, user => user.Age)
-          );
           ]]>
         </code>
       </content>
@@ -539,18 +533,18 @@
         </para>
         <code language="c#">
           <![CDATA[
-          TrackerDogConfiguration.TrackTheseTypes
-          (
-              Track.ThisType<TestDynamicObject>()
-          );
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<DynamicObject>());
+              
+          ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
           
-          dynamic trackable = new TestDynamicObject().AsTrackable();
+          dynamic trackable = trackableObjectFactory.CreateFrom(new TestDynamicObject());
           trackable.Text = "hello world";
           trackable.Text = "hello world2";
           ]]>
         </code>
         <para>
-          Now the issue will be using <codeEntityReference>M:TrackerDog.ObjectChangeTrackingExtensions.AsTrackable``1(``0)</codeEntityReference> with a dynamic object.
+          Now the issue will be using <codeEntityReference>M:TrackerDog.ITrackableObjectFactory.CreateFrom``1(``0))</codeEntityReference> with a dynamic object.
           You'll need to cast the <literal>dynamic</literal>-typed variable into <literal>object</literal> to be able to call all object change tracking-related extension methods:
         </para>
         <code language="c#">
@@ -569,13 +563,17 @@
         </para>
         <list class="bullet">
           <listItem>
-            ...when you want a tracking of a declared property (i.e. a design-time declared property), you'll get a <codeEntityReference>T:TrackerDog.IDeclaredObjectPropertyChangeTracking</codeEntityReference>, and it
-            will provide access you to the <codeEntityReference>P:TrackerDog.IDeclaredObjectPropertyChangeTracking.Property</codeEntityReference> which is of type <codeEntityReference>T:System.Reflection.PropertyInfo</codeEntityReference>.
+            <para>
+              ...when you want a tracking of a declared property (i.e. a design-time declared property), you'll get a <codeEntityReference>T:TrackerDog.IDeclaredObjectPropertyChangeTracking</codeEntityReference>, and it
+              will provide access you to the <codeEntityReference>P:TrackerDog.IDeclaredObjectPropertyChangeTracking.Property</codeEntityReference> which is of type <codeEntityReference>T:System.Reflection.PropertyInfo</codeEntityReference>.
+            </para>
           </listItem>
           <listItem>
-            ...when you want a tracking of a dynamic property (i.e. a run-time added property), you'll get a <codeEntityReference>T:TrackerDog.IObjectPropertyChangeTracking</codeEntityReference>, and it
-            will provide access you to the <codeEntityReference>P:TrackerDog.IObjectPropertyChangeTracking.PropertyName</codeEntityReference> which provides less info than a <codeEntityReference>T:System.Reflection.PropertyInfo</codeEntityReference> since
-            the property belongs to the object where it was declared but <phrase>since it's not an actual property, you don't know more than just its name</phrase>.
+            <para>
+              ...when you want a tracking of a dynamic property (i.e. a run-time added property), you'll get a <codeEntityReference>T:TrackerDog.IObjectPropertyChangeTracking</codeEntityReference>, and it
+              will provide access you to the <codeEntityReference>P:TrackerDog.IObjectPropertyChangeTracking.PropertyName</codeEntityReference> which provides less info than a <codeEntityReference>T:System.Reflection.PropertyInfo</codeEntityReference> since
+              the property belongs to the object where it was declared but <phrase>since it's not an actual property, you don't know more than just its name</phrase>.
+            </para>
           </listItem>
         </list>
         <para>
@@ -635,7 +633,12 @@
               Once trackable types have been already configured, it's very easy to get a trackable type metadata:
             </para>
             <code language="c#">
-              <![CDATA[ITrackableType metadata = typeof(A).GetTrackableType();]]>
+              <![CDATA[
+              IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration()
+                                                                .TrackThisType<A>();
+                                                                
+              ITrackableType metadata = config.GetTrackableType(typeof(A));
+              ]]>
             </code>
             <para>
               What if some project needs to know the path to <codeInline>C.Description</codeInline> property
@@ -645,7 +648,7 @@
               No problem, because <codeEntityReference>T:TrackerDog.Configuration.ITrackableType</codeEntityReference> has an <codeEntityReference>P:TrackerDog.Configuration.ITrackableType.ObjectPaths</codeEntityReference> property
               which holds a collection of all properties of some given trackable type and its associations, and each property is represented
               by the <codeEntityReference>T:TrackerDog.IObjectPropertyInfo</codeEntityReference> interface, which has, for example, <codeEntityReference>P:TrackerDog.IObjectPropertyInfo.Path</codeEntityReference> property
-              that gives the path to some particular property starting from the trackable type. For example, the so-called <codeInline>A.B.C.Description)</codeInline>
+              that gives the path to some particular property starting from the trackable type. For example, the so-called <codeInline>A.B.C.Description</codeInline>
             </para>
           </content>
         </section>

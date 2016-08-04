@@ -170,15 +170,15 @@
         </para>
         <list class="bullet">
           <listItem>
-            <codeEntityReference>M:TrackerDog.Configuration.TrackableCollectionConfiguration.AddImplementation(System.Type,System.Type,System.Type)</codeEntityReference>
+            <codeEntityReference>M:TrackerDog.Configuration.ICollectionChangeTrackingConfiguration.AddImplementation(System.Type,System.Type,System.Type)</codeEntityReference>
           </listItem>
           <listItem>
-            <codeEntityReference>M:TrackerDog.Configuration.TrackableCollectionConfiguration.ReplaceImplementation(System.Type,System.Type,System.Type)</codeEntityReference>
+            <codeEntityReference>M:TrackerDog.Configuration.ICollectionChangeTrackingConfiguration.ReplaceImplementation(System.Type,System.Type,System.Type)</codeEntityReference>
           </listItem>
         </list>
         <para>
-          <codeEntityReference>T:TrackerDog.Configuration.TrackableCollectionConfiguration</codeEntityReference> must be accessed and configured
-          getting it using the static property <codeEntityReference>P:TrackerDogConfiguration.Collections</codeEntityReference>
+          <codeEntityReference>T:TrackerDog.Configuration.ICollectionChangeTrackingConfiguration</codeEntityReference> must be accessed and configured
+          getting it using the property <codeEntityReference>P:IObjectChangeTrackingConfiguration.Collections</codeEntityReference>
         </para>
         <para>
           Method arguments explained:
@@ -238,7 +238,8 @@
         </para>
         <code language="c#">
           <![CDATA[
-          TrackerDogConfiguration.Collections.ReplaceImplementation
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.Collections.ReplaceImplementation
           (
               typeof(IList<>),
               typeof(MyIListImplementation<>)
