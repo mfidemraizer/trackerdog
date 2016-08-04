@@ -1,15 +1,16 @@
-﻿namespace TrackerDog.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Collections.Generic;
-    using System.Linq;
-    using TrackerDog.Configuration;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
+using TrackerDog.Configuration;
 
+namespace TrackerDog.Test
+{
     [TestClass]
     public class SimplePropertyTest
     {
         private static IObjectChangeTrackingConfiguration Configuration { get; set; }
         private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
+
         [ClassInitialize]
         public static void Init(TestContext context)
         {

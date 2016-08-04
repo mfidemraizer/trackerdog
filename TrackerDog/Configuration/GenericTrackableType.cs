@@ -10,7 +10,7 @@ namespace TrackerDog.Configuration
     /// Represents the default implementation to a fluent trackable type configuration.
     /// </summary>
     /// <typeparam name="T">The tracked object type</typeparam>
-    public sealed class TrackableType<T> : TrackableType, ICanConfigureTrackableType<TrackableType<T>>
+    internal sealed class TrackableType<T> : TrackableType, ITrackableType<T>, IConfigurableTrackableType<T>
     {
         private readonly ISet<PropertyInfo> _includedProperties = new HashSet<PropertyInfo>(new PropertyInfoEqualityComparer());
 
@@ -24,14 +24,14 @@ namespace TrackerDog.Configuration
         /// </summary>
         /// <param name="propertySelector">A property selector to select which property to track its changes</param>
         /// <returns>Current trackable type configuration</returns>
-        public TrackableType<T> IncludeProperty(Expression<Func<T, object>> propertySelector)
+        public ITrackableType<T> IncludeProperty(Expression<Func<T, object>> propertySelector)
         {
             Contract.Requires(propertySelector != null);
-            Contract.Ensures(Contract.Result<TrackableType<T>>() != null);
+            Contract.Ensures(Contract.Result<ITrackableType<T>>() != null);
 
             PropertyInfo property = propertySelector.ExtractProperty();
 
-            return (TrackableType<T>)IncludeProperty(property);
+            return (ITrackableType<T>)IncludeProperty(property);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace TrackerDog.Configuration
         /// </summary>
         /// <param name="propertySelectors">One or more property selectors to select which properties to track its changes</param>
         /// <returns>Current trackable type configuration</returns>
-        public TrackableType<T> IncludeProperties(params Expression<Func<T, object>>[] propertySelectors)
+        public ITrackableType<T> IncludeProperties(params Expression<Func<T, object>>[] propertySelectors)
         {
             //Contract.Requires(propertySelectors != null && propertySelectors.Length > 0, "Cannot include no selectors");
             //Contract.Ensures(Contract.Result<TrackableType<T>>() != null);
@@ -48,16 +48,6 @@ namespace TrackerDog.Configuration
                 IncludeProperty(propertySelector);
 
             return this;
-        }
-
-        TrackableType<T> ICanConfigureTrackableType<TrackableType<T>>.IncludeProperty(PropertyInfo property)
-        {
-            return (TrackableType<T>)IncludeProperty(property);
-        }
-
-        TrackableType<T> ICanConfigureTrackableType<TrackableType<T>>.IncludeProperties(params PropertyInfo[] properties)
-        {
-            return (TrackableType<T>)IncludeProperties(properties);
         }
     }
 }

@@ -108,7 +108,9 @@
     <Compile Include="CollectionHandling\CollectionChange.cs" />
     <Compile Include="CollectionHandling\CollectionChangeContext.cs" />
     <Compile Include="Configuration\CollectionImplementation.cs" />
-    <Compile Include="Configuration\ICanConfigureTrackableType.cs" />
+    <Compile Include="Configuration\GenericITrackableType.cs" />
+    <Compile Include="Configuration\IGenericConfigurableTrackableType.cs" />
+    <Compile Include="Configuration\IConfigurableTrackableType.cs" />
     <Compile Include="Configuration\IObjectChangeTrackingConfiguration.cs" />
     <Compile Include="Configuration\ICollectionChangeTrackingConfiguration.cs" />
     <Compile Include="Configuration\ITrackableType.cs" />

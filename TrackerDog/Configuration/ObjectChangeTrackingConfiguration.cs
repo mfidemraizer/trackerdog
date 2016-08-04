@@ -33,6 +33,8 @@ namespace TrackerDog.Configuration
 
         IImmutableSet<ITrackableType> IObjectChangeTrackingConfiguration.TrackableTypes => TrackableTypes.ToImmutableHashSet();
 
+        IImmutableList<ITrackableType> IObjectChangeTrackingConfiguration.TrackableInterfaceTypes => TrackableInterfaceTypes.ToImmutableList();
+
         /// <summary>
         /// Configures which types will support change tracking on current <see cref="AppDomain"/>.
         /// </summary>
@@ -48,7 +50,7 @@ namespace TrackerDog.Configuration
                         Contract.Assert(TrackableTypes.Add(type), "Type can only be configured to be tracked once");
                     else
                     {
-                        ICanConfigureTrackableType<ITrackableType> trackableType = type as ICanConfigureTrackableType<ITrackableType>;
+                        IConfigurableTrackableType trackableType = type as IConfigurableTrackableType;
                         trackableType.IncludeProperties(type.Type.GetProperties());
 
                         Contract.Assert(TrackableInterfaceTypes.Add(type), "Interface type can only be configured to be tracked once");
@@ -122,7 +124,7 @@ namespace TrackerDog.Configuration
             }
         }
 
-        public IObjectChangeTrackingConfiguration TrackThisType<T>(Action<TrackableType<T>> configure = null)
+        public IObjectChangeTrackingConfiguration TrackThisType<T>(Action<IConfigurableTrackableType<T>> configure = null)
         {
             TrackableType<T> trackableType = new TrackableType<T>(this);
             configure?.Invoke(trackableType);
@@ -135,7 +137,7 @@ namespace TrackerDog.Configuration
             return this;
         }
 
-        public IObjectChangeTrackingConfiguration TrackThisType(Type type, Action<ITrackableType> configure = null)
+        public IObjectChangeTrackingConfiguration TrackThisType(Type type, Action<IConfigurableTrackableType> configure = null)
         {
             TrackableType trackableType = new TrackableType(this, type);
             configure?.Invoke(trackableType);
@@ -148,12 +150,12 @@ namespace TrackerDog.Configuration
             return this;
         }
 
-        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive<TRoot>(Action<ITrackableType> configure = null, Func<Type, bool> filter = null)
+        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive<TRoot>(Action<IConfigurableTrackableType> configure = null, Func<Type, bool> filter = null)
         {
             return TrackThisTypeRecursive(typeof(TRoot), configure, filter);
         }
 
-        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive(Type rootType, Action<ITrackableType> configure = null, Func<Type, bool> filter = null)
+        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive(Type rootType, Action<IConfigurableTrackableType> configure = null, Func<Type, bool> filter = null)
         {
             TrackableType trackableRoot = new TrackableType(this, rootType);
             List<TrackableType> trackableTypes = null;
