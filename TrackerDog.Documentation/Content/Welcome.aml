@@ -22,6 +22,12 @@
         <list class="bullet">
           <listItem>
             <externalLink>
+              <linkText>v1 documentation (obsolete)</linkText>
+              <linkUri>http://matiasfidemraizer.com/trackerdog/v1</linkUri>
+            </externalLink>.
+          </listItem>
+          <listItem>
+            <externalLink>
               <linkText>GitHub repository</linkText>
               <linkUri>https://github.com/mfidemraizer/trackerdog</linkUri>
             </externalLink>.
