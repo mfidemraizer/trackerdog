@@ -10,6 +10,6 @@ namespace TrackerDog
             && x.Name == y.Name;
 
         public int GetHashCode(PropertyInfo obj) =>
-            (obj.DeclaringType.AssemblyQualifiedName.GetHashCode() + obj.Name.GetHashCode());
+            obj.DeclaringType.AssemblyQualifiedName.GetHashCode() + obj.Name.GetHashCode();
     }
 }

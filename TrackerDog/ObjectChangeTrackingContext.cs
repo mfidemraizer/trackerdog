@@ -6,6 +6,9 @@ namespace TrackerDog
 {
     internal sealed class ObjectChangeTrackingContext
     {
+        /// <summary>
+        /// Gets associated change-tracking configuration
+        /// </summary>
         public IObjectChangeTrackingConfiguration Configuration { get; set; }
 
         /// <summary>

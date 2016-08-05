@@ -67,7 +67,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BaseTypeTrackingTest.cs" />
+    <Compile Include="InterfaceTrackingTest.cs" />
     <Compile Include="CollectionTest.cs" />
     <Compile Include="DynamicObjectTest.cs" />
     <Compile Include="ProxyCreationTest.cs" />

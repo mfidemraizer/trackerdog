@@ -27,8 +27,7 @@ namespace TrackerDog.Serialization.Json
             jObjectReader.DateParseHandling = reader.DateParseHandling;
             jObjectReader.DateTimeZoneHandling = reader.DateTimeZoneHandling;
             jObjectReader.FloatParseHandling = reader.FloatParseHandling;
-
-            // Populate the object properties
+            
             serializer.Populate(jObjectReader, target);
 
             return target;

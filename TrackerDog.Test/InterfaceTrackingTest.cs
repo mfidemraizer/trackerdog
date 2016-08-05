@@ -4,7 +4,7 @@ using TrackerDog.Configuration;
 namespace TrackerDog.Test
 {
     [TestClass]
-    public sealed class BaseTypeTrackingTest
+    public sealed class InterfaceTrackingTest
     {
         public interface IWhatever
         {

@@ -15,6 +15,15 @@
             <link xlink:href="#objects2trackable">How to turn objects into change-trackable ones</link>
           </listItem>
           <listItem>
+            <link xlink:href="#inheritance">How to track inheritance</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#recursiveConfiguration">Recursively-configuring trackable types</link>
+          </listItem>
+          <listItem>
+            <link xlink:href="#trackingInterfaces">How to track interface implementation changes</link>
+          </listItem>
+          <listItem>
             <link xlink:href="#objects2untrackable">How to turn trackable objects into untrackable objects</link>
           </listItem>
           <listItem>
@@ -148,6 +157,195 @@
             user.Name = "Matías";
             user.Age = 30;
             ]]>
+        </code>
+      </content>
+    </section>
+
+    <section address="inheritance">
+      <title>How to track inheritance</title>
+      <content>
+        <para>
+          <token>projectName</token> can track inherited properties from a given type, but all base types must be configured separately. That is,
+          members from base classes in the inheritance tree will be taken in account too when tracking for property changes:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          public class A
+          {
+               public virtual string Text { get; set; }
+          }
+          
+          public class B : A
+          {
+               public virtual string Name { get; set; }
+          }
+          
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<A>();
+          config.TrackThisType<B>();
+          ]]>
+        </code>
+        <alert class="important">
+          <para>A given type to track properties must be configured for the type where the whole properties are declared.</para>
+          <para>
+            If you take last code sample as example, you will not configure <codeInline>A.Text</codeInline> on <codeInline>B</codeInline>
+          </para>
+        </alert>
+      </content>
+    </section>
+
+    <section address="recursiveConfiguration">
+      <title>Recursively-configuring trackable types</title>
+      <content>
+        <para>
+          Configuring types that must be trackable can be a boring task. If you have found that you do not need to customize which properties to track
+          on each type to track, maybe you have a lucky day: <token>projectName</token> can configure types recursively using <codeEntityReference qualifyHint="true">M:TrackerDog.Configuration.IObjectChangeTrackingConfiguration.TrackThisTypeRecursive``1(System.Action{TrackerDog.Configuration.IConfigurableTrackableType},System.Func{System.Type,System.Boolean})</codeEntityReference> and
+          <codeEntityReference qualifyHint="true">M:TrackerDog.Configuration.IObjectChangeTrackingConfiguration.TrackThisTypeRecursive(System.Type,System.Action{TrackerDog.Configuration.IConfigurableTrackableType},System.Func{System.Type,System.Boolean})</codeEntityReference> methods.
+        </para>
+        <para>See following code listing:</para>
+        <code language="c#">
+          <![CDATA[
+          public class A
+          {
+              public virtual B { get; set; }
+          }
+          
+          public class B
+          {
+              public virtual C { get; set; }
+          }
+          
+          public class C
+          {
+              public virtual B B { get; set; }
+          }
+          ]]>
+        </code>
+        <para>
+          Instead of configuring each type separately, now you can configure <codeInline>A</codeInline> and the rest will be done auto-magically:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          // This will also configure B and C
+          config.TrackThisTypeRecursive<A>();
+          ]]>
+        </code>
+        <para>
+          Are you looking for customizing how each type is configured? It is still possible, but since <token>projectName</token> does not know the types to configure
+          until run-time, configuration gets worse because you cannot use expression trees but reflection:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisTypeRecursive<A>
+          (
+              configure: t =>
+              {
+                  if(t.Type = typeof(A)) 
+                  {
+                      t.IncludeProperties(t.Type.GetProperty("Text"), t.Type.GetProperty("B"));
+                  }
+                  else if(t.Type == typeof(B))
+                  {
+                      t.IncludeProperty(t.Type.GetProperty("C"));
+                  }
+                  // ...and so on
+              }
+          );
+          ]]>
+        </code>
+        <para>
+          Also, there is a third parameter of the whole method that can filter which types to track during the recursive configuration:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisTypeRecursive<A>
+          (
+              configure: t =>
+              {
+                  if(t.Type = typeof(A)) 
+                  {
+                      t.IncludeProperties(t.Type.GetProperty("Text"), t.Type.GetProperty("B"));
+                  }
+                  else if(t.Type == typeof(B))
+                  {
+                      t.IncludeProperty(t.Type.GetProperty("C"));
+                  }
+                  // ...and so on
+              },
+              // You want A, B, C and other types will not be configured! You can invent any valid filter based on the type that
+              // must or must not be configured!
+              filter: t => new [] { "A", "B", "C" }.Contains(t.Name)
+          );
+          ]]>
+        </code>
+        <para>
+          The whole filter can be provided with or without the configure action. If you just want to filter types based on some convention, it is fine to
+          provide the filter and no other parameter.
+        </para>
+      </content>
+    </section>
+
+    <section address="trackingInterfaces">
+      <title>How to track interface implementation changes</title>
+      <content>
+        <para>
+          In some cases, you will need to track changes of types that are unknown but you already know that there will be types that implement a given
+          interface. Imagine that you want to track property changes of properties part of some interface:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          public interface IWhatever
+          {
+              string Text { get; set; }
+          }
+          ]]>
+        </code>
+        <para>
+          Now you can track <phrase>the unknown</phrase>! Let's configure <codeInline>IWhatever</codeInline>:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<IWhatever>();
+          ]]>
+        </code>
+        <para>
+          Interface implementation change tracking will behave slightly different than classes, because <token>projectName</token> will auto-magically
+          configure these interface implementations and also all associations/aggregates that may be defined in the whole interface. For example, let's
+          improve the <codeInline>IWhatever</codeInline> interface:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          public class Person
+          {
+               public virtual string Name { get; set; }
+          }
+          
+          public interface IWhatever
+          {
+              string Text { get; set; }
+              Person Person { get; set; }
+          }
+          
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<IWhatever>();
+          ]]>
+        </code>
+        <para>
+          Tracking <codeInline>IWhatever</codeInline> will automatically configure <codeInline>Person</codeInline>, and if there would be
+          other associations at any level, it would do it too.
+        </para>
+        <para>
+          Finally, interface tracking configuration can also define which properties to track like the rest of the cases:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+          config.TrackThisType<IWhatever>(t => t.IncludeProperties(w => w.Text, w => w.Person));
+          ]]>
         </code>
       </content>
     </section>
@@ -435,6 +633,26 @@
           );
           ]]>
         </code>
+        <para>
+          In addition, if you need to perform some action whenever some property changes, you can bind
+          an handler to <codeEntityReference qualifyHint="true">E:TrackerDog.IObjectChangeTracker.Changed</codeEntityReference> event:
+        </para>
+        <code language="c#">
+          <![CDATA[
+            // Continuation of previous code sample...
+            IObjectChangeTracker changeTracker = a.GetChangeTracker();
+            changeTracker.Changed += (sender, e) => 
+            {
+                // Do stuff here whenever a property changes
+            };
+            
+          ]]>
+        </code>
+        <para>
+          The whole event will give you an instance of <codeEntityReference>T:TrackerDog.DeclaredObjectPropertyChangeEventArgs</codeEntityReference> event
+          arguments, which will provide access to which property was changed, the target object that changed, and also an associated
+          <codeEntityReference>T:TrackerDog.IObjectGraphTrackingInfo</codeEntityReference> implementation instance to introspect full aggregate/association hierarchy.
+        </para>
       </content>
     </section>
 

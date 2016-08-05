@@ -13,6 +13,9 @@ namespace TrackerDog
     [ContractClass(typeof(IObjectChangeTrackerContract))]
     public interface IObjectChangeTracker : IEnumerable<IObjectPropertyChangeTracking>
     {
+        /// <summary>
+        /// Occurs when a property change tracking changes
+        /// </summary>
         event EventHandler<ObjectChangeEventArgs> Changed;
 
         /// <summary>

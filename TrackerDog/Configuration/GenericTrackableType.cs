@@ -24,14 +24,14 @@ namespace TrackerDog.Configuration
         /// </summary>
         /// <param name="propertySelector">A property selector to select which property to track its changes</param>
         /// <returns>Current trackable type configuration</returns>
-        public ITrackableType<T> IncludeProperty(Expression<Func<T, object>> propertySelector)
+        public IConfigurableTrackableType<T> IncludeProperty(Expression<Func<T, object>> propertySelector)
         {
             Contract.Requires(propertySelector != null);
-            Contract.Ensures(Contract.Result<ITrackableType<T>>() != null);
+            Contract.Ensures(Contract.Result<IConfigurableTrackableType<T>>() != null);
 
             PropertyInfo property = propertySelector.ExtractProperty();
 
-            return (ITrackableType<T>)IncludeProperty(property);
+            return (IConfigurableTrackableType<T>)IncludeProperty(property);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace TrackerDog.Configuration
         /// </summary>
         /// <param name="propertySelectors">One or more property selectors to select which properties to track its changes</param>
         /// <returns>Current trackable type configuration</returns>
-        public ITrackableType<T> IncludeProperties(params Expression<Func<T, object>>[] propertySelectors)
+        public IConfigurableTrackableType<T> IncludeProperties(params Expression<Func<T, object>>[] propertySelectors)
         {
             //Contract.Requires(propertySelectors != null && propertySelectors.Length > 0, "Cannot include no selectors");
             //Contract.Ensures(Contract.Result<TrackableType<T>>() != null);

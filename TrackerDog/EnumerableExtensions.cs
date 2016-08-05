@@ -14,6 +14,7 @@ namespace TrackerDog
         /// Clones the given <see cref="System.Collections.IEnumerable"/> concrete implementation
         /// </summary>
         /// <param name="enumerable">The <see cref="System.Collections.IEnumerable"/> to clone</param>
+        /// <param name="configuration">Configuration to use to determine how to clone the whole enumerable</param>
         /// <returns>The cloned enumerable</returns>
         internal static IEnumerable CloneEnumerable(this IEnumerable enumerable, IObjectChangeTrackingConfiguration configuration)
         {

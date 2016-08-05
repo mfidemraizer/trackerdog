@@ -11,6 +11,9 @@ namespace TrackerDog
         /// </summary>
         IObjectChangeTracker Tracker { get; }
 
+        /// <summary>
+        /// Gets the object that owns current property change tracking
+        /// </summary>
         object TargetObject { get; }
 
         /// <summary>

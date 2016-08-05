@@ -44,7 +44,7 @@ namespace TrackerDog
                         {
                             
                             if (trackableType.Type == typeToTrack)
-                                ((IConfigurableTrackableType)trackableType).IncludeProperties
+                                trackableType.IncludeProperties
                                 (
                                     interfaceTrackableType.IncludedProperties.ToArray()
                                 );
@@ -54,7 +54,7 @@ namespace TrackerDog
 
                 Contract.Assert(typeToTrack.IsClass && !typeToTrack.IsAbstract && !typeToTrack.IsSealed, "The object type to track must be a non-abstract, non-sealed class");
 
-                ProxyGenerationOptions options = new ProxyGenerationOptions(new SimplePropertyInterceptionHook(this.Configuration));
+                ProxyGenerationOptions options = new ProxyGenerationOptions(new SimplePropertyInterceptionHook(Configuration));
                 options.AddMixinInstance(new ChangeTrackableObjectMixin(Configuration, this));
                 options.AdditionalAttributes.Add(AttributeUtil.CreateBuilder(typeof(DebuggerDisplayAttribute), new[] { $"{typeToTrack.FullName}Proxy" }));
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Castle.DynamicProxy;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 using TrackerDog.Configuration;
@@ -370,6 +371,19 @@ namespace TrackerDog.Test
             a.B.C.ListOfD.Add(new D { Text = "changed 5!" });
 
             A untrackedA = a.ToUntracked();
+
+            Assert.IsInstanceOfType(a, typeof(IProxyTargetAccessor));
+            Assert.IsInstanceOfType(a.B, typeof(IProxyTargetAccessor));
+            Assert.IsInstanceOfType(a.B.C, typeof(IProxyTargetAccessor));
+            Assert.IsInstanceOfType(a.B.C.ListOfD, typeof(IProxyTargetAccessor));
+            Assert.IsInstanceOfType(a.B.C.ListOfD.First(), typeof(IProxyTargetAccessor));
+
+            Assert.IsNotInstanceOfType(untrackedA, typeof(IProxyTargetAccessor));
+            Assert.IsNotInstanceOfType(untrackedA.B, typeof(IProxyTargetAccessor));
+            Assert.IsNotInstanceOfType(untrackedA.B.C, typeof(IProxyTargetAccessor));
+            Assert.IsNotInstanceOfType(untrackedA.B.C.ListOfD, typeof(IProxyTargetAccessor));
+            Assert.IsNotInstanceOfType(untrackedA.B.C.ListOfD.First(), typeof(IProxyTargetAccessor));
+
 
             Assert.AreEqual("changed 1!", untrackedA.B.C.Text);
             Assert.AreEqual("changed 2!", untrackedA.B.Text);

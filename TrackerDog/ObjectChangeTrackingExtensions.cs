@@ -20,7 +20,13 @@ namespace TrackerDog
     /// </summary>
     public static class ObjectChangeTrackingExtensions
     {
-        public static IImmutableSet<IObjectPropertyInfo> BuildAllPropertyPaths(this Type someType, Func<PropertyInfo, bool> filter = null)
+        /// <summary>
+        /// Builds all paths to properties of given type as <see cref="IObjectPropertyInfo"/> implementations
+        /// </summary>
+        /// <param name="someType">The type to which paths should be built from</param>
+        /// <param name="filter">A filter to include or exclude properties</param>
+        /// <returns>A set of all built property paths</returns>
+        internal static IImmutableSet<IObjectPropertyInfo> BuildAllPropertyPaths(this Type someType, Func<PropertyInfo, bool> filter = null)
             => BuildAllPropertyPathsInternal(someType, filter: filter);
 
         private static IImmutableSet<IObjectPropertyInfo> BuildAllPropertyPathsInternal(this Type someType, ISet<ObjectPropertyInfo> paths = null, PropertyInfo ownerProperty = null, ObjectPropertyInfo currentPropertyInfo = null, Func<PropertyInfo, bool> filter = null)
