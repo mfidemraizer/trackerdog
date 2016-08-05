@@ -52,7 +52,7 @@ namespace TrackerDog.Hooks
         {
             bool isDynamicObject = type.IsDynamicObject();
 
-            if ((!isDynamicObject && !methodInfo.IsPropertyGetterOrSetter()) || _skippedMethods.Contains(methodInfo))
+            if ((!isDynamicObject && (!methodInfo.MethodIsPropertyAccessorOfReadWriteProperty() || !methodInfo.IsPropertyGetterOrSetter())) || _skippedMethods.Contains(methodInfo))
                 return false;
 
             ITrackableType trackableType = Configuration.TrackableTypes.SingleOrDefault(t => t.Type == type);

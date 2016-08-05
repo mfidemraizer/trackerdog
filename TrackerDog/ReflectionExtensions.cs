@@ -143,6 +143,25 @@ namespace TrackerDog
             return member.Name.StartsWith("set_");
         }
 
+        internal static string GetPropertyNameFromAccessor(this MemberInfo accessor)
+        {
+            Contract.Requires(accessor != null);
+
+            return accessor.Name.Replace("get_", "").Replace("set_", "");
+        }
+
+        internal static bool MethodIsPropertyAccessorOfReadWriteProperty(this MemberInfo accessor, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        {
+            Contract.Requires(accessor != null);
+
+            PropertyInfo property = accessor.DeclaringType.GetProperty(accessor.GetPropertyNameFromAccessor(), bindingFlags);
+
+            if (property == null)
+                return false;
+            
+            return property.GetMethod != null && property.SetMethod != null;
+        }
+
         /// <summary>
         /// Determines if current member is a property getter or setter.
         /// </summary>
