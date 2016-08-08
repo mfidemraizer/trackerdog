@@ -25,6 +25,16 @@ namespace TrackerDog.Test
             public virtual string Text { get; set; }
         }
 
+        public class D
+        {
+            public virtual string Text { get; set; }
+
+            public D()
+            {
+                Text = "some text";
+            }
+        }
+
         private static ITrackableObjectFactory TrackableObjectFactory { get; set; }
 
         private static IObjectChangeTrackingConfiguration Configuration { get; set; }
@@ -35,7 +45,8 @@ namespace TrackerDog.Test
             Configuration = ObjectChangeTracking.CreateConfiguration()
                 .TrackThisType<A>()
                 .TrackThisType<B>()
-                .TrackThisType<C>();
+                .TrackThisType<C>()
+                .TrackThisType<D>();
 
             TrackableObjectFactory = Configuration.CreateTrackableObjectFactory();
         }
@@ -70,6 +81,17 @@ namespace TrackerDog.Test
             Assert.IsTrue(b.IsTrackable());
 
             b.Text = "hello world";
+        }
+
+        [TestMethod]
+        public void CanCreateProxyWhenPropertyInitializedFromConstructor()
+        {
+            D d1 = new D();
+            D trackedD1 = TrackableObjectFactory.CreateFrom(d1);
+
+            Assert.IsTrue(d1.IsTrackable());
+
+
         }
     }
 }
