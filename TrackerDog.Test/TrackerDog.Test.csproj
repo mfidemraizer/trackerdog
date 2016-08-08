@@ -67,6 +67,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ConfigurationTest.cs" />
     <Compile Include="InterfaceTrackingTest.cs" />
     <Compile Include="CollectionTest.cs" />
     <Compile Include="DynamicObjectTest.cs" />

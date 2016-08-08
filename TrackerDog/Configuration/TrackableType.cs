@@ -42,6 +42,11 @@ namespace TrackerDog.Configuration
 
         public IConfigurableTrackableType IncludeProperties(params PropertyInfo[] properties)
         {
+            return IncludeProperties((IEnumerable<PropertyInfo>)properties);
+        }
+
+        public IConfigurableTrackableType IncludeProperties(IEnumerable<PropertyInfo> properties)
+        {
             foreach (PropertyInfo property in properties)
                 IncludeProperty(property);
 

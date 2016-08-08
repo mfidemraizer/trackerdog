@@ -47,20 +47,38 @@ namespace TrackerDog.Configuration
         /// any nesting level to be also change-trackable.
         /// </summary>
         /// <typeparam name="TRoot">The type of root change-trackable type</typeparam>
-        /// <param name="configure">A configuration action. It receives a trackable type instance to be configured beyond defaults</param>
-        /// <param name="filter">A filter predicate to include or discard certain types from being change-trackable</param>
+        /// <param name="searchSettings">Search settings</param>
+        /// <param name="configure">A predicate to customize configuration for each found type</param>
         /// <returns>Current configuration instance</returns>
-        IObjectChangeTrackingConfiguration TrackThisTypeRecursive<TRoot>(Action<IConfigurableTrackableType> configure = null, Func<Type, bool> filter = null);
+        IObjectChangeTrackingConfiguration TrackThisTypeRecursive<TRoot>(Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null);
 
         /// <summary>
         /// Configures given type given as parameter to be change-trackable and recurisvely configures all associated types within 
         /// any nesting level to be also change-trackable.
         /// </summary>
         /// <param name="rootType">The type of root change-trackable type</param>
-        /// <param name="configure">A configuration action. It receives a trackable type instance to be configured beyond defaults</param>
-        /// <param name="filter">A filter predicate to include or discard certain types from being change-trackable</param>
+        /// <param name="configure">A predicate to customize configuration for each found type</param>
+        /// <param name="searchSettings">Search settings</param>
         /// <returns>Current configuration instance</returns>
-        IObjectChangeTrackingConfiguration TrackThisTypeRecursive(Type rootType, Action<IConfigurableTrackableType> configure = null, Func<Type, bool> filter = null);
+        IObjectChangeTrackingConfiguration TrackThisTypeRecursive(Type rootType, Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null);
+
+        /// <summary>
+        /// Configures types from a given assembly to be change-trackable based on provided search settings
+        /// </summary>
+        /// <param name="assemblyName">The assembly name containing the types to configure</param>
+        /// <param name="searchSettings">Search settings</param>
+        /// <param name="configure">A predicate to customize configuration for each found type</param>
+        /// <returns>Current configuration instance</returns>
+        IObjectChangeTrackingConfiguration TrackTypesFromAssembly(string assemblyName, Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null);
+
+        /// <summary>
+        /// Configures types from a given assembly to be change-trackable based on provided search settings
+        /// </summary>
+        /// <param name="assembly">The assembly containing the types to configure</param>
+        /// <param name="searchSettings">Search settings</param>
+        /// <param name="configure">A predicate to customize configuration for each found type</param>
+        /// <returns>Current configuration instance</returns>
+        IObjectChangeTrackingConfiguration TrackTypesFromAssembly(Assembly assembly, Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null);
 
         /// <summary>
         /// Gets a trackable type configuration by giving its type

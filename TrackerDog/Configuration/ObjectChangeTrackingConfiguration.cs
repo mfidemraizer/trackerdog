@@ -124,9 +124,16 @@ namespace TrackerDog.Configuration
             }
         }
 
+        private void ConfigureWithAttributes(IConfigurableTrackableType trackableType)
+        {
+            AttributeConfigurationBuilder configBuilder = new AttributeConfigurationBuilder(this);
+            configBuilder.ConfigureType(trackableType);
+        }
+
         public IObjectChangeTrackingConfiguration TrackThisType<T>(Action<IConfigurableTrackableType<T>> configure = null)
         {
             TrackableType<T> trackableType = new TrackableType<T>(this);
+            ConfigureWithAttributes(trackableType);
             configure?.Invoke(trackableType);
 
             if (!trackableType.Type.IsInterface)
@@ -140,6 +147,7 @@ namespace TrackerDog.Configuration
         public IObjectChangeTrackingConfiguration TrackThisType(Type type, Action<IConfigurableTrackableType> configure = null)
         {
             TrackableType trackableType = new TrackableType(this, type);
+            ConfigureWithAttributes(trackableType);
             configure?.Invoke(trackableType);
 
             if (!trackableType.Type.IsInterface)
@@ -150,29 +158,36 @@ namespace TrackerDog.Configuration
             return this;
         }
 
-        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive<TRoot>(Action<IConfigurableTrackableType> configure = null, Func<Type, bool> filter = null)
+        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive<TRoot>(Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null)
         {
-            return TrackThisTypeRecursive(typeof(TRoot), configure, filter);
+            return TrackThisTypeRecursive(typeof(TRoot), configure, searchSettings);
         }
 
-        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive(Type rootType, Action<IConfigurableTrackableType> configure = null, Func<Type, bool> filter = null)
+        public IObjectChangeTrackingConfiguration TrackThisTypeRecursive(Type rootType, Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null)
         {
             TrackableType trackableRoot = new TrackableType(this, rootType);
+            ConfigureWithAttributes(trackableRoot);
             List<TrackableType> trackableTypes = null;
 
-            if (filter == null)
+            searchSettings = searchSettings ?? DefaultSearchSettings;
+
+            if (searchSettings.Filter == null)
+                searchSettings.Filter = t => t.Assembly == rootType.Assembly;
+
+            if (searchSettings.Mode == TypeSearchMode.AttributeConfigurationOnly)
             {
-                Assembly rootTypeAssembly = rootType.Assembly;
-                filter = t => t.Assembly == rootTypeAssembly;
+                Func<Type, bool> initialFilter = searchSettings.Filter;
+                searchSettings.Filter = t => initialFilter(t) && t.GetCustomAttribute<ChangeTrackableAttribute>() != null;
             }
 
             trackableTypes = new List<TrackableType>
             (
-                rootType.GetAllPropertyTypesRecursive(p => filter(p.PropertyType)).Select
+                rootType.GetAllPropertyTypesRecursive(p => searchSettings.Filter(p.PropertyType)).Select
                 (
                     t =>
                     {
                         TrackableType trackableType = new TrackableType(this, t);
+                        ConfigureWithAttributes(trackableType);
                         configure?.Invoke(trackableType);
 
                         return trackableType;
@@ -192,5 +207,37 @@ namespace TrackerDog.Configuration
         }
 
         public ITrackableObjectFactory CreateTrackableObjectFactory() => new TrackableObjectFactoryInternal(this);
+
+        private static TypeSearchSettings DefaultSearchSettings { get; } = new TypeSearchSettings();
+
+        public IObjectChangeTrackingConfiguration TrackTypesFromAssembly(string assemblyName, Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null)
+        {
+            return TrackTypesFromAssembly(Assembly.Load(assemblyName), configure, searchSettings);
+        }
+
+        public IObjectChangeTrackingConfiguration TrackTypesFromAssembly(Assembly assembly, Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null)
+        {
+            searchSettings = searchSettings ?? DefaultSearchSettings;
+            
+            if (searchSettings.Mode == TypeSearchMode.AttributeConfigurationOnly)
+            {
+                if (searchSettings.Filter != null)
+                {
+                    Func<Type, bool> initialFilter = searchSettings.Filter;
+                    searchSettings.Filter = t => initialFilter(t) && t.GetCustomAttribute<ChangeTrackableAttribute>() != null;
+                }
+                else
+                    searchSettings.Filter = t => t.GetCustomAttribute<ChangeTrackableAttribute>() != null;
+            }
+
+            foreach (Type type in assembly.GetTypes())
+                if (searchSettings.Filter == null || searchSettings.Filter(type))
+                    if (!searchSettings.Recursive)
+                        TrackThisType(type, configure);
+                    else
+                        TrackThisTypeRecursive(type, configure, searchSettings);
+
+            return this;
+        }
     }
 }

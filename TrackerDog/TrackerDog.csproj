@@ -107,7 +107,10 @@
   <ItemGroup>
     <Compile Include="CollectionHandling\CollectionChange.cs" />
     <Compile Include="CollectionHandling\CollectionChangeContext.cs" />
+    <Compile Include="Configuration\AttributeConfigurationBuilder.cs" />
+    <Compile Include="Configuration\ChangeTrackableAttribute.cs" />
     <Compile Include="Configuration\CollectionImplementation.cs" />
+    <Compile Include="Configuration\DoNotTrackChangesAttribute.cs" />
     <Compile Include="Configuration\GenericITrackableType.cs" />
     <Compile Include="Configuration\IGenericConfigurableTrackableType.cs" />
     <Compile Include="Configuration\IConfigurableTrackableType.cs" />
@@ -121,6 +124,8 @@
     <Compile Include="Configuration\TrackableType.cs" />
     <Compile Include="Configuration\ObjectChangeTrackingConfiguration.cs" />
     <Compile Include="CollectionHandling\DefaultCollectionChangeInterceptor.cs" />
+    <Compile Include="Configuration\TypeSearchMode.cs" />
+    <Compile Include="Configuration\TypeSearchSettings.cs" />
     <Compile Include="DeclaredObjectPropertyChangeEventArgs.cs" />
     <Compile Include="DynamicObjectExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />

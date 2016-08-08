@@ -75,8 +75,17 @@
     <Compile Include="..\TrackerDog\CollectionHandling\SetChangeInterceptor.cs">
       <Link>CollectionHandling\SetChangeInterceptor.cs</Link>
     </Compile>
+    <Compile Include="..\TrackerDog\Configuration\AttributeConfigurationBuilder.cs">
+      <Link>Configuration\AttributeConfigurationBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\TrackerDog\Configuration\ChangeTrackableAttribute.cs">
+      <Link>Configuration\ChangeTrackableAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\TrackerDog\Configuration\CollectionImplementation.cs">
       <Link>Configuration\CollectionImplementation.cs</Link>
+    </Compile>
+    <Compile Include="..\TrackerDog\Configuration\DoNotTrackChangesAttribute.cs">
+      <Link>Configuration\DoNotTrackChangesAttribute.cs</Link>
     </Compile>
     <Compile Include="..\TrackerDog\Configuration\GenericITrackableType.cs">
       <Link>Configuration\GenericITrackableType.cs</Link>
@@ -108,14 +117,17 @@
     <Compile Include="..\TrackerDog\Configuration\ObjectChangeTrackingConfiguration.cs">
       <Link>Configuration\ObjectChangeTrackingConfiguration.cs</Link>
     </Compile>
-    <Compile Include="..\TrackerDog\Configuration\PropertyChangeDetectionMode.cs">
-      <Link>Configuration\PropertyChangeDetectionMode.cs</Link>
-    </Compile>
     <Compile Include="..\TrackerDog\Configuration\TrackableCollectionConfiguration.cs">
       <Link>Configuration\TrackableCollectionConfiguration.cs</Link>
     </Compile>
     <Compile Include="..\TrackerDog\Configuration\TrackableType.cs">
       <Link>Configuration\TrackableType.cs</Link>
+    </Compile>
+    <Compile Include="..\TrackerDog\Configuration\TypeSearchMode.cs">
+      <Link>Configuration\TypeSearchMode.cs</Link>
+    </Compile>
+    <Compile Include="..\TrackerDog\Configuration\TypeSearchSettings.cs">
+      <Link>Configuration\TypeSearchSettings.cs</Link>
     </Compile>
     <Compile Include="..\TrackerDog\DeclaredObjectPropertyChangeEventArgs.cs">
       <Link>DeclaredObjectPropertyChangeEventArgs.cs</Link>

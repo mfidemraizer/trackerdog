@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace TrackerDog.Configuration
@@ -26,5 +27,12 @@ namespace TrackerDog.Configuration
         /// <param name="propertySelectors">One or more property selectors to select which properties to track its changes</param>
         /// <returns>Current trackable type configuration</returns>
         IConfigurableTrackableType IncludeProperties(params PropertyInfo[] propertySelectors);
+
+        /// <summary>
+        /// Configures multiple properties to be change-tracked for the current tracked type.
+        /// </summary>
+        /// <param name="properties">One or more property selectors to select which properties to track its changes</param>
+        /// <returns>Current trackable type configuration</returns>
+        IConfigurableTrackableType IncludeProperties(IEnumerable<PropertyInfo> properties);
     }
 }

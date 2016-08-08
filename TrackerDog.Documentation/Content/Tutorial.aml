@@ -10,54 +10,96 @@
     <section>
       <title>Index of contents</title>
       <content>
-        <list bullet="class">
+        <list class="bullet">
           <listItem>
-            <link xlink:href="#objects2trackable">How to turn objects into change-trackable ones</link>
+            <para>
+              <link xlink:href="#objects2trackable">How to turn objects into change-trackable ones</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#inheritance">How to track inheritance</link>
+            <para>
+              <link xlink:href="#inheritance">How to track inheritance</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#recursiveConfiguration">Recursively-configuring trackable types</link>
+            <para>
+              <link xlink:href="#assemblyConfiguration">Configuring all types from a given assembly</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#trackingInterfaces">How to track interface implementation changes</link>
+            <para>
+              <link xlink:href="#attributeConfiguration">Attribute-based configuration</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#objects2untrackable">How to turn trackable objects into untrackable objects</link>
+            <para>
+              <link xlink:href="#recursiveConfiguration">Recursively-configuring trackable types</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#changedPropertyChecking">Checking which properties have been changed</link>
+            <para>
+              <link xlink:href="#trackingInterfaces">How to track interface implementation changes</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#oldValue">Getting the value of some property before it was changed</link>
+            <para>
+              <link xlink:href="#objects2untrackable">How to turn trackable objects into untrackable objects</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#currentValue">Getting current property value</link>
+            <para>
+              <link xlink:href="#changedPropertyChecking">Checking which properties have been changed</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#propertyChanged">Checking if a property changed its value since it was started to be tracked</link>
+            <para>
+              <link xlink:href="#oldValue">Getting the value of some property before it was changed</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#undo">How do I accept or undo changes</link>
+            <para>
+              <link xlink:href="#currentValue">Getting current property value</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#collectionChanges">Tracking collection changes</link>
+            <para>
+              <link xlink:href="#propertyChanged">Checking if a property changed its value since it was started to be tracked</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#graph">Object graph changes</link>
+            <para>
+              <link xlink:href="#undo">How do I accept or undo changes</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#observe">Observe property and collection changes</link>
+            <para>
+              <link xlink:href="#collectionChanges">Tracking collection changes</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#dynamic">Track dynamic objects</link>
+            <para>
+              <link xlink:href="#graph">Object graph changes</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#metadata">Useful metadata</link>
+            <para>
+              <link xlink:href="#observe">Observe property and collection changes</link>
+            </para>
           </listItem>
           <listItem>
-            <link xlink:href="#test">Read the tests too</link>
+            <para>
+              <link xlink:href="#dynamic">Track dynamic objects</link>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <link xlink:href="#metadata">Useful metadata</link>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <link xlink:href="#test">Read the tests too</link>
+            </para>
           </listItem>
         </list>
       </content>
@@ -191,6 +233,187 @@
             If you take last code sample as example, you will not configure <codeInline>A.Text</codeInline> on <codeInline>B</codeInline>
           </para>
         </alert>
+      </content>
+    </section>
+
+    <section address="assemblyConfiguration">
+      <title>Configuring all types from a given assembly</title>
+      <content>
+        <para>
+          Perhaps your project is getting bigger and configuring each type manually to be change-trackable can be extremely tedious, or you just want
+          to simplify configuration code. No problem: TrackerDog can configure all types from a given assembly using two methods:
+        </para>
+        <list class="bullet">
+          <listItem>
+            <para>
+              <codeEntityReference qualifyHint="true">M:TrackerDog.Configuration.IObjectChangeTrackingConfiguration.TrackTypesFromAssembly(System.String,System.Action{TrackerDog.Configuration.IConfigurableTrackableType},TrackerDog.Configuration.TypeSearchSettings)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference qualifyHint="true">M:TrackerDog.Configuration.IObjectChangeTrackingConfiguration.TrackTypesFromAssembly(System.Reflection.Assembly,System.Action{TrackerDog.Configuration.IConfigurableTrackableType},TrackerDog.Configuration.TypeSearchSettings)</codeEntityReference>
+            </para>
+          </listItem>
+        </list>
+        <para>And this is a sample usage:</para>
+        <code language="c#">
+          <![CDATA[
+        IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+        config.TrackTypesFromAssembly("MyAssemblyName");
+        config.TrackTypesFromAssembly(Assembly.GetExecutingAssembly());
+        ]]>
+        </code>
+        <para>
+          While this saves a lot of time and makes things even simpler, it might happen that you need to customize the underlying configuration process some way.
+        </para>
+        <para>Above goal can be achieved the second and/or third parameter on both mentioned methods:</para>
+
+        <table>
+          <tableHeader>
+            <row>
+              <entry>
+                <para>Parameter</para>
+              </entry>
+              <entry>
+                <para>Description</para>
+              </entry>
+            </row>
+          </tableHeader>
+          <row>
+            <entry>
+              <para>configure</para>
+            </entry>
+            <entry>
+              <para>
+                It is a delegate that will be called for each type being configured. The whole delegate receives a <codeEntityReference>T:TrackerDog.Configuration.IConfigurableTrackableType</codeEntityReference> implementation instance that should be enough to customize how the specific type will be tracked for changes.
+              </para>
+            </entry>
+          </row>
+          <row>
+            <entry>
+              <para>
+                searchSettings
+              </para>
+            </entry>
+            <entry>
+              <para>
+                It accepts a <codeEntityReference>T:TrackerDog.Configuration.TypeSearchSettings</codeEntityReference> instance. It provides extra information
+                and behavior to configure how the whole methods will search for type and configure them as trackable types.
+              </para>
+            </entry>
+          </row>
+        </table>
+      </content>
+    </section>
+
+    <section address="attributeConfiguration">
+      <title>Attribute-based configuration</title>
+      <content>
+        <para>
+          In addition to manually-configuring everything, you can mark certain types and their properties with attributes, and these will allow
+          <token>projectName</token> to configure them as change-trackable types.
+        </para>
+        <para>
+          Any type that should be change-trackable configured by attribute configuration will need the <codeEntityReference>T:TrackerDog.Configuration.ChangeTrackableAttribute</codeEntityReference> attribute:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          [ChangeTrackable]
+          public class A
+          {
+              public virtual string Text { get; set; }
+              public virtual int Number { get; set; }
+          }
+          ]]>
+        </code>
+        <para>
+          Above code sample would mean that all properties should be included in the change-tracking process. Otherwise, you need to specify which ones should
+          be change-tracked with the same attribute:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          [ChangeTrackable]
+          public class A
+          {
+              [ChangeTrackable]
+              public virtual string Text { get; set; }
+
+              public virtual int Number { get; set; }
+          }
+          ]]>
+        </code>
+        <para>
+          Last code listing above would mean that <codeInline>Number</codeInline> property must not be tracked. This is like a <phrase>white list</phrase>. If you want to specify which ones
+          should not be tracked, it can be done with the <codeEntityReference>T:TrackerDog.Configuration.DoNotTrackChangesAttribute</codeEntityReference> attribute
+        </para>
+        <code language="c#">
+          <![CDATA[
+          [ChangeTrackable]
+          public class A
+          {
+              public virtual string Text { get; set; }
+
+              [DoNotTrackChanges]
+              public virtual int Number { get; set; }
+          }
+          ]]>
+        </code>
+        <para>
+          In the other hand, there are some rules to understand how these attributes work:
+        </para>
+
+        <list class="bullet">
+          <listItem>
+            <para>
+              If a type has been marked with <codeInline>[ChangeTrackable]</codeInline> and properties aren't marked with any of mentioned attributes, then, all properties are trackable
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              If a type has been marked with <codeInline>[ChangeTrackable]</codeInline> and one or more properties have been marked with <codeInline>[ChangeTrackable]</codeInline>, only those with the whole attribute
+              will be tracked.
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              If a type has been marked with <codeInline>[ChangeTrackable]</codeInline> and one or more properties have been marked with <codeInline>[DoNotTrackChanges]</codeInline>, those with or without <codeInline>[ChangeTrackable]</codeInline> will be tracked.
+            </para>
+          </listItem>
+        </list>
+
+        <para>
+          <token>projectName</token>'s default behavior is to configure types with and without attributes, but you can override this behavior in certain conditions when calling the following methods:
+        </para>
+        <list class="bullet">
+          <listItem>
+            <para>
+              <codeEntityReference>M:TrackerDog.Configuration.IObjectChangeTrackingConfiguration.TrackTypesFromAssembly(System.String,System.Action{TrackerDog.Configuration.IConfigurableTrackableType},TrackerDog.Configuration.TypeSearchSettings)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference>M:TrackerDog.Configuration.IObjectChangeTrackingConfiguration.TrackTypesFromAssembly(System.Reflection.Assembly,System.Action{TrackerDog.Configuration.IConfigurableTrackableType},TrackerDog.Configuration.TypeSearchSettings)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference>M:TrackerDog.Configuration.IObjectChangeTrackingConfiguration.TrackThisTypeRecursive(System.Type,System.Action{TrackerDog.Configuration.IConfigurableTrackableType},TrackerDog.Configuration.TypeSearchSettings)</codeEntityReference>
+            </para>
+          </listItem>
+          <listItem>
+            <para>
+              <codeEntityReference>M:TrackerDog.Configuration.IObjectChangeTrackingConfiguration.TrackThisTypeRecursive``1(System.Action{TrackerDog.Configuration.IConfigurableTrackableType},TrackerDog.Configuration.TypeSearchSettings)</codeEntityReference>
+            </para>
+          </listItem>
+        </list>
+
+        <para>
+          All above listed methods accept an argument of type <codeEntityReference>T:TrackerDog.Configuration.TypeSearchSettings</codeEntityReference> and an instance of the whole search settings
+          can set <codeEntityReference>P:TrackerDog.Configuration.TypeSearchSettings.Mode</codeEntityReference> property to <codeEntityReference>F:TrackerDog.Configuration.TypeSearchMode.AttributeConfigurationOnly</codeEntityReference> which
+          exactly meant to do restrict configuration to attribute-based one only.
+        </para>
+      
+         <para>This configuration approach is even more friendly <link xlink:href="#assemblyConfiguration">when configuring types for an entire assembly</link>!</para>
       </content>
     </section>
 

@@ -42,12 +42,8 @@ namespace TrackerDog
                         typeToTrack,
                         trackableType =>
                         {
-                            
                             if (trackableType.Type == typeToTrack)
-                                trackableType.IncludeProperties
-                                (
-                                    interfaceTrackableType.IncludedProperties.ToArray()
-                                );
+                                trackableType.IncludeProperties(interfaceTrackableType.IncludedProperties.ToArray());
                         }
                     );
                 }
