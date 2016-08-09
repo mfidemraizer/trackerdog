@@ -35,6 +35,9 @@ namespace TrackerDog.Interceptors
 
                     Contract.Assert(trackableObject != null);
 
+                    if (trackableObject.GetChangeTrackingContext().State == ChangeTrackableObjectState.Constructing)
+                        return;
+
                     if (invocation.Method.IsPropertyGetter())
                         InterceptGetter
                         (

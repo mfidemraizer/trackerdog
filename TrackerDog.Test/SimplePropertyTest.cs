@@ -1,5 +1,6 @@
 ﻿using Castle.DynamicProxy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TrackerDog.Configuration;
@@ -23,7 +24,9 @@ namespace TrackerDog.Test
                     .TrackThisType<E>(t => t.IncludeProperties(e => e.Text, e => e.Number))
                     .TrackThisType<Customer>(t => t.IncludeProperty(c => c.ContactInfo))
                     .TrackThisType<Contact>(t => t.IncludeProperty(c => c.Name))
-                    .TrackThisType<EnhancedContact>(t => t.IncludeProperty(c => c.Default));
+                    .TrackThisType<EnhancedContact>(t => t.IncludeProperty(c => c.Default))
+                    .TrackThisType<ClassWithReadOnlyPropertyThrowingException>()
+                    .TrackThisType<ClassSettingPropertiesDuringConstructionTime>(t => t.IncludeProperty(c => c.Text));
 
             TrackableObjectFactory = Configuration.CreateTrackableObjectFactory();
         }
@@ -53,23 +56,47 @@ namespace TrackerDog.Test
 
         public class E
         {
-            public string Text { get; set; }
-            public int Number { get; set; }
+            public virtual string Text { get; set; }
+            public virtual int Number { get; set; }
         }
 
         public class Customer
         {
-            public EnhancedContact ContactInfo { get; set; }
+            public virtual EnhancedContact ContactInfo { get; set; }
         }
 
         public class Contact
         {
-            public string Name { get; set; }
+            public virtual string Name { get; set; }
         }
 
         public class EnhancedContact : Contact
         {
-            public bool Default { get; set; }
+            public virtual bool Default { get; set; }
+        }
+
+        public class ClassWithReadOnlyPropertyThrowingException
+        {
+            public virtual string Text
+            {
+                get { throw new InvalidOperationException(); }
+            }
+        }
+
+        public class ClassSettingPropertiesDuringConstructionTime
+        {
+            public ClassSettingPropertiesDuringConstructionTime()
+            {
+                Text = "hello world";
+            }
+
+            public virtual string Text { get; set; }
+        }
+
+        [TestMethod]
+        public void CanTrackClassWithReadOnlyPropertiesThrowingExceptions()
+        {
+            TrackableObjectFactory.CreateOf<ClassWithReadOnlyPropertyThrowingException>();
         }
 
         [TestMethod]
@@ -409,6 +436,14 @@ namespace TrackerDog.Test
             Assert.AreEqual(initialValue, a.OldPropertyValue(i => i.Text));
             Assert.AreEqual(changedValue, a.CurrentPropertyValue(i => i.Text));
             Assert.IsTrue(a.PropertyHasChanged(i => i.Text));
+        }
+
+        [TestMethod]
+        public void CanSetPropertyOnConstructor()
+        {
+            ClassSettingPropertiesDuringConstructionTime some = TrackableObjectFactory.CreateOf<ClassSettingPropertiesDuringConstructionTime>();
+
+            Assert.AreEqual("hello world", some.Text);
         }
     }
 }

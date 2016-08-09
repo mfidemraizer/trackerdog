@@ -48,7 +48,7 @@ namespace TrackerDog
                     );
                 }
 
-                Contract.Assert(typeToTrack.IsClass && !typeToTrack.IsAbstract && !typeToTrack.IsSealed, "The object type to track must be a non-abstract, non-sealed class");
+                Contract.Assert(typeToTrack.IsClass && !typeToTrack.IsAbstract && !typeToTrack.IsSealed, $"The object type to track '{typeToTrack.AssemblyQualifiedName}' must be a non-abstract, non-sealed class");
 
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new SimplePropertyInterceptionHook(Configuration));
                 options.AddMixinInstance(new ChangeTrackableObjectMixin(Configuration, this));
@@ -85,7 +85,11 @@ namespace TrackerDog
 
 
                 IChangeTrackableObject trackableObject = (IChangeTrackableObject)proxy;
+                ObjectChangeTrackingContext trackingContext = trackableObject.GetChangeTrackingContext();
+
+                trackingContext.State = ChangeTrackableObjectState.Constructing;
                 trackableObject.StartTracking(trackableObject, reusedTracker);
+                trackingContext.State = ChangeTrackableObjectState.Ready;
 
                 HashSet<PropertyInfo> propertiesToTrack =
                     new HashSet<PropertyInfo>(Configuration.GetTrackableType(typeToTrack).IncludedProperties);
@@ -96,7 +100,7 @@ namespace TrackerDog
 
                 foreach (PropertyInfo property in propertiesToTrack)
                 {
-                    if (!property.IsIndexer())
+                    if (!property.IsIndexer() && property.CanReadAndWrite())
                     {
                         object propertyValue = property.GetValue(trackableObject);
 

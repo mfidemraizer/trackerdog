@@ -105,6 +105,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangeTrackableObjectState.cs" />
     <Compile Include="CollectionHandling\CollectionChange.cs" />
     <Compile Include="CollectionHandling\CollectionChangeContext.cs" />
     <Compile Include="Configuration\AttributeConfigurationBuilder.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Configuration\CollectionImplementation.cs" />
     <Compile Include="Configuration\DoNotTrackChangesAttribute.cs" />
     <Compile Include="Configuration\GenericITrackableType.cs" />
+    <Compile Include="Configuration\IConfigurableTrackableTypeContract.cs" />
     <Compile Include="Configuration\IGenericConfigurableTrackableType.cs" />
     <Compile Include="Configuration\IConfigurableTrackableType.cs" />
     <Compile Include="Configuration\IObjectChangeTrackingConfiguration.cs" />

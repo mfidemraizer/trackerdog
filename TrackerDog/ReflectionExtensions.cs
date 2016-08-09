@@ -62,6 +62,8 @@ namespace TrackerDog
                     yield return baseType;
         }
 
+        internal static bool CanReadAndWrite(this PropertyInfo property) => property.GetMethod != null && property.SetMethod != null;
+
         /// <summary>
         /// Determines if given type implements <see cref="System.Collections.Generic.IEnumerable{T}"/>
         /// </summary>

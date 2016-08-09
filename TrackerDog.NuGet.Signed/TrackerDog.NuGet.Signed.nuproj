@@ -19,13 +19,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TrackerDog.Signed</Id>
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
     <Title>TrackerDog: A generic .NET object change tracker (SIGNED)</Title>
     <Authors>Matías Fidemraizer</Authors>
     <Owners>Matías Fidemraizer</Owners>
     <Summary>Track changes of any .NET object and full object graphs</Summary>
     <Description>TrackerDog turns any .NET object or full object graph into a change-trackable object</Description>
-    <ReleaseNotes>See release notes here: https://github.com/mfidemraizer/trackerdog/releases/tag/v2.1.0</ReleaseNotes>
+    <ReleaseNotes>See release notes here: https://github.com/mfidemraizer/trackerdog/releases/tag/v2.1.1</ReleaseNotes>
     <ProjectUrl>http://matiasfidemrazer.com/trackerdog/</ProjectUrl>
     <LicenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © Matías Fidemraizer</Copyright>

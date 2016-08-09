@@ -20,7 +20,12 @@ namespace TrackerDog.Configuration
             Contract.Requires(trackableType != null);
 
             if (trackableType.Type.GetCustomAttribute<ChangeTrackableAttribute>() != null)
-                trackableType.IncludeProperties(GetTrackableProperties(trackableType.Type));
+            {
+                IEnumerable<PropertyInfo> trackableProperties = GetTrackableProperties(trackableType.Type);
+
+                if (trackableProperties.Count() > 0)
+                    trackableType.IncludeProperties(trackableProperties);
+            }
         }
 
         private IEnumerable<PropertyInfo> GetTrackableProperties(Type type)
@@ -28,7 +33,9 @@ namespace TrackerDog.Configuration
             Contract.Requires(type != null);
             Contract.Ensures(Contract.Result<IEnumerable<PropertyInfo>>() != null);
 
-            IEnumerable<PropertyInfo> allProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            IEnumerable<PropertyInfo> allProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                                                          .Where(p => p.CanReadAndWrite() && p.GetMethod.IsVirtual);
+
             IEnumerable<PropertyInfo> trackableProperties = allProperties.Where(p => p.GetCustomAttribute<ChangeTrackableAttribute>() != null);
             IEnumerable<PropertyInfo> nonTrackableProperties = allProperties.Where(p => p.GetCustomAttribute<DoNotTrackChangesAttribute>() != null);
 

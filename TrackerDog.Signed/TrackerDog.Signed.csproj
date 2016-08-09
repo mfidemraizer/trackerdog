@@ -63,6 +63,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\TrackerDog\ChangeTrackableObjectState.cs">
+      <Link>ChangeTrackableObjectState.cs</Link>
+    </Compile>
     <Compile Include="..\TrackerDog\CollectionHandling\CollectionChange.cs">
       <Link>CollectionHandling\CollectionChange.cs</Link>
     </Compile>
@@ -98,6 +101,9 @@
     </Compile>
     <Compile Include="..\TrackerDog\Configuration\IConfigurableTrackableType.cs">
       <Link>Configuration\IConfigurableTrackableType.cs</Link>
+    </Compile>
+    <Compile Include="..\TrackerDog\Configuration\IConfigurableTrackableTypeContract.cs">
+      <Link>Configuration\IConfigurableTrackableTypeContract.cs</Link>
     </Compile>
     <Compile Include="..\TrackerDog\Configuration\IGenericConfigurableTrackableType.cs">
       <Link>Configuration\IGenericConfigurableTrackableType.cs</Link>

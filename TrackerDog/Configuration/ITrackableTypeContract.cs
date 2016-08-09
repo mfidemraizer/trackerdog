@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.Contracts;
 using System.Reflection;
@@ -13,6 +12,8 @@ namespace TrackerDog.Configuration
         {
             get
             {
+                Contract.Ensures(Contract.Result<IImmutableSet<PropertyInfo>>() != null, "'IncludedProperties' cannot be null");
+
                 throw new NotImplementedException();
             }
         }
@@ -21,6 +22,8 @@ namespace TrackerDog.Configuration
         {
             get
             {
+                Contract.Ensures(Contract.Result<IImmutableSet<IObjectPropertyInfo>>() != null, "'ObjectPaths' cannot be null");
+
                 throw new NotImplementedException();
             }
         }
@@ -29,16 +32,10 @@ namespace TrackerDog.Configuration
         {
             get
             {
+                Contract.Ensures(Contract.Result<Type>() != null, $"'Type' cannot be null");
+
                 throw new NotImplementedException();
             }
-        }
-
-        [ContractInvariantMethod]
-        private void Invariants()
-        {
-            Contract.Invariant(IncludedProperties != null, "Included properties cannot be null");
-            Contract.Invariant(Type != null, "Type cannot be null");
-            Contract.Invariant(ObjectPaths != null, "Object paths must not be null");
         }
     }
 }

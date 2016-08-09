@@ -133,6 +133,7 @@ namespace TrackerDog.Configuration
         public IObjectChangeTrackingConfiguration TrackThisType<T>(Action<IConfigurableTrackableType<T>> configure = null)
         {
             TrackableType<T> trackableType = new TrackableType<T>(this);
+
             ConfigureWithAttributes(trackableType);
             configure?.Invoke(trackableType);
 

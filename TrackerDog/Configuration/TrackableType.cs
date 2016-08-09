@@ -18,6 +18,9 @@ namespace TrackerDog.Configuration
 
         public TrackableType(IObjectChangeTrackingConfiguration configuration, Type type)
         {
+            //Contract.Requires(type != null, "Give type reference must be non-null");
+            Contract.Assert((type.IsClass && !type.IsSealed) || type.IsInterface, $"Given type '{type.AssemblyQualifiedName}' must be either a non-sealed class or an interface");
+
             _type = type;
             _objectPaths = new Lazy<IImmutableSet<IObjectPropertyInfo>>
             (

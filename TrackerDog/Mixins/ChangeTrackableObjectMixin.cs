@@ -42,6 +42,7 @@ namespace TrackerDog.Mixins
             {
                 object proxiedCollection = TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property);
 
+                Contract.Assert(property.SetMethod != null, $"Property '{property.Name} must implement a setter");
                 property.SetValue(parentObject, proxiedCollection);
             }
         }
@@ -61,7 +62,11 @@ namespace TrackerDog.Mixins
             if (trackableType != null && trackableType.IncludedProperties.Count > 0)
                 trackableProperties = new HashSet<PropertyInfo>(trackableType.IncludedProperties);
             else
-                trackableProperties = new HashSet<PropertyInfo>(trackableObject.GetType().GetProperties(DefaultBindingFlags));
+                trackableProperties = new HashSet<PropertyInfo>
+                (
+                    trackableObject.GetType().GetProperties(DefaultBindingFlags)
+                                        .Where(p => p.CanReadAndWrite())
+                );
 
             IEnumerable<Type> baseTypes = trackableType.Type.GetAllBaseTypes();
 
