@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpTOC>
+
+  <HelpTOCNode Title="Welcome to TrackerDog!" Url="html/0e46d6ac-6f64-4d54-98fd-3813df42cb8e.htm" />
+  <HelpTOCNode Title="How does it work?" Url="html/95cc6530-e365-4045-951e-4ab992610c1f.htm" />
+  <HelpTOCNode Title="How-to: Working with TrackerDog" Url="html/52e40f26-3dfe-47e0-adf1-09233e98f42e.htm" />
+  <HelpTOCNode Title="What changes are tracked?" Url="html/1941dd31-d46f-472f-9589-7ef6e721bb5b.htm" />
+  <HelpTOCNode Title="Collection change tracking" Url="html/1e03762d-b9f5-44af-a4b0-c23c36064c24.htm" />
+  <HelpTOCNode Id="28692780-4c0c-470c-996e-7afc75c53642" Title="TrackerDog Namespaces" Url="html/G_TrackerDog.htm">
+    <HelpTOCNode Id="0baad228-304b-44c3-9246-8a024cf3eb48" Title="TrackerDog" Url="html/N_TrackerDog.htm">
+      <HelpTOCNode Id="242ab0f3-f2c6-4a79-a31c-d2a6490a32a1" Title="IDeclaredObjectPropertyChangeTracking Interface" Url="html/T_TrackerDog_IDeclaredObjectPropertyChangeTracking.htm">
+        <HelpTOCNode Id="d5b731c4-2907-496f-b1e3-ebdc2859443b" Title="IDeclaredObjectPropertyChangeTracking Properties" Url="html/Properties_T_TrackerDog_IDeclaredObjectPropertyChangeTracking.htm">
+          <HelpTOCNode Title="Property Property " Url="html/P_TrackerDog_IDeclaredObjectPropertyChangeTracking_Property.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="IDeclaredObjectPropertyChangeTracking Methods" Url="html/Methods_T_TrackerDog_IDeclaredObjectPropertyChangeTracking.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="880532bb-7179-4659-a333-298b79755b92" Title="IObjectChangeTracker Interface" Url="html/T_TrackerDog_IObjectChangeTracker.htm">
+        <HelpTOCNode Id="432e1429-5b2c-4405-90ac-476d6805d2d1" Title="IObjectChangeTracker Properties" Url="html/Properties_T_TrackerDog_IObjectChangeTracker.htm">
+          <HelpTOCNode Title="ChangedProperties Property " Url="html/P_TrackerDog_IObjectChangeTracker_ChangedProperties.htm" />
+          <HelpTOCNode Title="UnchangedProperties Property " Url="html/P_TrackerDog_IObjectChangeTracker_UnchangedProperties.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="45585be2-2aaa-4f92-801e-19d8eb04c833" Title="IObjectChangeTracker Methods" Url="html/Methods_T_TrackerDog_IObjectChangeTracker.htm">
+          <HelpTOCNode Title="GetDynamicTrackingByProperty Method " Url="html/M_TrackerDog_IObjectChangeTracker_GetDynamicTrackingByProperty.htm" />
+          <HelpTOCNode Id="1eca8c12-35ac-44c1-a9dc-349ae027c4c0" Title="GetTrackingByProperty Method " Url="html/Overload_TrackerDog_IObjectChangeTracker_GetTrackingByProperty.htm">
+            <HelpTOCNode Title="GetTrackingByProperty(T, TProperty) Method (Expression(Func(T, TProperty)))" Url="html/M_TrackerDog_IObjectChangeTracker_GetTrackingByProperty__2.htm" />
+            <HelpTOCNode Title="GetTrackingByProperty Method (PropertyInfo)" Url="html/M_TrackerDog_IObjectChangeTracker_GetTrackingByProperty.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="6232354b-6576-41d8-932c-85cd6c20b3b1" Title="IObjectPropertyChangeTracking Interface" Url="html/T_TrackerDog_IObjectPropertyChangeTracking.htm">
+        <HelpTOCNode Id="2cca81d8-9c99-4a53-adce-5196ad950ec9" Title="IObjectPropertyChangeTracking Properties" Url="html/Properties_T_TrackerDog_IObjectPropertyChangeTracking.htm">
+          <HelpTOCNode Title="CurrentValue Property " Url="html/P_TrackerDog_IObjectPropertyChangeTracking_CurrentValue.htm" />
+          <HelpTOCNode Title="HasChanged Property " Url="html/P_TrackerDog_IObjectPropertyChangeTracking_HasChanged.htm" />
+          <HelpTOCNode Title="OldValue Property " Url="html/P_TrackerDog_IObjectPropertyChangeTracking_OldValue.htm" />
+          <HelpTOCNode Title="PropertyName Property " Url="html/P_TrackerDog_IObjectPropertyChangeTracking_PropertyName.htm" />
+          <HelpTOCNode Title="Tracker Property " Url="html/P_TrackerDog_IObjectPropertyChangeTracking_Tracker.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="IObjectPropertyChangeTracking Methods" Url="html/Methods_T_TrackerDog_IObjectPropertyChangeTracking.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="b2f60d1b-5a69-43fe-9ce3-65dda8a099b0" Title="IReadOnlyChangeTrackableCollection Interface" Url="html/T_TrackerDog_IReadOnlyChangeTrackableCollection.htm">
+        <HelpTOCNode Id="204467e8-1651-4bad-9c00-5ffb8354e2ac" Title="IReadOnlyChangeTrackableCollection Properties" Url="html/Properties_T_TrackerDog_IReadOnlyChangeTrackableCollection.htm">
+          <HelpTOCNode Title="AddedItems Property " Url="html/P_TrackerDog_IReadOnlyChangeTrackableCollection_AddedItems.htm" />
+          <HelpTOCNode Title="RemovedItems Property " Url="html/P_TrackerDog_IReadOnlyChangeTrackableCollection_RemovedItems.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="005b29c9-1da4-4320-b869-2f2d0dca3498" Title="ObjectChangeTrackingExtensions Class" Url="html/T_TrackerDog_ObjectChangeTrackingExtensions.htm">
+        <HelpTOCNode Id="481750a2-4a3e-4954-89bd-8eb4bb78441b" Title="ObjectChangeTrackingExtensions Methods" Url="html/Methods_T_TrackerDog_ObjectChangeTrackingExtensions.htm">
+          <HelpTOCNode Title="AcceptChanges Method " Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_AcceptChanges.htm" />
+          <HelpTOCNode Title="AsTrackable(TObject) Method " Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_AsTrackable__1.htm" />
+          <HelpTOCNode Id="c04f6cb0-6348-4e0a-8852-fba41c694e23" Title="CurrentPropertyValue Method " Url="html/Overload_TrackerDog_ObjectChangeTrackingExtensions_CurrentPropertyValue.htm">
+            <HelpTOCNode Title="CurrentPropertyValue Method (Object, String)" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_CurrentPropertyValue.htm" />
+            <HelpTOCNode Title="CurrentPropertyValue(T, TReturn) Method (T, Expression(Func(T, TReturn)))" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_CurrentPropertyValue__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="5a25259a-0663-4064-a28a-374c177450ba" Title="GetActualTypeIfTrackable Method " Url="html/Overload_TrackerDog_ObjectChangeTrackingExtensions_GetActualTypeIfTrackable.htm">
+            <HelpTOCNode Title="GetActualTypeIfTrackable Method (Object)" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_GetActualTypeIfTrackable.htm" />
+            <HelpTOCNode Title="GetActualTypeIfTrackable Method (Type)" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_GetActualTypeIfTrackable_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="GetChangeTracker Method " Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_GetChangeTracker.htm" />
+          <HelpTOCNode Id="81daf4f5-394a-49b9-a358-d972d1c52340" Title="GetPropertyTracking Method " Url="html/Overload_TrackerDog_ObjectChangeTrackingExtensions_GetPropertyTracking.htm">
+            <HelpTOCNode Title="GetPropertyTracking Method (Object, PropertyInfo)" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_GetPropertyTracking.htm" />
+            <HelpTOCNode Title="GetPropertyTracking Method (Object, String)" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_GetPropertyTracking_1.htm" />
+            <HelpTOCNode Title="GetPropertyTracking(TObject, TReturn) Method (TObject, Expression(Func(TObject, TReturn)))" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_GetPropertyTracking__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="2eedce42-a2fe-4696-9683-bf190be1ceb2" Title="IsTrackable Method " Url="html/Overload_TrackerDog_ObjectChangeTrackingExtensions_IsTrackable.htm">
+            <HelpTOCNode Title="IsTrackable Method (Object)" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_IsTrackable.htm" />
+            <HelpTOCNode Title="IsTrackable Method (Type)" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_IsTrackable_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="44bb34af-dca6-401a-8d28-fc51177e826e" Title="OldPropertyValue Method " Url="html/Overload_TrackerDog_ObjectChangeTrackingExtensions_OldPropertyValue.htm">
+            <HelpTOCNode Title="OldPropertyValue Method (Object, String)" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_OldPropertyValue.htm" />
+            <HelpTOCNode Title="OldPropertyValue(T, TReturn) Method (T, Expression(Func(T, TReturn)))" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_OldPropertyValue__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="3355f6d8-9dbf-42ef-b2f3-6fb87bc44600" Title="PropertyHasChanged Method " Url="html/Overload_TrackerDog_ObjectChangeTrackingExtensions_PropertyHasChanged.htm">
+            <HelpTOCNode Title="PropertyHasChanged Method (Object, String)" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_PropertyHasChanged.htm" />
+            <HelpTOCNode Title="PropertyHasChanged(T) Method (T, Expression(Func(T, Object)))" Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_PropertyHasChanged__1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="ToUntracked(TObject) Method " Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_ToUntracked__1.htm" />
+          <HelpTOCNode Title="ToUntrackedEnumerable Method " Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_ToUntrackedEnumerable.htm" />
+          <HelpTOCNode Title="UndoChanges Method " Url="html/M_TrackerDog_ObjectChangeTrackingExtensions_UndoChanges.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="dfb8caab-0c03-4451-b42c-70d2b95ff0db" Title="Trackable Class" Url="html/T_TrackerDog_Trackable.htm">
+        <HelpTOCNode Id="36a9895d-0049-4935-b7e4-4a877803019f" Title="Trackable Methods" Url="html/Methods_T_TrackerDog_Trackable.htm">
+          <HelpTOCNode Title="Of(TObject) Method " Url="html/M_TrackerDog_Trackable_Of__1.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="9a6cd7db-09a1-48dc-a5b9-2b5770fe6a89" Title="TrackerDog.CollectionHandling" Url="html/N_TrackerDog_CollectionHandling.htm">
+      <HelpTOCNode Title="CollectionChange Enumeration" Url="html/T_TrackerDog_CollectionHandling_CollectionChange.htm" />
+      <HelpTOCNode Id="a2db0fb9-2932-484e-875f-1babccf8c50a" Title="CollectionChangeContext Class" Url="html/T_TrackerDog_CollectionHandling_CollectionChangeContext.htm">
+        <HelpTOCNode Title="CollectionChangeContext Constructor " Url="html/M_TrackerDog_CollectionHandling_CollectionChangeContext__ctor.htm" />
+        <HelpTOCNode Id="a65a28f6-bed1-4894-89db-11251ce8cf18" Title="CollectionChangeContext Properties" Url="html/Properties_T_TrackerDog_CollectionHandling_CollectionChangeContext.htm">
+          <HelpTOCNode Title="AddedItems Property " Url="html/P_TrackerDog_CollectionHandling_CollectionChangeContext_AddedItems.htm" />
+          <HelpTOCNode Title="Change Property " Url="html/P_TrackerDog_CollectionHandling_CollectionChangeContext_Change.htm" />
+          <HelpTOCNode Title="Collection Property " Url="html/P_TrackerDog_CollectionHandling_CollectionChangeContext_Collection.htm" />
+          <HelpTOCNode Title="ItemsBefore Property " Url="html/P_TrackerDog_CollectionHandling_CollectionChangeContext_ItemsBefore.htm" />
+          <HelpTOCNode Title="ParentObjectProperty Property " Url="html/P_TrackerDog_CollectionHandling_CollectionChangeContext_ParentObjectProperty.htm" />
+          <HelpTOCNode Title="RemovedItems Property " Url="html/P_TrackerDog_CollectionHandling_CollectionChangeContext_RemovedItems.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="CollectionChangeContext Methods" Url="html/Methods_T_TrackerDog_CollectionHandling_CollectionChangeContext.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="2bc724ee-c119-40ae-ac82-bb2aa0911d2e" Title="DefaultCollectionChangeInterceptor(T) Class" Url="html/T_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1.htm">
+        <HelpTOCNode Title="DefaultCollectionChangeInterceptor(T) Constructor " Url="html/M_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1__ctor.htm" />
+        <HelpTOCNode Id="4a8ec19c-200b-4e94-a056-4d0d29a8984c" Title="DefaultCollectionChangeInterceptor(T) Properties" Url="html/Properties_T_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1.htm">
+          <HelpTOCNode Title="ChangeContext Property " Url="html/P_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_ChangeContext.htm" />
+          <HelpTOCNode Title="Count Property " Url="html/P_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_Count.htm" />
+          <HelpTOCNode Title="IsReadOnly Property " Url="html/P_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_IsReadOnly.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="7eec95f4-be6c-48b6-be00-6135f04cdc61" Title="DefaultCollectionChangeInterceptor(T) Methods" Url="html/Methods_T_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1.htm">
+          <HelpTOCNode Title="IEnumerable.GetEnumerator Method " Url="html/M_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_System_Collections_IEnumerable_GetEnumerator.htm" />
+          <HelpTOCNode Title="Add Method " Url="html/M_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_Add.htm" />
+          <HelpTOCNode Title="Clear Method " Url="html/M_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_Clear.htm" />
+          <HelpTOCNode Title="Contains Method " Url="html/M_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_Contains.htm" />
+          <HelpTOCNode Title="CopyTo Method " Url="html/M_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_CopyTo.htm" />
+          <HelpTOCNode Title="GetEnumerator Method " Url="html/M_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_GetEnumerator.htm" />
+          <HelpTOCNode Title="Remove Method " Url="html/M_TrackerDog_CollectionHandling_DefaultCollectionChangeInterceptor_1_Remove.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="e3172179-07b1-4813-9eb1-348be9d46a45" Title="SetChangeInterceptor(T) Class" Url="html/T_TrackerDog_CollectionHandling_SetChangeInterceptor_1.htm">
+        <HelpTOCNode Title="SetChangeInterceptor(T) Constructor " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1__ctor.htm" />
+        <HelpTOCNode Title="SetChangeInterceptor(T) Properties" Url="html/Properties_T_TrackerDog_CollectionHandling_SetChangeInterceptor_1.htm" />
+        <HelpTOCNode Id="4e6c0a49-3308-434a-8d94-92e7c9a98e02" Title="SetChangeInterceptor(T) Methods" Url="html/Methods_T_TrackerDog_CollectionHandling_SetChangeInterceptor_1.htm">
+          <HelpTOCNode Title="ISet(T).Add Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_System_Collections_Generic_ISet{T}_Add.htm" />
+          <HelpTOCNode Title="ExceptWith Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_ExceptWith.htm" />
+          <HelpTOCNode Title="IntersectWith Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_IntersectWith.htm" />
+          <HelpTOCNode Title="IsProperSubsetOf Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_IsProperSubsetOf.htm" />
+          <HelpTOCNode Title="IsProperSupersetOf Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_IsProperSupersetOf.htm" />
+          <HelpTOCNode Title="IsSubsetOf Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_IsSubsetOf.htm" />
+          <HelpTOCNode Title="IsSupersetOf Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_IsSupersetOf.htm" />
+          <HelpTOCNode Title="Overlaps Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_Overlaps.htm" />
+          <HelpTOCNode Title="SetEquals Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_SetEquals.htm" />
+          <HelpTOCNode Title="SymmetricExceptWith Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_SymmetricExceptWith.htm" />
+          <HelpTOCNode Title="UnionWith Method " Url="html/M_TrackerDog_CollectionHandling_SetChangeInterceptor_1_UnionWith.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="b8c09b75-6b94-4439-b1e5-40f230445e68" Title="TrackerDog.Configuration" Url="html/N_TrackerDog_Configuration.htm">
+      <HelpTOCNode Id="3e8923a7-4a0c-4306-a75d-570e6665c341" Title="CollectionImplementation Class" Url="html/T_TrackerDog_Configuration_CollectionImplementation.htm">
+        <HelpTOCNode Title="CollectionImplementation Constructor " Url="html/M_TrackerDog_Configuration_CollectionImplementation__ctor.htm" />
+        <HelpTOCNode Id="973e6b2b-43a9-4143-922d-741b91515b4a" Title="CollectionImplementation Properties" Url="html/Properties_T_TrackerDog_Configuration_CollectionImplementation.htm">
+          <HelpTOCNode Title="ChangeInterceptor Property " Url="html/P_TrackerDog_Configuration_CollectionImplementation_ChangeInterceptor.htm" />
+          <HelpTOCNode Title="Type Property " Url="html/P_TrackerDog_Configuration_CollectionImplementation_Type.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="CollectionImplementation Methods" Url="html/Methods_T_TrackerDog_Configuration_CollectionImplementation.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="a4910e2b-60c6-4d85-a80f-0d83c0ac01f2" Title="ITrackableType Interface" Url="html/T_TrackerDog_Configuration_ITrackableType.htm">
+        <HelpTOCNode Id="1517176d-d690-4139-af24-148d95c1b78c" Title="ITrackableType Properties" Url="html/Properties_T_TrackerDog_Configuration_ITrackableType.htm">
+          <HelpTOCNode Title="IncludedProperties Property " Url="html/P_TrackerDog_Configuration_ITrackableType_IncludedProperties.htm" />
+          <HelpTOCNode Title="Type Property " Url="html/P_TrackerDog_Configuration_ITrackableType_Type.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="f0aee04e-4cd4-4ae9-b947-ae3f7889c6ff" Title="Track Class" Url="html/T_TrackerDog_Configuration_Track.htm">
+        <HelpTOCNode Id="aa73a957-19e9-484c-81c8-8b617b5e0d91" Title="Track Methods" Url="html/Methods_T_TrackerDog_Configuration_Track.htm">
+          <HelpTOCNode Title="ThisType(T) Method " Url="html/M_TrackerDog_Configuration_Track_ThisType__1.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="3b3988d9-eb7c-4d82-95af-05697ac6f379" Title="TrackableCollectionConfiguration Class" Url="html/T_TrackerDog_Configuration_TrackableCollectionConfiguration.htm">
+        <HelpTOCNode Title="TrackableCollectionConfiguration Constructor " Url="html/M_TrackerDog_Configuration_TrackableCollectionConfiguration__ctor.htm" />
+        <HelpTOCNode Id="844a5ea1-6eea-46e8-a914-245dfe717515" Title="TrackableCollectionConfiguration Methods" Url="html/Methods_T_TrackerDog_Configuration_TrackableCollectionConfiguration.htm">
+          <HelpTOCNode Title="AddImplementation Method " Url="html/M_TrackerDog_Configuration_TrackableCollectionConfiguration_AddImplementation.htm" />
+          <HelpTOCNode Title="CanTrack Method " Url="html/M_TrackerDog_Configuration_TrackableCollectionConfiguration_CanTrack.htm" />
+          <HelpTOCNode Title="GetImplementation Method " Url="html/M_TrackerDog_Configuration_TrackableCollectionConfiguration_GetImplementation.htm" />
+          <HelpTOCNode Title="ReplaceImplementation Method " Url="html/M_TrackerDog_Configuration_TrackableCollectionConfiguration_ReplaceImplementation.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="97d7833f-485d-4eab-952c-56aef3e82119" Title="TrackableType(T) Class" Url="html/T_TrackerDog_Configuration_TrackableType_1.htm">
+        <HelpTOCNode Title="TrackableType(T) Constructor " Url="html/M_TrackerDog_Configuration_TrackableType_1__ctor.htm" />
+        <HelpTOCNode Id="9f4bef04-f413-4b2c-a0df-ffb0d42918a2" Title="TrackableType(T) Properties" Url="html/Properties_T_TrackerDog_Configuration_TrackableType_1.htm">
+          <HelpTOCNode Title="IncludedProperties Property " Url="html/P_TrackerDog_Configuration_TrackableType_1_IncludedProperties.htm" />
+          <HelpTOCNode Title="Type Property " Url="html/P_TrackerDog_Configuration_TrackableType_1_Type.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="a21ccd14-1f97-4b24-a2bf-dc45e4b707f2" Title="TrackableType(T) Methods" Url="html/Methods_T_TrackerDog_Configuration_TrackableType_1.htm">
+          <HelpTOCNode Title="IncludeProperties Method " Url="html/M_TrackerDog_Configuration_TrackableType_1_IncludeProperties.htm" />
+          <HelpTOCNode Title="IncludeProperty Method " Url="html/M_TrackerDog_Configuration_TrackableType_1_IncludeProperty.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="0cbb4838-3f8d-4159-a9d4-b027b6d1503a" Title="TrackerDogConfiguration Class" Url="html/T_TrackerDog_Configuration_TrackerDogConfiguration.htm">
+        <HelpTOCNode Id="50745b54-08ef-4423-975e-eadc4de20e0a" Title="TrackerDogConfiguration Properties" Url="html/Properties_T_TrackerDog_Configuration_TrackerDogConfiguration.htm">
+          <HelpTOCNode Title="Collections Property " Url="html/P_TrackerDog_Configuration_TrackerDogConfiguration_Collections.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="201951e6-7ec6-4ed9-b5e2-5bb8fdb93820" Title="TrackerDogConfiguration Methods" Url="html/Methods_T_TrackerDog_Configuration_TrackerDogConfiguration.htm">
+          <HelpTOCNode Title="CanTrackProperty Method " Url="html/M_TrackerDog_Configuration_TrackerDogConfiguration_CanTrackProperty.htm" />
+          <HelpTOCNode Title="CanTrackType Method " Url="html/M_TrackerDog_Configuration_TrackerDogConfiguration_CanTrackType.htm" />
+          <HelpTOCNode Title="TrackTheseTypes Method " Url="html/M_TrackerDog_Configuration_TrackerDogConfiguration_TrackTheseTypes.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="95d4c313-ce83-4629-94e3-19e74a0022b8" Title="TrackerDog.Patterns" Url="html/N_TrackerDog_Patterns.htm">
+      <HelpTOCNode Id="311923cc-5a4b-4602-b62e-27c14fda11c0" Title="IObjectChangeUnitOfWork Interface" Url="html/T_TrackerDog_Patterns_IObjectChangeUnitOfWork.htm">
+        <HelpTOCNode Id="ee253b0b-435a-41e5-9a14-3817762db838" Title="IObjectChangeUnitOfWork Methods" Url="html/Methods_T_TrackerDog_Patterns_IObjectChangeUnitOfWork.htm">
+          <HelpTOCNode Title="Complete Method " Url="html/M_TrackerDog_Patterns_IObjectChangeUnitOfWork_Complete.htm" />
+          <HelpTOCNode Title="Discard Method " Url="html/M_TrackerDog_Patterns_IObjectChangeUnitOfWork_Discard.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+    </HelpTOCNode>
+  </HelpTOCNode>
+</HelpTOC>

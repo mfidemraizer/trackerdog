@@ -1,0 +1,1589 @@
+﻿<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="../icons/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="../styles/branding.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/branding-en-US.css" />
+    <script type="text/javascript" src="../scripts/branding.js"> </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>How-to: Working with TrackerDog</title>
+    <meta name="Language" content="en-us" />
+    <meta name="Microsoft.Help.Id" content="52e40f26-3dfe-47e0-adf1-09233e98f42e" />
+    <meta name="Description" content="This is a quick tutorial to learn how to use TrackerDog" />
+    <meta name="Microsoft.Help.ContentType" content="Concepts" />
+    <meta name="BrandingAware" content="true" />
+    
+    
+    <link type="text/css" rel="stylesheet" href="../styles/highlight.css" />
+    <script type="text/javascript" src="../scripts/highlight.js"> </script>
+    <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
+    <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+  </head>
+  <body onload="OnLoad('cs')">
+    <input type="hidden" id="userDataCache" class="userDataStyle" />
+    <div class="pageHeader" id="PageHeader">TrackerDog<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
+    <div class="pageBody">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="0e46d6ac-6f64-4d54-98fd-3813df42cb8e.htm" title="TrackerDog" tocid="roottoc">TrackerDog</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="0e46d6ac-6f64-4d54-98fd-3813df42cb8e.htm" title="Welcome to TrackerDog!" tocid="0e46d6ac-6f64-4d54-98fd-3813df42cb8e">Welcome to TrackerDog!</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="95cc6530-e365-4045-951e-4ab992610c1f.htm" title="How does it work?" tocid="95cc6530-e365-4045-951e-4ab992610c1f">How does it work?</a></div><div class="toclevel1 current" data-toclevel="1"><a data-tochassubtree="false" href="52e40f26-3dfe-47e0-adf1-09233e98f42e.htm" title="How-to: Working with TrackerDog" tocid="52e40f26-3dfe-47e0-adf1-09233e98f42e">How-to: Working with TrackerDog</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="1941dd31-d46f-472f-9589-7ef6e721bb5b.htm" title="What changes are tracked?" tocid="1941dd31-d46f-472f-9589-7ef6e721bb5b">What changes are tracked?</a></div><div class="toclevel1" data-toclevel="1"><a data-tochassubtree="false" href="1e03762d-b9f5-44af-a4b0-c23c36064c24.htm" title="Collection change tracking" tocid="1e03762d-b9f5-44af-a4b0-c23c36064c24">Collection change tracking</a></div><div class="toclevel1" data-toclevel="1"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="G_TrackerDog.htm" title="TrackerDog Namespaces" tocid="G_TrackerDog">TrackerDog Namespaces</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+        <table class="titleTable">
+          <tr>
+            <td class="logoColumn">
+              <img width="50px" height="40px" src="../icons/dogtracker.png" />
+            </td>
+            <td class="titleColumn">How-to: Working with TrackerDog</td>
+          </tr>
+        </table>
+        <span class="introStyle"></span>
+        <div class="introduction">
+          <p>
+        This is a quick tutorial to learn how to use TrackerDog</p>
+        </div>
+        <div class="collapsibleAreaRegion">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
+            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Index of contents</span>
+        </div>
+        <div id="ID0RBSection" class="collapsibleSection">
+          <ul>
+            <li>
+              <p>
+                <a href="#objects2trackable">How to turn objects into change-trackable ones</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#inheritance">How to track inheritance</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#assemblyConfiguration">Configuring all types from a given assembly</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#attributeConfiguration">Attribute-based configuration</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#recursiveConfiguration">Recursively-configuring trackable types</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#trackingInterfaces">How to track interface implementation changes</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#objects2untrackable">How to turn trackable objects into untrackable objects</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#changedPropertyChecking">Checking which properties have been changed</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#oldValue">Getting the value of some property before it was changed</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#currentValue">Getting current property value</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#propertyChanged">Checking if a property changed its value since it was started to be tracked</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#undo">How do I accept or undo changes</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#collectionChanges">Tracking collection changes</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#graph">Object graph changes</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#observe">Observe property and collection changes</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#dynamic">Track dynamic objects</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#metadata">Useful metadata</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="#test">Read the tests too</a>
+              </p>
+            </li>
+          </ul>
+        </div>
+        <div class="collapsibleAreaRegion" id="objects2trackable">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID2RB')" onkeypress="SectionExpandCollapse_CheckKey('ID2RB', event)" tabindex="0">
+            <img id="ID2RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />How to turn objects into change-trackable ones</span>
+        </div>
+        <div id="ID2RBSection" class="collapsibleSection">
+          <p>
+          First of all, you need to design a regular class. <strong>
+            Note that the class must not be sealed and
+            its properties must be <span class="term">virtual</span> to let the proxy generator override them to intercept both
+            sets and gets:
+          </strong></p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAKASAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAKASAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAKASAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAKASAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> User
+{
+  <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Name { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+  <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">byte</span> Age { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAKASAAA");</script>
+          <p>
+          Before being able to turn an object into a change-trackable one, you will need to tell TrackerDog that
+          your class (i.e. <span class="phrase">the type</span>) can be trackable:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAIASAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAIASAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAIASAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAIASAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;User&gt;();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAIASAAA");</script>
+          <p>
+          Above configuration will tell TrackerDog to track all property changes for the given type. <strong>
+            This can
+            be harmful and it's advisable that you tell TrackerDog which properties you want to track for the given type:
+          </strong></p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAGASAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAGASAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAGASAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAGASAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-comment">// This will avoid some overhead since TrackerDog won't need to intercept absolutely all</span>
+<span class="highlight-comment">// property changes</span>
+IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+
+config.TrackThisType&lt;User&gt;(t =&gt; t.IncludeProperties(u =&gt; u.Name, u =&gt; u.Age));</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAGASAAA");</script>
+          <p>
+          Now, to track an instance of <span class="code">User</span> you need to
+          use <a href="M_TrackerDog_ITrackableObjectFactory_CreateFrom__1.htm">CreateFrom<span id="LSTAF17CDF3_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_0?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>TObject<span id="LSTAF17CDF3_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_1?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(TObject)</a> method after getting
+          <a href="T_TrackerDog_ITrackableObjectFactory.htm">ITrackableObjectFactory</a>'s implementation calling <a href="M_TrackerDog_ObjectChangeTracking_CreateConfiguration.htm">CreateConfiguration<span id="LSTAF17CDF3_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_2?cs=()|vb=|cpp=()|nu=()|fs=()");</script></a> method:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAEASAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAEASAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAEASAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAEASAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;User&gt;();
+
+ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+
+User user = trackableObjectFactory.CreateFrom(<span class="highlight-keyword">new</span> User());
+
+<span class="highlight-comment">// or...</span>
+User user = <span class="highlight-keyword">new</span> User();
+user = trackableObjectFactory.CreateFrom(user);
+
+<span class="highlight-comment">// Also you can create a trackable object from the type directly without requiring an instance:</span>
+User user2 = trackableObjectFactory.CreateOf&lt;User&gt;();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAEASAAA");</script>
+          <p>
+          Note that you won't be able to create trackable objects using <a href="M_TrackerDog_ITrackableObjectFactory_CreateFrom__1.htm">CreateFrom<span id="LSTAF17CDF3_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_3?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>TObject<span id="LSTAF17CDF3_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_4?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(TObject)</a>
+          extension method if the whole object type has no paramterless constructor. Either if it has both a parameterless constructor or a one with parameters, and you want to create a trackable
+          object with constructor arguments, you'll need to use <a href="M_TrackerDog_ITrackableObjectFactory_CreateOf__1.htm">CreateOf<span id="LSTAF17CDF3_5"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_5?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>TObject<span id="LSTAF17CDF3_6"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_6?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(<span id="LSTAF17CDF3_7"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_7?cpp=array&lt;");</script>Object<span id="LSTAF17CDF3_8"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_8?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>)</a> method:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EACASAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EACASAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EACASAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EACASAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> A 
+{
+  <span class="highlight-keyword">public</span> A() { }
+  <span class="highlight-keyword">public</span> A(<span class="highlight-keyword">int</span> a, <span class="highlight-keyword">string</span> b) { }
+}
+
+IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;A&gt;();
+
+ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+
+A a1 = trackableObjectFactory.CreateFrom(<span class="highlight-keyword">new</span> A()); <span class="highlight-comment">// Regular way</span>
+A a2 = trackacbleObjectFactory.CreateOf&lt;A&gt;(); <span class="highlight-comment">// From type with parameterless constructor</span>
+A a3 = trackacbleObjectFactory.CreateOf&lt;A&gt;(<span class="highlight-number">101</span>, <span class="highlight-literal">"hello world"</span>); <span class="highlight-comment">// From type with constructor which has parameters</span></pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EACASAAA");</script>
+          <p>Now you can produce changes to the trackable object:</p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAAASAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAAASAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAAASAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAAASAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">user.Name = <span class="highlight-literal">"Matías"</span>;
+user.Age = <span class="highlight-number">30</span>;</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAAASAAA");</script>
+        </div>
+        <div class="collapsibleAreaRegion" id="inheritance">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID3RB')" onkeypress="SectionExpandCollapse_CheckKey('ID3RB', event)" tabindex="0">
+            <img id="ID3RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />How to track inheritance</span>
+        </div>
+        <div id="ID3RBSection" class="collapsibleSection">
+          <p>TrackerDog can track inherited properties from a given type, but all base types must be configured separately. That is,
+          members from base classes in the inheritance tree will be taken in account too when tracking for property changes:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EABARAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EABARAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EABARAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EABARAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> A
+{
+     <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> B : A
+{
+     <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Name { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;A&gt;();
+config.TrackThisType&lt;B&gt;();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EABARAAA");</script>
+          <div class="alert">
+            <table>
+              <tr>
+                <th>
+                  <img src="../icons/AlertCaution.png" alt="Important note" /> Important</th>
+              </tr>
+              <tr>
+                <td>
+                  <p>A given type to track properties must be configured for the type where the whole properties are declared.</p>
+                  <p>
+            If you take last code sample as example, you will not configure <span class="code">A.Text</span> on <span class="code">B</span></p>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="collapsibleAreaRegion" id="assemblyConfiguration">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID4RB')" onkeypress="SectionExpandCollapse_CheckKey('ID4RB', event)" tabindex="0">
+            <img id="ID4RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Configuring all types from a given assembly</span>
+        </div>
+        <div id="ID4RBSection" class="collapsibleSection">
+          <p>
+          Perhaps your project is getting bigger and configuring each type manually to be change-trackable can be extremely tedious, or you just want
+          to simplify configuration code. No problem: TrackerDog can configure all types from a given assembly using two methods:
+        </p>
+          <ul>
+            <li>
+              <p>
+                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackTypesFromAssembly_1.htm">IObjectChangeTrackingConfiguration<span id="LSTAF17CDF3_9"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_9?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>TrackTypesFromAssembly(String, Action<span id="LSTAF17CDF3_10"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_10?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTAF17CDF3_11"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_11?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackTypesFromAssembly.htm">IObjectChangeTrackingConfiguration<span id="LSTAF17CDF3_12"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_12?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>TrackTypesFromAssembly(Assembly, Action<span id="LSTAF17CDF3_13"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_13?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTAF17CDF3_14"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_14?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
+              </p>
+            </li>
+          </ul>
+          <p>And this is a sample usage:</p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EADAQAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EADAQAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EADAQAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EADAQAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackTypesFromAssembly(<span class="highlight-literal">"MyAssemblyName"</span>);
+config.TrackTypesFromAssembly(Assembly.GetExecutingAssembly());</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EADAQAAA");</script>
+          <p>
+          While this saves a lot of time and makes things even simpler, it might happen that you need to customize the underlying configuration process some way.
+        </p>
+          <p>Above goal can be achieved the second and/or third parameter on both mentioned methods:</p>
+          <div class="tableSection">
+            <table>
+              <tr>
+                <th>
+                  <p>Parameter</p>
+                </th>
+                <th>
+                  <p>Description</p>
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <p>configure</p>
+                </td>
+                <td>
+                  <p>
+                It is a delegate that will be called for each type being configured. The whole delegate receives a <a href="T_TrackerDog_Configuration_IConfigurableTrackableType.htm">IConfigurableTrackableType</a> implementation instance that should be enough to customize how the specific type will be tracked for changes.
+              </p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>
+                searchSettings
+              </p>
+                </td>
+                <td>
+                  <p>
+                It accepts a <a href="T_TrackerDog_Configuration_TypeSearchSettings.htm">TypeSearchSettings</a> instance. It provides extra information
+                and behavior to configure how the whole methods will search for type and configure them as trackable types.
+              </p>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="collapsibleAreaRegion" id="attributeConfiguration">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID5RB')" onkeypress="SectionExpandCollapse_CheckKey('ID5RB', event)" tabindex="0">
+            <img id="ID5RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Attribute-based configuration</span>
+        </div>
+        <div id="ID5RBSection" class="collapsibleSection">
+          <p>
+          In addition to manually-configuring everything, you can mark certain types and their properties with attributes, and these will allow
+          TrackerDog to configure them as change-trackable types.
+        </p>
+          <p>
+          Any type that should be change-trackable configured by attribute configuration will need the <a href="T_TrackerDog_Configuration_ChangeTrackableAttribute.htm">ChangeTrackableAttribute</a> attribute:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAKAPAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAKAPAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAKAPAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAKAPAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">[ChangeTrackable]
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> A
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">int</span> Number { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAKAPAAA");</script>
+          <p>
+          Above code sample would mean that all properties should be included in the change-tracking process. Otherwise, you need to specify which ones should
+          be change-tracked with the same attribute:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAIAPAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAIAPAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAIAPAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAIAPAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">[ChangeTrackable]
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> A
+{
+    [ChangeTrackable]
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">int</span> Number { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAIAPAAA");</script>
+          <p>
+          Last code listing above would mean that <span class="code">Number</span> property must not be tracked. This is like a <span class="phrase">white list</span>. If you want to specify which ones
+          should not be tracked, it can be done with the <a href="T_TrackerDog_Configuration_DoNotTrackChangesAttribute.htm">DoNotTrackChangesAttribute</a> attribute
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAGAPAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAGAPAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAGAPAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAGAPAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">[ChangeTrackable]
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> A
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+
+    [DoNotTrackChanges]
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">int</span> Number { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAGAPAAA");</script>
+          <p>
+          In the other hand, there are some rules to understand how these attributes work:
+        </p>
+          <ul>
+            <li>
+              <p>
+              If a type has been marked with <span class="code">[ChangeTrackable]</span> and properties aren't marked with any of mentioned attributes, then, all properties are trackable
+            </p>
+            </li>
+            <li>
+              <p>
+              If a type has been marked with <span class="code">[ChangeTrackable]</span> and one or more properties have been marked with <span class="code">[ChangeTrackable]</span>, only those with the whole attribute
+              will be tracked.
+            </p>
+            </li>
+            <li>
+              <p>
+              If a type has been marked with <span class="code">[ChangeTrackable]</span> and one or more properties have been marked with <span class="code">[DoNotTrackChanges]</span>, those with or without <span class="code">[ChangeTrackable]</span> will be tracked.
+            </p>
+            </li>
+          </ul>
+          <p>TrackerDog's default behavior is to configure types with and without attributes, but you can override this behavior in certain conditions when calling the following methods:
+        </p>
+          <ul>
+            <li>
+              <p>
+                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackTypesFromAssembly_1.htm">TrackTypesFromAssembly(String, Action<span id="LSTAF17CDF3_15"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_15?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTAF17CDF3_16"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_16?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackTypesFromAssembly.htm">TrackTypesFromAssembly(Assembly, Action<span id="LSTAF17CDF3_17"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_17?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTAF17CDF3_18"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_18?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisTypeRecursive.htm">TrackThisTypeRecursive(Type, Action<span id="LSTAF17CDF3_19"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_19?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTAF17CDF3_20"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_20?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisTypeRecursive__1.htm">TrackThisTypeRecursive<span id="LSTAF17CDF3_21"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_21?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>TRoot<span id="LSTAF17CDF3_22"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_22?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(Action<span id="LSTAF17CDF3_23"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_23?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTAF17CDF3_24"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_24?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
+              </p>
+            </li>
+          </ul>
+          <p>
+          All above listed methods accept an argument of type <a href="T_TrackerDog_Configuration_TypeSearchSettings.htm">TypeSearchSettings</a> and an instance of the whole search settings
+          can set <a href="P_TrackerDog_Configuration_TypeSearchSettings_Mode.htm">Mode</a> property to <a href="T_TrackerDog_Configuration_TypeSearchMode.htm">AttributeConfigurationOnly</a> which
+          exactly meant to do restrict configuration to attribute-based one only.
+        </p>
+          <p>This configuration approach is even more friendly <a href="#assemblyConfiguration">when configuring types for an entire assembly</a>!</p>
+        </div>
+        <div class="collapsibleAreaRegion" id="recursiveConfiguration">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID6RB')" onkeypress="SectionExpandCollapse_CheckKey('ID6RB', event)" tabindex="0">
+            <img id="ID6RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Recursively-configuring trackable types</span>
+        </div>
+        <div id="ID6RBSection" class="collapsibleSection">
+          <p>
+          Configuring types that must be trackable can be a boring task. If you have found that you do not need to customize which properties to track
+          on each type to track, maybe you have a lucky day: TrackerDog can configure types recursively using <span class="nolink">IObjectChangeTrackingConfiguration.TrackThisTypeRecursive``1(Action<span id="LSTAF17CDF3_25"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_25?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTAF17CDF3_26"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_26?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, Func<span id="LSTAF17CDF3_27"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_27?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>Type, Boolean<span id="LSTAF17CDF3_28"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_28?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</span> and
+          <span class="nolink">IObjectChangeTrackingConfiguration.TrackThisTypeRecursive(Type, Action<span id="LSTAF17CDF3_29"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_29?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTAF17CDF3_30"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_30?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, Func<span id="LSTAF17CDF3_31"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_31?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>Type, Boolean<span id="LSTAF17CDF3_32"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_32?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</span> methods.
+        </p>
+          <p>See following code listing:</p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAHAOAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAHAOAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAHAOAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAHAOAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> A
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> B { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> B
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> C { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> C
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> B B { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAHAOAAA");</script>
+          <p>
+          Instead of configuring each type separately, now you can configure <span class="code">A</span> and the rest will be done auto-magically:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAFAOAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAFAOAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAFAOAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAFAOAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+<span class="highlight-comment">// This will also configure B and C</span>
+config.TrackThisTypeRecursive&lt;A&gt;();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAFAOAAA");</script>
+          <p>
+          Are you looking for customizing how each type is configured? It is still possible, but since TrackerDog does not know the types to configure
+          until run-time, configuration gets worse because you cannot use expression trees but reflection:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EADAOAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EADAOAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EADAOAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EADAOAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisTypeRecursive&lt;A&gt;
+(
+    configure: t =&gt;
+    {
+        <span class="highlight-keyword">if</span>(t.Type = <span class="highlight-keyword">typeof</span>(A)) 
+        {
+            t.IncludeProperties(t.Type.GetProperty(<span class="highlight-literal">"Text"</span>), t.Type.GetProperty(<span class="highlight-literal">"B"</span>));
+        }
+        <span class="highlight-keyword">else</span> <span class="highlight-keyword">if</span>(t.Type == <span class="highlight-keyword">typeof</span>(B))
+        {
+            t.IncludeProperty(t.Type.GetProperty(<span class="highlight-literal">"C"</span>));
+        }
+        <span class="highlight-comment">// ...and so on</span>
+    }
+);</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EADAOAAA");</script>
+          <p>
+          Also, there is a third parameter of the whole method that can filter which types to track during the recursive configuration:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EABAOAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EABAOAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EABAOAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EABAOAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisTypeRecursive&lt;A&gt;
+(
+    configure: t =&gt;
+    {
+        <span class="highlight-keyword">if</span>(t.Type = <span class="highlight-keyword">typeof</span>(A)) 
+        {
+            t.IncludeProperties(t.Type.GetProperty(<span class="highlight-literal">"Text"</span>), t.Type.GetProperty(<span class="highlight-literal">"B"</span>));
+        }
+        <span class="highlight-keyword">else</span> <span class="highlight-keyword">if</span>(t.Type == <span class="highlight-keyword">typeof</span>(B))
+        {
+            t.IncludeProperty(t.Type.GetProperty(<span class="highlight-literal">"C"</span>));
+        }
+        <span class="highlight-comment">// ...and so on</span>
+    },
+    <span class="highlight-comment">// You want A, B, C and other types will not be configured! You can invent any valid filter based on the type that</span>
+    <span class="highlight-comment">// must or must not be configured!</span>
+    filter: t =&gt; <span class="highlight-keyword">new</span> [] { <span class="highlight-literal">"A"</span>, <span class="highlight-literal">"B"</span>, <span class="highlight-literal">"C"</span> }.Contains(t.Name)
+);</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EABAOAAA");</script>
+          <p>
+          The whole filter can be provided with or without the configure action. If you just want to filter types based on some convention, it is fine to
+          provide the filter and no other parameter.
+        </p>
+        </div>
+        <div class="collapsibleAreaRegion" id="trackingInterfaces">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID7RB')" onkeypress="SectionExpandCollapse_CheckKey('ID7RB', event)" tabindex="0">
+            <img id="ID7RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />How to track interface implementation changes</span>
+        </div>
+        <div id="ID7RBSection" class="collapsibleSection">
+          <p>
+          In some cases, you will need to track changes of types that are unknown but you already know that there will be types that implement a given
+          interface. Imagine that you want to track property changes of properties part of some interface:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAHANAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAHANAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAHANAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAHANAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">interface</span> IWhatever
+{
+    <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAHANAAA");</script>
+          <p>
+          Now you can track <span class="phrase">the unknown</span>! Let's configure <span class="code">IWhatever</span>:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAFANAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAFANAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAFANAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAFANAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;IWhatever&gt;();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAFANAAA");</script>
+          <p>
+          Interface implementation change tracking will behave slightly different than classes, because TrackerDog will auto-magically
+          configure these interface implementations and also all associations/aggregates that may be defined in the whole interface. For example, let's
+          improve the <span class="code">IWhatever</span> interface:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EADANAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EADANAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EADANAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EADANAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> Person
+{
+     <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Name { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">interface</span> IWhatever
+{
+    <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+    Person Person { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;IWhatever&gt;();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EADANAAA");</script>
+          <p>
+          Tracking <span class="code">IWhatever</span> will automatically configure <span class="code">Person</span>, and if there would be
+          other associations at any level, it would do it too.
+        </p>
+          <p>
+          Finally, interface tracking configuration can also define which properties to track like the rest of the cases:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAAANAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAAANAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAAANAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAAANAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;IWhatever&gt;(t =&gt; t.IncludeProperties(w =&gt; w.Text, w =&gt; w.Person));</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAAANAAA");</script>
+        </div>
+        <div class="collapsibleAreaRegion" id="objects2untrackable">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID8RB')" onkeypress="SectionExpandCollapse_CheckKey('ID8RB', event)" tabindex="0">
+            <img id="ID8RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />How to turn trackable objects into untrackable objects</span>
+        </div>
+        <div id="ID8RBSection" class="collapsibleSection">
+          <p>
+          Sometimes, once an object has been tracked for changes for a while, some layer may need to get the object
+          with latest property values but the object itself may not be change-trackable anymore.
+        </p>
+          <p>
+          A good use case for this is <span class="term">serialization</span>. When serializing a trackable object, resulting
+          serialization will contain not just source object properties but also change-tracking internal ones, and this can be
+          very dangerous. In fact, since TrackerDog uses <span class="phrase">Castle DynamicProxy</span>, serialized proxies
+          will not be able to be deserialized because proxy requires some run-time details that will be available only when the object
+          was created in memory
+        </p>
+          <p>
+          Turning an object to <span class="term">untrackable</span> requires a call to <a href="M_TrackerDog_ObjectChangeTrackingExtensions_ToUntracked__1.htm">ToUntracked<span id="LSTAF17CDF3_33"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_33?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>TObject<span id="LSTAF17CDF3_34"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_34?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(TObject)</a>:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAEAMAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAEAMAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAEAMAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAEAMAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">User untrackedUser = user.ToUntracked();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAEAMAAA");</script>
+          <p>
+          Calling the whole method not only will untrack the target object but also any association, including collections and its items.
+        </p>
+          <p>
+          In the other hand, it's possible to get an untracked version of some collection directly calling <a href="M_TrackerDog_ObjectChangeTrackingExtensions_ToUntrackedEnumerable.htm">ToUntrackedEnumerable(IEnumerable, Type)</a>:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EABAMAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EABAMAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EABAMAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EABAMAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> A
+{
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> B
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> List&lt;A&gt; ListOfA { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; } = <span class="highlight-keyword">new</span> List&lt;A&gt;();
+}
+
+IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;A&gt;()
+      .TrackThisType&lt;B&gt;();
+
+ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+
+B b = trackableObjectFactory.CreateFrom(<span class="highlight-keyword">new</span> B());
+
+IList&lt;A&gt; list = b.ListOfA.ToUntrackedEnumerable(<span class="highlight-keyword">typeof</span>(IList&lt;&gt;));</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EABAMAAA");</script>
+          <div class="alert">
+            <table>
+              <tr>
+                <th>
+                  <img src="../icons/AlertNote.png" alt="Note" /> Note</th>
+              </tr>
+              <tr>
+                <td>
+                  <p>
+            The whole method to convert a collection to an untracked one requires a type, where the
+            type is a collection type that must be configured. <a href="1e03762d-b9f5-44af-a4b0-c23c36064c24.htm#configuration">Follow this link to learn more.</a></p>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="collapsibleAreaRegion" id="changedPropertyChecking">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID9RB')" onkeypress="SectionExpandCollapse_CheckKey('ID9RB', event)" tabindex="0">
+            <img id="ID9RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Checking which properties have been changed</span>
+        </div>
+        <div id="ID9RBSection" class="collapsibleSection">
+          <p>
+          Call <a href="M_TrackerDog_ObjectChangeTrackingExtensions_GetChangeTracker.htm">GetChangeTracker(Object)</a> extension method:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAEALAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAEALAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAEALAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAEALAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTracker changeTracker = user.GetChangeTracker();
+
+IImmutableSet&lt;IObjectPropertyChangeTracking&gt; changedProperties = changeTracker.ChangedProperties;
+
+<span class="highlight-comment">// Also you can get unchanged properties</span>
+IImmutableSet&lt;IObjectPropertyChangeTracking&gt; unchangedProperties = changeTracker.UnchangedProperties;</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAEALAAA");</script>
+          <p>
+          This will give sets of changed and unchanged properties typed as <a href="T_TrackerDog_IObjectPropertyChangeTracking.htm">IObjectPropertyChangeTracking</a>. Mostly this
+          is fine, but the whole interface exposes the affected property as string. If you need further info to perform reflection operations, you should cast set elements to
+          <a href="T_TrackerDog_IDeclaredObjectPropertyChangeTracking.htm">IDeclaredObjectPropertyChangeTracking</a>:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EACALAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EACALAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EACALAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EACALAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IEnumerable&lt;IObjectPropertyChangeTracking&gt; changedProperties = changeTracker.ChangedProperties.OfType&lt;IDeclaredObjectPropertyChangeTracking&gt;();
+
+<span class="highlight-comment">// Also you can get unchanged properties</span>
+IEnumerable&lt;IObjectPropertyChangeTracking&gt; unchangedProperties = changeTracker.UnchangedProperties.OfType&lt;IDeclaredObjectPropertyChangeTracking&gt;();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EACALAAA");</script>
+          <p>
+          Now you'll be able to access <a href="P_TrackerDog_IDeclaredObjectPropertyChangeTracking_Property.htm">Property</a>.
+        </p>
+          <p>
+          Since <a href="T_TrackerDog_IDeclaredObjectPropertyChangeTracking.htm">IDeclaredObjectPropertyChangeTracking</a> also implements <a href="T_TrackerDog_IObjectPropertyChangeTracking.htm">IObjectPropertyChangeTracking</a>, unless
+          you need the property info of tracked property, there's no need to perform the whole cast.
+        </p>
+        </div>
+        <div class="collapsibleAreaRegion" id="oldValue">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID10RB')" onkeypress="SectionExpandCollapse_CheckKey('ID10RB', event)" tabindex="0">
+            <img id="ID10RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Getting the value of some property before it was changed</span>
+        </div>
+        <div id="ID10RBSection" class="collapsibleSection">
+          <p>
+          Call <a href="M_TrackerDog_ObjectChangeTrackingExtensions_OldPropertyValue__2.htm">OldPropertyValue<span id="LSTAF17CDF3_35"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_35?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T, TReturn<span id="LSTAF17CDF3_36"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_36?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(T, Expression<span id="LSTAF17CDF3_37"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_37?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>Func<span id="LSTAF17CDF3_38"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_38?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T, TReturn<span id="LSTAF17CDF3_39"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_39?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script><span id="LSTAF17CDF3_40"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_40?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a> extension method:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAAAKAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAAAKAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAAAKAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAAAKAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">string</span> oldUserName = user.OldPropertyValue(u =&gt; u.Name);
+
+<span class="highlight-comment">// You can also get a property tracking object</span>
+IObjectChangeTracking userNameChangeTracking = user.GetPropertyTracking(u =&gt; u.Name);
+
+oldUserName = userNameChangeTracking.OldValue;</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAAAKAAA");</script>
+        </div>
+        <div class="collapsibleAreaRegion" id="currentValue">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID11RB')" onkeypress="SectionExpandCollapse_CheckKey('ID11RB', event)" tabindex="0">
+            <img id="ID11RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Getting current property value</span>
+        </div>
+        <div id="ID11RBSection" class="collapsibleSection">
+          <p>
+          Call <a href="M_TrackerDog_ObjectChangeTrackingExtensions_CurrentPropertyValue__2.htm">CurrentPropertyValue<span id="LSTAF17CDF3_41"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_41?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T, TReturn<span id="LSTAF17CDF3_42"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_42?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(T, Expression<span id="LSTAF17CDF3_43"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_43?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>Func<span id="LSTAF17CDF3_44"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_44?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T, TReturn<span id="LSTAF17CDF3_45"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_45?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script><span id="LSTAF17CDF3_46"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_46?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a> extension method:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAAAJAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAAAJAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAAAJAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAAAJAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">string</span> currentUserName = user.CurrentPropertyValue(u =&gt; u.Name);
+
+<span class="highlight-comment">// Ok, you would also be able to achieve the same result doing so:</span>
+currentUserName = user.Name;
+
+<span class="highlight-comment">// But having this method lets you build an expression tree to select some tracked property "current value"...</span>
+
+<span class="highlight-comment">// You can also get a property tracking object</span>
+IObjectChangeTracking userNameChangeTracking = user.GetPropertyTracking(u =&gt; u.Name);
+
+currentUserName = userNameChangeTracking.CurrentValue;</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAAAJAAA");</script>
+        </div>
+        <div class="collapsibleAreaRegion" id="propertyChanged">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID12RB')" onkeypress="SectionExpandCollapse_CheckKey('ID12RB', event)" tabindex="0">
+            <img id="ID12RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Checking if a property changed its value since it was started to be tracked</span>
+        </div>
+        <div id="ID12RBSection" class="collapsibleSection">
+          <p>
+          Call <a href="M_TrackerDog_ObjectChangeTrackingExtensions_PropertyHasChanged__1.htm">PropertyHasChanged<span id="LSTAF17CDF3_47"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_47?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T<span id="LSTAF17CDF3_48"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_48?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(T, Expression<span id="LSTAF17CDF3_49"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_49?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>Func<span id="LSTAF17CDF3_50"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_50?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T, Object<span id="LSTAF17CDF3_51"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_51?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script><span id="LSTAF17CDF3_52"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_52?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a> extension method:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAAAIAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAAAIAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAAAIAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAAAIAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">if</span>(user.PropertyHasChanged(u =&gt; u.Name))
+{
+    <span class="highlight-comment">// It has changed!</span>
+}
+
+<span class="highlight-comment">// You can also get a property tracking object</span>
+IObjectChangeTracking userNameChangeTracking = user.GetPropertyTracking(u =&gt; u.Name);
+
+<span class="highlight-keyword">if</span>(userNameChangeTracking.HasChanged)
+{
+    <span class="highlight-comment">// It has changed!</span>
+}</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAAAIAAA");</script>
+        </div>
+        <div class="collapsibleAreaRegion" id="undo">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID13RB')" onkeypress="SectionExpandCollapse_CheckKey('ID13RB', event)" tabindex="0">
+            <img id="ID13RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />How do I accept or undo changes</span>
+        </div>
+        <div id="ID13RBSection" class="collapsibleSection">
+          <p>
+          Call
+          <a href="M_TrackerDog_ObjectChangeTrackingExtensions_AcceptChanges.htm">AcceptChanges(Object)</a> or
+          <a href="M_TrackerDog_ObjectChangeTrackingExtensions_UndoChanges.htm">UndoChanges(Object)</a> extension methods:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAAAHAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAAAHAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAAAHAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAAAHAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">user.AcceptChanges();
+
+<span class="highlight-comment">// or...</span>
+user.UndoChanges();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAAAHAAA");</script>
+        </div>
+        <div class="collapsibleAreaRegion" id="collectionChanges">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID14RB')" onkeypress="SectionExpandCollapse_CheckKey('ID14RB', event)" tabindex="0">
+            <img id="ID14RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Tracking collection changes</span>
+        </div>
+        <div id="ID14RBSection" class="collapsibleSection">
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAAAGAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAAAGAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAAAGAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAAAGAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> App 
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> List&lt;User&gt; Users { <span class="highlight-keyword">get</span>; } = <span class="highlight-keyword">new</span> List&lt;User&gt;();
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> User 
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">string</span> Name { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">byte</span> Age { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;App&gt;(t =&gt; t.IncludeProperty(app =&gt; app.Users))
+      .TrackThisType&lt;User&gt;(t =&gt; t.IncludeProperties(u =&gt; u.Name, u =&gt; u.Age));
+
+ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+
+App app = trackableObjectFactory.CreateFrom(<span class="highlight-keyword">new</span> App());
+app.Users.Add(<span class="highlight-keyword">new</span> User { Name = <span class="highlight-literal">"Matías"</span>, Age = <span class="highlight-number">30</span> });
+
+IReadOnlyChangeTrackableCollection trackableCollection =
+              (IReadOnlyChangeTrackableCollection)app.CurrentPropertyValue(app =&gt; app.Users);
+
+IImmutableSet&lt;<span class="highlight-keyword">object</span>&gt; addedItems = trackableCollection.AddedItems;
+IImmutableSet&lt;<span class="highlight-keyword">object</span>&gt; removedItems = trackableCollection.RemovedItems;
+
+<span class="highlight-comment">// If you need typed items...</span>
+IEnumerable&lt;User&gt; typedAddedUsers = addedItems.Cast&lt;User&gt;();
+IEnumerable&lt;User&gt; typedRemovedUsers = removedItems.Cast&lt;User&gt;();</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAAAGAAA");</script>
+        </div>
+        <div class="collapsibleAreaRegion" id="graph">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID15RB')" onkeypress="SectionExpandCollapse_CheckKey('ID15RB', event)" tabindex="0">
+            <img id="ID15RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Object graph changes</span>
+        </div>
+        <div id="ID15RBSection" class="collapsibleSection">
+          <p>
+          When an aggregate root has many associations like 1-n, 1-1 or even M-N, TrackerDog
+          works the same way as a POCO with no associations with other objects:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EADAFAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EADAFAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EADAFAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EADAFAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> A
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> B B { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> B
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> C C { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> C
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> IList&lt;D&gt; ListOfD { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> D
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}          
+
+IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;A&gt;(t =&gt; t.IncludeProperties(a =&gt; a.Text, a =&gt; a.B))
+      .TrackThisType&lt;B&gt;(t =&gt; t.IncludeProperties(b =&gt; b.Text, b =&gt; b.C))
+      .TrackThisType&lt;C&gt;(t =&gt; t.IncludeProperties(c =&gt; c.Text, c =&gt; c.ListOfD))
+      .TrackThisType&lt;D&gt;(t =&gt; t.IncludeProperty(d =&gt; d.Text));
+
+ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+
+<span class="highlight-comment">// It will track the full object graph changes!</span>
+A a = trackableObjectFactory.CreateFrom
+(
+  <span class="highlight-keyword">new</span> A
+  {
+    Text = initialValue,
+    B = <span class="highlight-keyword">new</span> B
+    {
+        Text = initialValue,
+        C = <span class="highlight-keyword">new</span> C
+        {
+            Text = initialValue,
+            ListOfD = <span class="highlight-keyword">new</span> List&lt;D&gt; { <span class="highlight-keyword">new</span> D { Text = <span class="highlight-literal">"initialValue"</span> } }
+        }
+    }
+  }
+);</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EADAFAAA");</script>
+          <p>
+          In addition, if you need to perform some action whenever some property changes, you can bind
+          an handler to <a href="E_TrackerDog_IObjectChangeTracker_Changed.htm">IObjectChangeTracker<span id="LSTAF17CDF3_53"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTAF17CDF3_53?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>Changed</a> event:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EABAFAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EABAFAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EABAFAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EABAFAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-comment">// Continuation of previous code sample...</span>
+IObjectChangeTracker changeTracker = a.GetChangeTracker();
+changeTracker.Changed += (sender, e) =&gt; 
+{
+    <span class="highlight-comment">// Do stuff here whenever a property changes</span>
+};</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EABAFAAA");</script>
+          <p>
+          The whole event will give you an instance of <a href="T_TrackerDog_DeclaredObjectPropertyChangeEventArgs.htm">DeclaredObjectPropertyChangeEventArgs</a> event
+          arguments, which will provide access to which property was changed, the target object that changed, and also an associated
+          <a href="T_TrackerDog_IObjectGraphTrackingInfo.htm">IObjectGraphTrackingInfo</a> implementation instance to introspect full aggregate/association hierarchy.
+        </p>
+        </div>
+        <div class="collapsibleAreaRegion" id="observe">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID16RB')" onkeypress="SectionExpandCollapse_CheckKey('ID16RB', event)" tabindex="0">
+            <img id="ID16RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Observe property and collection changes</span>
+        </div>
+        <div id="ID16RBSection" class="collapsibleSection">
+          <p>
+          All change-tracked objects implement <a href="http://msdn2.microsoft.com/en-us/library/ms133020" target="_blank">INotifyPropertyChanged</a> and
+          change-tracked collection properties implement <a href="http://msdn2.microsoft.com/en-us/library/ms668629" target="_blank">INotifyCollectionChanged</a>.
+
+        </p>
+          <p>
+          Note that collection changes will also trigger a <a href="http://msdn2.microsoft.com/en-us/library/ms133023" target="_blank">PropertyChanged</a> event on the
+          object in the other side of the 1-n association.
+
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAAAEAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAAAEAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAAAEAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAAAEAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> App 
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Name { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+    <span class="highlight-keyword">public</span> List&lt;User&gt; Users { <span class="highlight-keyword">get</span>; } = <span class="highlight-keyword">new</span> List&lt;User&gt;();
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> User 
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">string</span> Name { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">virtual</span> <span class="highlight-keyword">byte</span> Age { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;App&gt;(t =&gt; t.IncludeProperty(app =&gt; app.Users))
+      .TrackThisType&lt;User&gt;(t =&gt; t.IncludeProperties(u =&gt; u.Name, u =&gt; u.Age));
+
+ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+
+App app = trackableObjectFactory.CreateFrom(<span class="highlight-keyword">new</span> App());
+
+((INotifyPropertyChanged)app).PropertyChanged += (sender, e) =&gt;
+{
+    <span class="highlight-keyword">string</span> propertyName = e.PropertyName;
+};
+
+((INotifyCollectionChanged)app.Users).CollectionChanged += (sender, e) =&gt;
+{
+    IEnumerable&lt;<span class="highlight-keyword">object</span>&gt; changedItems = e.ChangedItems;
+};
+
+app.Name = <span class="highlight-literal">"MyApp"</span>; <span class="highlight-comment">// This will trigger a PropertyChanged event on app</span>
+
+ <span class="highlight-comment">// This will both trigger a CollectionChanged event on app.Users and a PropertyChanged event on</span>
+ <span class="highlight-comment">// app.</span>
+app.Users.Add(<span class="highlight-keyword">new</span> User { Name = <span class="highlight-literal">"Matías"</span> });</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAAAEAAA");</script>
+        </div>
+        <div class="collapsibleAreaRegion">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID17RB')" onkeypress="SectionExpandCollapse_CheckKey('ID17RB', event)" tabindex="0">
+            <img id="ID17RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Track dynamic objects</span>
+        </div>
+        <div id="ID17RBSection" class="collapsibleSection">
+          <p>
+          A dynamic object (i.e. a derived class of <a href="http://msdn2.microsoft.com/en-us/library/dd487439" target="_blank">DynamicObject</a>) can't be tracked
+          <span class="phrase">per se</span>. For example, <a href="http://msdn2.microsoft.com/en-us/library/dd487338" target="_blank">ExpandoObject</a> can't be tracked because
+          it's a sealed class and either way its members aren't virtual.
+        </p>
+          <p>TrackerDog supports dynamic objects but they must be non-sealed class and their members must be virtual. That is, TrackerDog
+          will be able to track custom dynamic objects. For example:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAIADAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAIADAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAIADAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAIADAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> TestDynamicObject : DynamicObject
+{
+    <span class="highlight-keyword">private</span> <span class="highlight-keyword">string</span> <span class="highlight-keyword">value</span>;
+
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">override</span> <span class="highlight-keyword">bool</span> TryGetMember(GetMemberBinder binder, <span class="highlight-keyword">out</span> <span class="highlight-keyword">object</span> result)
+    {
+        result = <span class="highlight-keyword">value</span>;
+
+        <span class="highlight-keyword">return</span> <span class="highlight-keyword">true</span>;
+    }
+
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">override</span> <span class="highlight-keyword">bool</span> TrySetMember(SetMemberBinder binder, <span class="highlight-keyword">object</span> <span class="highlight-keyword">value</span>)
+    {
+        <span class="highlight-keyword">this</span>.<span class="highlight-keyword">value</span> = <span class="highlight-keyword">value</span>?.ToString();
+        <span class="highlight-keyword">return</span> <span class="highlight-keyword">true</span>;
+    }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAIADAAA");</script>
+          <p>
+          Above class has no sense in a real-world case, since any try to set a member sets the same class field
+          and whenever any member is tried to be got, it will return the last set value. But this sample dynamic object
+          is a good enough to test that TrackerDog can track dynamic objects:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAGADAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAGADAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAGADAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAGADAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+config.TrackThisType&lt;DynamicObject&gt;());
+
+ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+
+<span class="highlight-keyword">dynamic</span> trackable = trackableObjectFactory.CreateFrom(<span class="highlight-keyword">new</span> TestDynamicObject());
+trackable.Text = <span class="highlight-literal">"hello world"</span>;
+trackable.Text = <span class="highlight-literal">"hello world2"</span>;</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAGADAAA");</script>
+          <p>
+          Now the issue will be using <span class="nolink">[M:TrackerDog.ITrackableObjectFactory.CreateFrom``1(``0))]</span> with a dynamic object.
+          You'll need to cast the <span class="literal">dynamic</span>-typed variable into <span class="literal">object</span> to be able to call all object change tracking-related extension methods:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAEADAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAEADAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAEADAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAEADAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">
+                  <span class="highlight-comment">// Note that all extension methods that relate to dynamic objects will require</span>
+<span class="highlight-comment">// you to give the property name as string, because expression trees can't work with </span>
+<span class="highlight-comment">// dynamic objects, and anyway, "Text" property doesn't exist since it's not declared but</span>
+<span class="highlight-comment">// dynamically-handled using DynamicObject.TryGetMemeber and DynamicObject.TrySetMember</span>
+<span class="highlight-keyword">string</span> currentTextValue = ((<span class="highlight-keyword">object</span>)trackable).OldPropertyValue(<span class="highlight-literal">"Text"</span>);
+IObjectChangeTracker changeTracker ((<span class="highlight-keyword">object</span>)trackable).GetChangeTracker();
+<span class="highlight-comment">// ...and so on.</span></pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAEADAAA");</script>
+          <p>
+          When getting property trackings, there's a difference between <span class="phrase">declared properties</span> and <span class="phrase">dynamic properties</span></p>
+          <ul>
+            <li>
+              <p>
+              ...when you want a tracking of a declared property (i.e. a design-time declared property), you'll get a <a href="T_TrackerDog_IDeclaredObjectPropertyChangeTracking.htm">IDeclaredObjectPropertyChangeTracking</a>, and it
+              will provide access you to the <a href="P_TrackerDog_IDeclaredObjectPropertyChangeTracking_Property.htm">Property</a> which is of type <a href="http://msdn2.microsoft.com/en-us/library/8z852kf5" target="_blank">PropertyInfo</a>.
+            </p>
+            </li>
+            <li>
+              <p>
+              ...when you want a tracking of a dynamic property (i.e. a run-time added property), you'll get a <a href="T_TrackerDog_IObjectPropertyChangeTracking.htm">IObjectPropertyChangeTracking</a>, and it
+              will provide access you to the <a href="P_TrackerDog_IObjectPropertyChangeTracking_PropertyName.htm">PropertyName</a> which provides less info than a <a href="http://msdn2.microsoft.com/en-us/library/8z852kf5" target="_blank">PropertyInfo</a> since
+              the property belongs to the object where it was declared but <span class="phrase">since it's not an actual property, you don't know more than just its name</span>.
+            </p>
+            </li>
+          </ul>
+          <p>
+          For example, if you want to get a dynamic property tracking, you would do as follows:
+        </p>
+          <div class="codeSnippetContainer">
+            <div class="codeSnippetContainerTabs">
+              <div id="ID1EAAADAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+            </div>
+            <div class="codeSnippetContainerCodeContainer">
+              <div class="codeSnippetToolBar">
+                <div class="codeSnippetToolBarText">
+                  <a id="ID1EAAADAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAAADAAA');return false;" title="Copy">Copy</a>
+                </div>
+              </div>
+              <div id="ID1EAAADAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                <pre xml:space="preserve">IObjectChangeTracker changeTracker ((<span class="highlight-keyword">object</span>)trackable).GetChangeTracker();
+IObjectPropertyChangeTracking propertyTracking = tracker.GetDynamicTrackingByProperty(<span class="highlight-literal">"Text"</span>);</pre>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">AddLanguageTabSet("ID1EAAADAAA");</script>
+        </div>
+        <div class="collapsibleAreaRegion" id="metadata">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID18RB')" onkeypress="SectionExpandCollapse_CheckKey('ID18RB', event)" tabindex="0">
+            <img id="ID18RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Useful metadata</span>
+        </div>
+        <div id="ID18RBSection" class="collapsibleSection">
+          <p>
+          Once trackable types have been already configured, TrackerDog can expose
+          useful metadata that is being used internally but it can be also required outside of the
+          project's code base.
+        </p>
+          <h4 class="subHeading">Object paths</h4>
+          <div class="subsection">
+            <p>
+              Sometimes external tools and frameworks might require to know the full path to some
+              property part of a given trackable type.
+            </p>
+            <p>
+              For example, consider the following class hierarchy:
+            </p>
+            <div class="codeSnippetContainer">
+              <div class="codeSnippetContainerTabs">
+                <div id="ID1EAEAAACAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+              </div>
+              <div class="codeSnippetContainerCodeContainer">
+                <div class="codeSnippetToolBar">
+                  <div class="codeSnippetToolBarText">
+                    <a id="ID1EAEAAACAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EAEAAACAAA');return false;" title="Copy">Copy</a>
+                  </div>
+                </div>
+                <div id="ID1EAEAAACAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                  <pre xml:space="preserve">
+                    <span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> A
+{
+  <span class="highlight-keyword">public</span> <span class="highlight-keyword">string</span> Text { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+  <span class="highlight-keyword">public</span> B B { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> B
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">string</span> Name { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+    <span class="highlight-keyword">public</span> C C { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+} 
+
+<span class="highlight-keyword">public</span> <span class="highlight-keyword">class</span> C 
+{
+    <span class="highlight-keyword">public</span> <span class="highlight-keyword">string</span> Description { <span class="highlight-keyword">get</span>; <span class="highlight-keyword">set</span>; }
+}</pre>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">AddLanguageTabSet("ID1EAEAAACAAA");</script>
+            <p>
+              Once trackable types have been already configured, it's very easy to get a trackable type metadata:
+            </p>
+            <div class="codeSnippetContainer">
+              <div class="codeSnippetContainerTabs">
+                <div id="ID1EACAAACAAA_tab1" class="codeSnippetContainerTabSingle">C#</div>
+              </div>
+              <div class="codeSnippetContainerCodeContainer">
+                <div class="codeSnippetToolBar">
+                  <div class="codeSnippetToolBarText">
+                    <a id="ID1EACAAACAAA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID1EACAAACAAA');return false;" title="Copy">Copy</a>
+                  </div>
+                </div>
+                <div id="ID1EACAAACAAA_code_Div1" class="codeSnippetContainerCode" style="display: block">
+                  <pre xml:space="preserve">IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration()
+                                                  .TrackThisType&lt;A&gt;();
+
+ITrackableType metadata = config.GetTrackableType(<span class="highlight-keyword">typeof</span>(A));</pre>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">AddLanguageTabSet("ID1EACAAACAAA");</script>
+            <p>
+              What if some project needs to know the path to <span class="code">C.Description</span> property
+              starting from <span class="code">A</span> (i.e. <span class="code">A.B.C.Description)</span>?
+            </p>
+            <p>
+              No problem, because <a href="T_TrackerDog_Configuration_ITrackableType.htm">ITrackableType</a> has an <a href="P_TrackerDog_Configuration_ITrackableType_ObjectPaths.htm">ObjectPaths</a> property
+              which holds a collection of all properties of some given trackable type and its associations, and each property is represented
+              by the <a href="T_TrackerDog_IObjectPropertyInfo.htm">IObjectPropertyInfo</a> interface, which has, for example, <a href="P_TrackerDog_IObjectPropertyInfo_Path.htm">Path</a> property
+              that gives the path to some particular property starting from the trackable type. For example, the so-called <span class="code">A.B.C.Description</span></p>
+          </div>
+        </div>
+        <div class="collapsibleAreaRegion" id="test">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID19RB')" onkeypress="SectionExpandCollapse_CheckKey('ID19RB', event)" tabindex="0">
+            <img id="ID19RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Read the tests too</span>
+        </div>
+        <div id="ID19RBSection" class="collapsibleSection">
+          <p>
+          In addition to this tutorial, you might learn more reading the unit/integration tests provided as part
+          of project's source code. You can also clone the repository in your own computer and run the whole tests using
+          the Visual Studio debugger to check how TrackerDog works step by step!
+        </p>
+          <ul>
+            <li>
+              <a href="https://github.com/mfidemraizer/trackerdog" target="_blank">GitHub repository</a>.
+          </li>
+            <li>
+              <a href="https://github.com/mfidemraizer/trackerdog/tree/master/TrackerDog.Test" target="_blank">Tests source code</a>.
+          </li>
+          </ul>
+        </div>
+        <div class="collapsibleAreaRegion" id="seeAlsoSection">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID20RB')" onkeypress="SectionExpandCollapse_CheckKey('ID20RB', event)" tabindex="0">
+            <img id="ID20RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
+        </div>
+        <div id="ID20RBSection" class="collapsibleSection">
+          <h4 class="subHeading">Other Resources</h4>
+          <div class="seeAlsoStyle">
+            <a href="1e03762d-b9f5-44af-a4b0-c23c36064c24.htm">Understanding and configuring collection change tracking</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="pageFooter" class="pageFooter" />
+  </body>
+</html>
