@@ -1,5 +1,6 @@
 # Welcome to TrackerDog!
 
+![trackerdog build badge](https://mfidemraizer.visualstudio.com/_apis/public/build/definitions/6b21f8d5-b74c-4f26-8e06-f156bd0ab331/1/badge)
 ![project logo](http://mfidemraizer.github.io/trackerdog/media/dogtracker.png)
 
 ## What is TrackerDog?

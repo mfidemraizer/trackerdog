@@ -14,7 +14,8 @@
     <ProjectGuid>48f79414-05bf-437c-861d-cbc620ebd9b5</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
-    <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(MSBuildExtensionsPath)\NuProj\</NuProjPath>
+    <NuGetPackageRoot Condition="'$(NuGetPackageRoot)' == ''">$(SolutionDir)packages\</NuGetPackageRoot>
+    <NuProjPath>$(NuGetPackageRoot)NuProj.0.11.14-beta\tools\</NuProjPath>
   </PropertyGroup>
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
@@ -42,6 +43,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Dependency Include="FastMember">
