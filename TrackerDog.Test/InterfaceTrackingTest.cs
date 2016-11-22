@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerDog.Configuration;
 
 namespace TrackerDog.Test
@@ -6,10 +7,13 @@ namespace TrackerDog.Test
     [TestClass]
     public sealed class InterfaceTrackingTest
     {
+        public enum WhateverEnum { Some, Other }
+
         public interface IWhatever
         {
             string Text { get; set; }
             A A { get; set; }
+            WhateverEnum Enum { get; set; }
         }
 
         public class A
@@ -20,6 +24,8 @@ namespace TrackerDog.Test
         public class WhateverImpl : IWhatever
         {
             public virtual A A { get; set; }
+
+            public virtual WhateverEnum Enum { get; set; }
 
             public virtual string Text { get; set; }
         }
@@ -44,6 +50,7 @@ namespace TrackerDog.Test
             whatever.A = new A();
 
             whatever = TrackableObjectFactory.CreateFrom(whatever);
+            whatever.Enum = WhateverEnum.Other;
         }
     }
 }

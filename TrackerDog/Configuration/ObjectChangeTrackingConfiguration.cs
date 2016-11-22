@@ -183,7 +183,7 @@ namespace TrackerDog.Configuration
 
             trackableTypes = new List<TrackableType>
             (
-                rootType.GetAllPropertyTypesRecursive(p => searchSettings.Filter(p.PropertyType)).Select
+                rootType.GetAllPropertyTypesRecursive(p => p.PropertyType.IsClass && searchSettings.Filter(p.PropertyType)).Select
                 (
                     t =>
                     {
