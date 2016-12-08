@@ -271,7 +271,7 @@ namespace TrackerDog
 
                 foreach (object item in enumerable)
                 {
-                    addMethod.Invoke(enumerableCopy, new[] { item.ToUntracked() });
+                    addMethod.Invoke(enumerableCopy, new[] { item.ToUntypedUntracked() });
                 }
 
                 return enumerableCopy;
@@ -282,13 +282,11 @@ namespace TrackerDog
         /// <summary>
         /// Turns given object and all associates to untrackable objects (i.e. POCO objects).
         /// </summary>
-        /// <typeparam name="TObject">The type of the whole object to untrack</typeparam>
         /// <param name="some">The whole object to untrack</param>
         /// <returns>The untracked version of given object</returns>
-        public static TObject ToUntracked<TObject>(this TObject some)
-            where TObject : class
+        internal static object ToUntypedUntracked(this object some)
         {
-            Contract.Ensures(!(Contract.Result<TObject>() is IProxyTargetAccessor), "To convert a tracked object to untracked one the whole tracked object must be created from a pre-existing object");
+            Contract.Ensures(!(Contract.Result<object>() is IProxyTargetAccessor), "To convert a tracked object to untracked one the whole tracked object must be created from a pre-existing object");
 
             if (some == null)
                 return some;
@@ -298,17 +296,14 @@ namespace TrackerDog
             if (trackable != null)
             {
                 IProxyTargetAccessor proxyTargetAccessor = (IProxyTargetAccessor)trackable;
-                TObject target = (TObject)proxyTargetAccessor.DynProxyGetTarget();
+                object target = proxyTargetAccessor.DynProxyGetTarget();
 
-                JsonSerializerSettings serializerSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                JsonSerializerSettings serializerSettings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize
+                };
 
-                if (target is IDynamicMetaObjectProvider)
-                    serializerSettings.Converters.Add(new DynamicObjectWithDeclaredPropertiesConverter());
-
-                TObject unwrapped = JsonConvert.DeserializeObject<TObject>
-                (
-                    JsonConvert.SerializeObject(target, serializerSettings)
-                );
+                object unwrapped = target.CloneIt(some.GetType().GetActualTypeIfTrackable());
 
                 ObjectChangeTracker changeTracker = (ObjectChangeTracker)trackable.GetChangeTracker();
 
@@ -337,6 +332,20 @@ namespace TrackerDog
 
             }
             else return some;
+        }
+
+        /// <summary>
+        /// Turns given object and all associates to untrackable objects (i.e. POCO objects).
+        /// </summary>
+        /// <typeparam name="TObject">The type of the whole object to untrack</typeparam>
+        /// <param name="some">The whole object to untrack</param>
+        /// <returns>The untracked version of given object</returns>
+        public static TObject ToUntracked<TObject>(this TObject some)
+            where TObject : class
+        {
+            Contract.Ensures(!(Contract.Result<TObject>() is IProxyTargetAccessor), "To convert a tracked object to untracked one the whole tracked object must be created from a pre-existing object");
+
+            return (TObject)some.ToUntypedUntracked();
         }
 
         /// <summary>

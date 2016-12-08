@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Dynamic;
 using System.Linq;
+using System.Reflection;
 
 namespace TrackerDog.Serialization.Json
 {
@@ -10,7 +11,7 @@ namespace TrackerDog.Serialization.Json
     {
         public override bool CanConvert(Type objectType)
         {
-            return true;
+            return typeof(IDynamicMetaObjectProvider).IsAssignableFrom(objectType);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -21,13 +22,13 @@ namespace TrackerDog.Serialization.Json
             JObject jObject = JObject.Load(reader);
 
             var target = Activator.CreateInstance(objectType);
-            
+
             JsonReader jObjectReader = jObject.CreateReader();
             jObjectReader.Culture = reader.Culture;
             jObjectReader.DateParseHandling = reader.DateParseHandling;
             jObjectReader.DateTimeZoneHandling = reader.DateTimeZoneHandling;
             jObjectReader.FloatParseHandling = reader.FloatParseHandling;
-            
+
             serializer.Populate(jObjectReader, target);
 
             return target;
@@ -35,13 +36,20 @@ namespace TrackerDog.Serialization.Json
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var properties = value.GetType().GetProperties().Where(x => x.PropertyType != typeof(DynamicObject)).ToList();
-            JObject o = (JObject)JToken.FromObject(value);
+            var properties = value.GetType()
+                                    .GetProperties()
+                                    .Where
+                                    (
+                                        p => p.PropertyType != typeof(DynamicObject)
+                                             && p.GetIndexParameters().Length == 0
+                                             && !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute))
+                                    ).ToList();
 
-            properties.ForEach(x =>
-            {
-                o.AddFirst(new JProperty(x.Name, x.GetValue(value)));
-            });
+            JObject o = (JObject)JToken.FromObject(value);
+            
+            foreach (PropertyInfo property in properties)
+                if (o[property.Name] == null)
+                    o.AddFirst(new JProperty(property.Name, property.GetValue(value)));
 
             o.WriteTo(writer);
         }

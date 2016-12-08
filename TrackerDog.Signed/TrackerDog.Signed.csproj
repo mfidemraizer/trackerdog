@@ -43,8 +43,12 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FastMember, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9056fda458ff61cf, processorArchitecture=MSIL">
-      <HintPath>..\packages\FastMember.Signed.1.0.0.11\lib\net40\FastMember.dll</HintPath>
+    <Reference Include="FastMember, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.1.0\lib\net40\FastMember.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FastMember.Signed, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -52,8 +56,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.3.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
@@ -248,6 +252,9 @@
     <Compile Include="..\TrackerDog\ObjectChangeTrackingExtensions.cs">
       <Link>ObjectChangeTrackingExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\TrackerDog\ObjectExtensions.cs">
+      <Link>ObjectExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\TrackerDog\ObjectGraphTrackingInfo.cs">
       <Link>ObjectGraphTrackingInfo.cs</Link>
     </Compile>
@@ -265,6 +272,9 @@
     </Compile>
     <Compile Include="..\TrackerDog\ReflectionExtensions.cs">
       <Link>ReflectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\TrackerDog\Serialization\Json\DynamicObjectContractResolver.cs">
+      <Link>Serialization\Json\DynamicObjectContractResolver.cs</Link>
     </Compile>
     <Compile Include="..\TrackerDog\Serialization\Json\DynamicObjectWithDeclaredPropertiesConverter.cs">
       <Link>Serialization\Json\DynamicObjectWithDeclaredPropertiesConverter.cs</Link>
