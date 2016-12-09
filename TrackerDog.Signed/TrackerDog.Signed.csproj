@@ -43,10 +43,6 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FastMember, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FastMember.1.1.0\lib\net40\FastMember.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FastMember.Signed, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
       <Private>True</Private>
@@ -71,6 +67,9 @@
   <ItemGroup>
     <Compile Include="..\TrackerDog\ChangeTrackableObjectState.cs">
       <Link>ChangeTrackableObjectState.cs</Link>
+    </Compile>
+    <Compile Include="..\TrackerDog\CollectionChangeTrackingContext.cs">
+      <Link>CollectionChangeTrackingContext.cs</Link>
     </Compile>
     <Compile Include="..\TrackerDog\CollectionHandling\CollectionChange.cs">
       <Link>CollectionHandling\CollectionChange.cs</Link>

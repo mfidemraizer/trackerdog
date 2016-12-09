@@ -20,6 +20,8 @@ namespace TrackerDog
         /// </summary>
         HashSet<object> RemovedItems { get; }
 
+        CollectionChangeTrackingContext GetChangeTrackingContext();
+
         /// <summary>
         /// Raises the collection changed event to let a change tracker be aware that the collection has changed.
         /// </summary>

@@ -161,7 +161,9 @@ namespace TrackerDog
             bool canTrackCollectionType = Configuration.CanTrackType(genericCollectionType);
 
             ProxyGenerationOptions options = new ProxyGenerationOptions(new CollectionterceptionHook());
-            options.AddMixinInstance(new ChangeTrackableCollectionMixin());
+            ChangeTrackableCollectionMixin changeTrackingMixin = new ChangeTrackableCollectionMixin();
+            changeTrackingMixin.GetChangeTrackingContext().Configuration = Configuration;
+            options.AddMixinInstance(changeTrackingMixin);
 
             KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail
                         = Configuration.Collections.GetImplementation(parentObjectProperty.PropertyType);

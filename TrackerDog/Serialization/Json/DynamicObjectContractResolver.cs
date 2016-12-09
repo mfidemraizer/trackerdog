@@ -1,6 +1,10 @@
-﻿using Newtonsoft.Json.Serialization;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
+using System.Reflection;
 
 namespace TrackerDog.Serialization.Json
 {
@@ -15,6 +19,5 @@ namespace TrackerDog.Serialization.Json
 
             return base.CreateContract(objectType);
         }
-
     }
 }

@@ -45,7 +45,7 @@ namespace TrackerDog.Serialization.Json
                                              && !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute))
                                     ).ToList();
 
-            JObject o = (JObject)JToken.FromObject(value);
+            JObject o = (JObject)JToken.FromObject(value, serializer);
             
             foreach (PropertyInfo property in properties)
                 if (o[property.Name] == null)

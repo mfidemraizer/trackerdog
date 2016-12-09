@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -18,6 +19,13 @@ namespace TrackerDog
         public HashSet<object> RemovedItems { get; set; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public CollectionChangeTrackingContext GetChangeTrackingContext()
+        {
+            Contract.Ensures(Contract.Result<CollectionChangeTrackingContext>() != null);
+
+            throw new NotImplementedException();
+        }
 
         public void RaiseCollectionChanged(NotifyCollectionChangedAction action, IEnumerable<object> changedItems)
         {

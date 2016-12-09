@@ -253,10 +253,8 @@ namespace TrackerDog
                 else
                     collectionTypeArguments.Add(enumerable.GetCollectionItemType());
 
-                IEnumerator collectionEnumerator = enumerable.GetEnumerator();
-                collectionEnumerator.MoveNext();
+                IObjectChangeTrackingConfiguration configuration = ((IChangeTrackableCollection)enumerable).GetChangeTrackingContext().Configuration;
 
-                IObjectChangeTrackingConfiguration configuration = ((IChangeTrackableObject)collectionEnumerator.Current).GetChangeTrackingContext().Configuration;
                 IEnumerable enumerableCopy =
                     (IEnumerable)configuration.Collections.GetImplementation(targetCollectionType)
                         .Value.Type.CreateInstanceWithGenericArgs(null, collectionTypeArguments.ToArray());
@@ -297,11 +295,6 @@ namespace TrackerDog
             {
                 IProxyTargetAccessor proxyTargetAccessor = (IProxyTargetAccessor)trackable;
                 object target = proxyTargetAccessor.DynProxyGetTarget();
-
-                JsonSerializerSettings serializerSettings = new JsonSerializerSettings
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize
-                };
 
                 object unwrapped = target.CloneIt(some.GetType().GetActualTypeIfTrackable());
 

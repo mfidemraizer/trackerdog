@@ -8,6 +8,7 @@ namespace TrackerDog.Mixins
 {
     internal class ChangeTrackableCollectionMixin : IChangeTrackableCollection, IReadOnlyChangeTrackableCollection
     {
+
         private readonly static Guid _id = Guid.NewGuid();
         private readonly HashSet<object> _addedItems = new HashSet<object>();
         private readonly HashSet<object> _removedItems = new HashSet<object>();
@@ -15,6 +16,7 @@ namespace TrackerDog.Mixins
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         internal Guid Id => _id;
+        private CollectionChangeTrackingContext ChangeTrackingContext { get; } = new CollectionChangeTrackingContext();
         public IChangeTrackableObject ParentObject { get; set; }
         public PropertyInfo ParentObjectProperty { get; set; }
         public IImmutableSet<object> AddedItems => _addedItems.ToImmutableHashSet();
@@ -22,14 +24,15 @@ namespace TrackerDog.Mixins
         HashSet<object> IChangeTrackableCollection.AddedItems => _addedItems;
         HashSet<object> IChangeTrackableCollection.RemovedItems => _removedItems;
 
+        public CollectionChangeTrackingContext GetChangeTrackingContext() => ChangeTrackingContext;
+
         public void RaiseCollectionChanged(NotifyCollectionChangedAction action, IEnumerable<object> changedItems)
         {
-            if (CollectionChanged != null)
-                CollectionChanged
-                (
-                    this,
-                    new NotifyCollectionChangedEventArgs(action, changedItems.ToImmutableList())
-                );
+            CollectionChanged?.Invoke
+            (
+                this,
+                new NotifyCollectionChangedEventArgs(action, changedItems.ToImmutableList())
+            );
         }
 
         public override bool Equals(object obj)
