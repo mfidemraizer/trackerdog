@@ -264,5 +264,21 @@
             Assert.IsTrue(g.PropertyHasChanged(o => o.Buffer));
             Assert.IsNotInstanceOfType(g.Buffer, typeof(IReadOnlyChangeTrackableCollection));
         }
+
+        [TestMethod]
+        public void CanClearCollectionChanges()
+        {
+            A a = TrackableObjectFactory.CreateOf<A>();
+            a.Items.Add("a");
+            a.Items.Add("b");
+            
+            a.Items.ClearChanges();
+
+            IReadOnlyChangeTrackableCollection trackableCollection
+                = (IReadOnlyChangeTrackableCollection)a.Items;
+
+            Assert.AreEqual(0, trackableCollection.AddedItems.Count);
+            Assert.AreEqual(0, trackableCollection.RemovedItems.Count);
+        }
     }
 }

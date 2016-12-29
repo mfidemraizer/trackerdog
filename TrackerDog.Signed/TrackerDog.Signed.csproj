@@ -71,6 +71,9 @@
     <Compile Include="..\TrackerDog\CollectionChangeTrackingContext.cs">
       <Link>CollectionChangeTrackingContext.cs</Link>
     </Compile>
+    <Compile Include="..\TrackerDog\CollectionExtensions.cs">
+      <Link>CollectionExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\TrackerDog\CollectionHandling\CollectionChange.cs">
       <Link>CollectionHandling\CollectionChange.cs</Link>
     </Compile>
@@ -160,6 +163,9 @@
     </Compile>
     <Compile Include="..\TrackerDog\Hooks\SimplePropertyInterceptionHook.cs">
       <Link>Hooks\SimplePropertyInterceptionHook.cs</Link>
+    </Compile>
+    <Compile Include="..\TrackerDog\ICanClearChanges.cs">
+      <Link>ICanClearChanges.cs</Link>
     </Compile>
     <Compile Include="..\TrackerDog\IChangeTrackableCollection.cs">
       <Link>IChangeTrackableCollection.cs</Link>

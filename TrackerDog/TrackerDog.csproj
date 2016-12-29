@@ -113,6 +113,7 @@
   <ItemGroup>
     <Compile Include="ChangeTrackableObjectState.cs" />
     <Compile Include="CollectionChangeTrackingContext.cs" />
+    <Compile Include="CollectionExtensions.cs" />
     <Compile Include="CollectionHandling\CollectionChange.cs" />
     <Compile Include="CollectionHandling\CollectionChangeContext.cs" />
     <Compile Include="Configuration\AttributeConfigurationBuilder.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="ExpressionExtensions.cs" />
     <Compile Include="Hooks\SimplePropertyInterceptionHook.cs" />
     <Compile Include="Hooks\CollectionterceptionHook.cs" />
+    <Compile Include="ICanClearChanges.cs" />
     <Compile Include="IChangeTrackableCollection.cs" />
     <Compile Include="IChangeTrackableCollectionContract.cs" />
     <Compile Include="IChangeTrackableObjectContract.cs" />

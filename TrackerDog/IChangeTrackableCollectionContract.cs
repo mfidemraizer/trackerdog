@@ -19,7 +19,7 @@ namespace TrackerDog
         public HashSet<object> RemovedItems { get; set; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
-
+        
         public CollectionChangeTrackingContext GetChangeTrackingContext()
         {
             Contract.Ensures(Contract.Result<CollectionChangeTrackingContext>() != null);
