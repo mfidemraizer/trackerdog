@@ -6,9 +6,8 @@ using System.Reflection;
 
 namespace TrackerDog.Mixins
 {
-    internal class ChangeTrackableCollectionMixin : IChangeTrackableCollection, IReadOnlyChangeTrackableCollection
+    internal class ChangeTrackableCollectionMixin : IChangeTrackableCollection, ICanClearChanges, IReadOnlyChangeTrackableCollection
     {
-
         private readonly static Guid _id = Guid.NewGuid();
         private readonly HashSet<object> _addedItems = new HashSet<object>();
         private readonly HashSet<object> _removedItems = new HashSet<object>();
@@ -47,5 +46,11 @@ namespace TrackerDog.Mixins
         }
 
         public override int GetHashCode() => Id.GetHashCode();
+
+        void ICanClearChanges.ClearChanges()
+        {
+            _addedItems.Clear();
+            _removedItems.Clear();
+        }
     }
 }
