@@ -182,7 +182,7 @@
     <Compile Include="PropertyInfoEqualityComparer.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="CollectionHandling\SetChangeInterceptor.cs" />
-    <Compile Include="Serialization\Json\DynamicObjectContractResolver.cs" />
+    <Compile Include="Serialization\Json\CustomObjectContractResolver.cs" />
     <Compile Include="Serialization\Json\DynamicObjectWithDeclaredPropertiesConverter.cs" />
     <Compile Include="TrackableObjectFactoryInternal.cs" />
     <Compile Include="ObjectChangeTracking.cs" />

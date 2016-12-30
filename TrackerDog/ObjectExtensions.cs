@@ -11,7 +11,7 @@ namespace TrackerDog
         {
             JsonSerializer serializer = new JsonSerializer();
             serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            serializer.ContractResolver = new DynamicObjectContractResolver();
+            serializer.ContractResolver = new CustomObjectContractResolver();
 
             return JObject.FromObject(some, serializer).ToObject(type, serializer);
         }
