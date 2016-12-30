@@ -278,8 +278,8 @@
     <Compile Include="..\TrackerDog\ReflectionExtensions.cs">
       <Link>ReflectionExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\TrackerDog\Serialization\Json\DynamicObjectContractResolver.cs">
-      <Link>Serialization\Json\DynamicObjectContractResolver.cs</Link>
+    <Compile Include="..\TrackerDog\Serialization\Json\CustomObjectContractResolver.cs">
+      <Link>Serialization\Json\CustomObjectContractResolver.cs</Link>
     </Compile>
     <Compile Include="..\TrackerDog\Serialization\Json\DynamicObjectWithDeclaredPropertiesConverter.cs">
       <Link>Serialization\Json\DynamicObjectWithDeclaredPropertiesConverter.cs</Link>

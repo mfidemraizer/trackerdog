@@ -280,5 +280,16 @@
             Assert.AreEqual(0, trackableCollection.AddedItems.Count);
             Assert.AreEqual(0, trackableCollection.RemovedItems.Count);
         }
+
+        [TestMethod]
+        public void DictionaryKeysAreNotMessedUp()
+        {
+            E e = TrackableObjectFactory.CreateOf<E>();
+            e.Dictionary.Add("Hey", "Oops!");
+
+            E untrackedE = e.ToUntracked();
+
+            Assert.AreEqual("Hey", e.Dictionary.First().Key);
+        }
     }
 }
