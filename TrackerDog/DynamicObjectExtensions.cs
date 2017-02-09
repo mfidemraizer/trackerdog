@@ -1,7 +1,7 @@
 ﻿using FastMember;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using TrackerDog.Contracts;
 
 namespace TrackerDog
 {
@@ -19,8 +19,8 @@ namespace TrackerDog
         /// <returns>The property value</returns>
         public static object GetDynamicMember(this object obj, string memberName)
         {
-            Contract.Requires(obj != null, "The dynamic object must be not null");
-            Contract.Requires(!string.IsNullOrEmpty(memberName), "The member name must be provided");
+            Contract.Requires(() => obj != null, "The dynamic object must be not null");
+            Contract.Requires(() => !string.IsNullOrEmpty(memberName), "The member name must be provided");
 
             TypeAccessor accessor;
 
@@ -39,8 +39,8 @@ namespace TrackerDog
         /// <returns>The property value</returns>
         public static void SetDynamicMember(this object obj, string memberName, object value)
         {
-            Contract.Requires(obj != null, "The dynamic object must be not null");
-            Contract.Requires(!string.IsNullOrEmpty(memberName), "The member name must be provided");
+            Contract.Requires(() => obj != null, "The dynamic object must be not null");
+            Contract.Requires(() => !string.IsNullOrEmpty(memberName), "The member name must be provided");
 
             TypeAccessor accessor;
 

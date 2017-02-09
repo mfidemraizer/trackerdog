@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.Configuration
 {
@@ -17,9 +17,9 @@ namespace TrackerDog.Configuration
 
         public void ConfigureType(IConfigurableTrackableType trackableType)
         {
-            Contract.Requires(trackableType != null);
+            Contract.Requires(() => trackableType != null);
 
-            if (trackableType.Type.GetCustomAttribute<ChangeTrackableAttribute>() != null)
+            if (trackableType.Type.GetTypeInfo().GetCustomAttribute<ChangeTrackableAttribute>() != null)
             {
                 IEnumerable<PropertyInfo> trackableProperties = GetTrackableProperties(trackableType.Type);
 
@@ -30,8 +30,7 @@ namespace TrackerDog.Configuration
 
         private IEnumerable<PropertyInfo> GetTrackableProperties(Type type)
         {
-            Contract.Requires(type != null);
-            Contract.Ensures(Contract.Result<IEnumerable<PropertyInfo>>() != null);
+            Contract.Requires(() => type != null);
 
             IEnumerable<PropertyInfo> allProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                                                           .Where(p => p.CanReadAndWrite() && p.GetMethod.IsVirtual);

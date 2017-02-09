@@ -1,10 +1,10 @@
-﻿using TrackerDog.Configuration;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using TrackerDog.Configuration;
+using TrackerDog.Contracts;
 
 namespace TrackerDog
 {
@@ -18,15 +18,14 @@ namespace TrackerDog
         /// <returns>The cloned enumerable</returns>
         internal static IEnumerable CloneEnumerable(this IEnumerable enumerable, IObjectChangeTrackingConfiguration configuration)
         {
-            Contract.Requires(enumerable != null, "Given enumerable must be a non-null reference");
-            Contract.Ensures(Contract.Result<IEnumerable>() != null);
+            Contract.Requires(() => enumerable != null, "Given enumerable must be a non-null reference");
 
             Type collectionType = configuration.Collections.GetImplementation(enumerable.GetType()).Value.Type;
             Type collectionItemType = enumerable.GetCollectionItemType();
 
             List<Type> collectionTypeArguments = new List<Type>();
 
-            if (collectionItemType.IsGenericType && collectionItemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+            if (collectionItemType.GetTypeInfo().IsGenericType && collectionItemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
                 collectionTypeArguments.AddRange(collectionItemType.GenericTypeArguments);
             else
                 collectionTypeArguments.Add(enumerable.GetCollectionItemType());
@@ -36,7 +35,7 @@ namespace TrackerDog
 
             Type collectionInterface = collectionClone.GetType()
                                                 .GetInterfaces()
-                                                .Single(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(ICollection<>));
+                                                .Single(t => t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(ICollection<>));
 
             MethodInfo addMethod = collectionInterface.GetMethod("Add", BindingFlags.Instance | BindingFlags.Public);
 
@@ -58,10 +57,10 @@ namespace TrackerDog
         public static IEnumerable<T> MakeAllTrackable<T>(this IEnumerable<T> enumerable, IObjectChangeTrackingConfiguration configuration, ITrackableObjectFactory trackableObjectFactory, PropertyInfo parentObjectProperty, IChangeTrackableObject parentObject)
             where T : class
         {
-            Contract.Requires(enumerable != null, "Given enumerable must be a non-null reference to turn its objects into trackable ones");
-            Contract.Requires(parentObjectProperty != null, "A reference to property which holds the enumerable is mandatory");
-            Contract.Requires(parentObject != null, "The instance of the object where the property holding the enumerable is declared is mandatory");
-            Contract.Requires(parentObjectProperty.DeclaringType.GetActualTypeIfTrackable().IsAssignableFrom(parentObject.GetActualTypeIfTrackable()), "Given property holding the enumerable must be declared on the given parent object type");
+            Contract.Requires(() => enumerable != null, "Given enumerable must be a non-null reference to turn its objects into trackable ones");
+            Contract.Requires(() => parentObjectProperty != null, "A reference to property which holds the enumerable is mandatory");
+            Contract.Requires(() => parentObject != null, "The instance of the object where the property holding the enumerable is declared is mandatory");
+            Contract.Requires(() => parentObjectProperty.DeclaringType.GetActualTypeIfTrackable().IsAssignableFrom(parentObject.GetActualTypeIfTrackable()), "Given property holding the enumerable must be declared on the given parent object type");
 
             if (enumerable.Count() > 0 &&
                 configuration.CanTrackType(enumerable.First().GetType()))
@@ -83,7 +82,7 @@ namespace TrackerDog
                     result.Add((T)trackableObject);
                 }
 
-                Contract.Assert(result.Count == enumerable.Count(), "New sequence with objects turned into trackable ones must match the count of source sequence");
+                Contract.Assert(() => result.Count == enumerable.Count(), "New sequence with objects turned into trackable ones must match the count of source sequence");
 
                 return result;
             }

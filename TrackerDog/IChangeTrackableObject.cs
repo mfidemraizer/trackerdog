@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics.Contracts;
 
 namespace TrackerDog
 {
     /// <summary>
     /// Defines an object that allows its changes to be tracked.
     /// </summary>
-    [ContractClass(typeof(IChangeTrackableObjectContract))]
     internal interface IChangeTrackableObject : INotifyPropertyChanged
     {
         ObjectChangeTrackingContext GetChangeTrackingContext();

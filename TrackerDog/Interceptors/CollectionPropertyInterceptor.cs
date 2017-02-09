@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reflection;
 
 namespace TrackerDog.Interceptors
 {
@@ -37,7 +38,7 @@ namespace TrackerDog.Interceptors
 
                 IEnumerable<object> currentItems;
                 Type collectionItemType = withParent.GetCollectionItemType();
-                bool itemsAreKeyValuePair = collectionItemType.IsGenericType && collectionItemType == typeof(KeyValuePair<,>).MakeGenericType(collectionItemType.GenericTypeArguments);
+                bool itemsAreKeyValuePair = collectionItemType.GetTypeInfo().IsGenericType && collectionItemType == typeof(KeyValuePair<,>).MakeGenericType(collectionItemType.GenericTypeArguments);
 
                 if (itemsAreKeyValuePair)
                     currentItems = ((IEnumerable)withParent).Cast<object>();

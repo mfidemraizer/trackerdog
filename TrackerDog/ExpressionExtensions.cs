@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog
 {
@@ -9,8 +9,7 @@ namespace TrackerDog
     {
         public static PropertyInfo ExtractProperty<T, TProperty>(this Expression<Func<T, TProperty>> propertySelector)
         {
-            Contract.Requires(propertySelector != null, "Given property selector must not be null");
-            Contract.Ensures(Contract.Result<PropertyInfo>() != null, "Selected member is not a property");
+            Contract.Requires(() => propertySelector != null, "Given property selector must not be null");
 
             MemberExpression propertyAccessExpr = propertySelector.Body as MemberExpression;
 
@@ -22,9 +21,13 @@ namespace TrackerDog
                     propertyAccessExpr = convertExpr.Operand as MemberExpression;
             }
 
-            Contract.Assert(propertyAccessExpr != null, "Given expression is not supported as property selector");
+            Contract.Assert(() => propertyAccessExpr != null, "Given expression is not supported as property selector");
 
-            return propertyAccessExpr.Member as PropertyInfo;
+            PropertyInfo selectedProperty = propertyAccessExpr.Member as PropertyInfo;
+
+            Contract.Assert(() => selectedProperty != null, "Selected member is not a property");
+
+            return selectedProperty;
         }
     }
 }

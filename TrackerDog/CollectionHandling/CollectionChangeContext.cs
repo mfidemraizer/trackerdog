@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.CollectionHandling
 {
@@ -18,11 +18,11 @@ namespace TrackerDog.CollectionHandling
 
         public CollectionChangeContext(IEnumerable<object> collection, IEnumerable<object> itemsBefore, PropertyInfo parentObjectProperty, ISet<object> addedItems, ISet<object> removedItems)
         {
-            Contract.Requires(collection != null, "Given source collection must not be null");
-            Contract.Requires(itemsBefore != null, "Given items before collection was changed cannot be null");
-            Contract.Requires(parentObjectProperty != null, "Given parent object property owning the collection cannot be null");
-            Contract.Requires(addedItems != null, "Given set of added item tracking cannot be null");
-            Contract.Requires(removedItems != null, "Given set of removed item tracking cannot be null");
+            Contract.Requires(() => collection != null, "Given source collection must not be null");
+            Contract.Requires(() => itemsBefore != null, "Given items before collection was changed cannot be null");
+            Contract.Requires(() => parentObjectProperty != null, "Given parent object property owning the collection cannot be null");
+            Contract.Requires(() => addedItems != null, "Given set of added item tracking cannot be null");
+            Contract.Requires(() => removedItems != null, "Given set of removed item tracking cannot be null");
 
             _collection = collection;
             _itemsBefore = itemsBefore;

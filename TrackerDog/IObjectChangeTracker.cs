@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -10,7 +9,6 @@ namespace TrackerDog
     /// <summary>
     /// Defines an object change tracker.
     /// </summary>
-    [ContractClass(typeof(IObjectChangeTrackerContract))]
     public interface IObjectChangeTracker : IEnumerable<IObjectPropertyChangeTracking>
     {
         /// <summary>

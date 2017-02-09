@@ -1,9 +1,9 @@
 ﻿using Castle.DynamicProxy;
 using System;
-using System.Diagnostics.Contracts;
 using System.Dynamic;
 using System.Reflection;
 using TrackerDog.Configuration;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.Interceptors
 {
@@ -33,7 +33,7 @@ namespace TrackerDog.Interceptors
                 if (setBinder != null)
                 {
                     IChangeTrackableObject trackableObject = invocation.Proxy as IChangeTrackableObject;
-                    Contract.Assert(trackableObject != null);
+                    Contract.Assert(() => trackableObject != null);
 
                     if (!invocation.Arguments[1].IsTrackable() && Configuration.CanTrackType(invocation.Arguments[1].GetType()))
                     {

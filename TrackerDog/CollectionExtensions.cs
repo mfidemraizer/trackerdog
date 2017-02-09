@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using TrackerDog.Contracts;
 
 namespace TrackerDog
 {
@@ -7,7 +7,7 @@ namespace TrackerDog
     {
         public static void ClearChanges<TItem>(this ICollection<TItem> source)
         {
-            Contract.Requires(source is ICanClearChanges, $"Given collection must implement 'TrackerDog.ICanClearChanges'");
+            Contract.Requires(() => source is ICanClearChanges, $"Given collection must implement 'TrackerDog.ICanClearChanges'");
 
             ICanClearChanges canClearChanges = (ICanClearChanges)source;
 

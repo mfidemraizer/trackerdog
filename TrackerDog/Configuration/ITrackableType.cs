@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 
 namespace TrackerDog.Configuration
@@ -8,7 +7,6 @@ namespace TrackerDog.Configuration
     /// <summary>
     /// Defines the configuration of a trackable type
     /// </summary>
-    [ContractClass(typeof(ITrackableTypeContract))]
     public interface ITrackableType
     {
         /// <summary>

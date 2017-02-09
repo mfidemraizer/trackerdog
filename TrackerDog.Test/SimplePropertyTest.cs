@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using TrackerDog.Configuration;
 
 namespace TrackerDog.Test
@@ -178,7 +179,7 @@ namespace TrackerDog.Test
 
             IObjectChangeTracker changeTracker = a.GetChangeTracker();
 
-            var C_ListOfDGraph = changeTracker.GetTrackingGraphFromProperty(typeof(C).GetProperty("ListOfD"));
+            var C_ListOfDGraph = changeTracker.GetTrackingGraphFromProperty(typeof(C).GetTypeInfo().GetProperty("ListOfD"));
             Assert.AreEqual(typeof(C).GetProperty("ListOfD"), C_ListOfDGraph.AggregateHierarchy[2].Property.GetBaseProperty());
             Assert.AreEqual(typeof(B).GetProperty("C"), C_ListOfDGraph.AggregateHierarchy[1].Property.GetBaseProperty());
             Assert.AreEqual(typeof(A).GetProperty("B"), C_ListOfDGraph.AggregateHierarchy[0].Property.GetBaseProperty());

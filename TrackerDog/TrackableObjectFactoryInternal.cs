@@ -3,10 +3,10 @@ using Castle.DynamicProxy.Internal;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using TrackerDog.Configuration;
+using TrackerDog.Contracts;
 using TrackerDog.Hooks;
 using TrackerDog.Interceptors;
 using TrackerDog.Mixins;
@@ -48,11 +48,13 @@ namespace TrackerDog
                     );
                 }
 
-                Contract.Assert(typeToTrack.IsClass && !typeToTrack.IsAbstract && !typeToTrack.IsSealed, $"The object type to track '{typeToTrack.AssemblyQualifiedName}' must be a non-abstract, non-sealed class");
+                TypeInfo typeToTrackInfo = typeToTrack.GetTypeInfo();
+
+                Contract.Assert(() => typeToTrackInfo.IsClass && !typeToTrackInfo.IsAbstract && !typeToTrackInfo.IsSealed, $"The object type to track '{typeToTrack.AssemblyQualifiedName}' must be a non-abstract, non-sealed class");
 
                 ProxyGenerationOptions options = new ProxyGenerationOptions(new SimplePropertyInterceptionHook(Configuration));
                 options.AddMixinInstance(new ChangeTrackableObjectMixin(Configuration, this));
-                options.AdditionalAttributes.Add(AttributeUtil.CreateBuilder(typeof(DebuggerDisplayAttribute), new[] { $"{typeToTrack.FullName}Proxy" }));
+                options.AdditionalAttributes.Add(AttributeUtil.CreateInfo(typeof(DebuggerDisplayAttribute), new[] { $"{typeToTrack.FullName}Proxy" }));
 
                 List<IInterceptor> interceptors = new List<IInterceptor>
                 {
@@ -137,25 +139,25 @@ namespace TrackerDog
 
             Type collectionImplementation;
 
-            if (parentObjectProperty.PropertyType.IsGenericType && parentObjectProperty.PropertyType == collectionType.MakeGenericType(parentObjectProperty.PropertyType.GenericTypeArguments))
+            if (parentObjectProperty.PropertyType.GetTypeInfo().IsGenericType && parentObjectProperty.PropertyType == collectionType.MakeGenericType(parentObjectProperty.PropertyType.GenericTypeArguments))
                 collectionImplementation = collectionType.MakeGenericType(parentObjectProperty.PropertyType.GenericTypeArguments);
             else
                 collectionImplementation = parentObjectProperty.PropertyType.GetInterfaces().SingleOrDefault
                 (
                     i =>
                     {
-                        return i.IsGenericType && i == collectionType.MakeGenericType(i.GenericTypeArguments[0]);
+                        return i.GetTypeInfo().IsGenericType && i == collectionType.MakeGenericType(i.GenericTypeArguments[0]);
                     }
                 );
 
-            Contract.Assert(collectionImplementation != null);
+            Contract.Assert(() => collectionImplementation != null);
 
             if (some == null)
                 some = Configuration.Collections
                                 .GetImplementation(parentObjectProperty.PropertyType).Value.Type
                                 .CreateInstanceWithGenericArgs(null, collectionImplementation.GenericTypeArguments[0]);
 
-            Contract.Assert(some != null, "Either if a collection object is provided or not, a proxied instance of the whole collection type must be created");
+            Contract.Assert(() => some != null, "Either if a collection object is provided or not, a proxied instance of the whole collection type must be created");
 
             Type genericCollectionType = some.GetType().GetGenericArguments().Last();
             bool canTrackCollectionType = Configuration.CanTrackType(genericCollectionType);
@@ -168,7 +170,7 @@ namespace TrackerDog
             KeyValuePair<Type, CollectionImplementation> collectionImplementationDetail
                         = Configuration.Collections.GetImplementation(parentObjectProperty.PropertyType);
 
-            Contract.Assert(collectionImplementationDetail.Key.MakeGenericType(collectionImplementation.GenericTypeArguments).IsAssignableFrom(parentObjectProperty.PropertyType), $"Trackable collection implementation of type '{collectionImplementationDetail.Key.AssemblyQualifiedName}' cannot be set to the target property '{parentObjectProperty.DeclaringType.FullName}.{parentObjectProperty.Name}' with type '{parentObjectProperty.PropertyType.AssemblyQualifiedName}'. This isn't supported because it might require a downcast. Please provide a collection change tracking configuration to work with the more concrete interface.");
+            Contract.Assert(() => collectionImplementationDetail.Key.MakeGenericType(collectionImplementation.GenericTypeArguments).IsAssignableFrom(parentObjectProperty.PropertyType), $"Trackable collection implementation of type '{collectionImplementationDetail.Key.AssemblyQualifiedName}' cannot be set to the target property '{parentObjectProperty.DeclaringType.FullName}.{parentObjectProperty.Name}' with type '{parentObjectProperty.PropertyType.AssemblyQualifiedName}'. This isn't supported because it might require a downcast. Please provide a collection change tracking configuration to work with the more concrete interface.");
 
             object targetList;
 
@@ -186,7 +188,7 @@ namespace TrackerDog
                     genericCollectionType
                 );
 
-            Contract.Assert(targetList != null, "List to proxy is mandatory");
+            Contract.Assert(() => targetList != null, "List to proxy is mandatory");
 
             IChangeTrackableCollection proxy = (IChangeTrackableCollection)ProxyGenerator.CreateInterfaceProxyWithTarget
             (

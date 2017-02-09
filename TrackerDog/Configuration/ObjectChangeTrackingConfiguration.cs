@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.Configuration
 {
@@ -36,24 +36,24 @@ namespace TrackerDog.Configuration
         IImmutableList<ITrackableType> IObjectChangeTrackingConfiguration.TrackableInterfaceTypes => TrackableInterfaceTypes.ToImmutableList();
 
         /// <summary>
-        /// Configures which types will support change tracking on current <see cref="AppDomain"/>.
+        /// Configures which types will support change tracking.
         /// </summary>
         /// <param name="types">The types to track its changes</param>
         public void TrackTheseTypes(params ITrackableType[] types)
         {
-            Contract.Requires(types != null && types.Length > 0 && types.All(t => t != null), "Given types cannot be null");
+            Contract.Requires(() => types != null && types.Length > 0 && types.All(t => t != null), "Given types cannot be null");
 
             lock (_syncLock)
             {
                 foreach (ITrackableType type in types)
-                    if (!type.Type.IsInterface)
-                        Contract.Assert(TrackableTypes.Add(type), "Type can only be configured to be tracked once");
+                    if (!type.Type.GetTypeInfo().IsInterface)
+                        Contract.Assert(() => TrackableTypes.Add(type), "Type can only be configured to be tracked once");
                     else
                     {
                         IConfigurableTrackableType trackableType = type as IConfigurableTrackableType;
                         trackableType.IncludeProperties(type.Type.GetProperties());
 
-                        Contract.Assert(TrackableInterfaceTypes.Add(type), "Interface type can only be configured to be tracked once");
+                        Contract.Assert(() => TrackableInterfaceTypes.Add(type), "Interface type can only be configured to be tracked once");
                     }
             }
         }
@@ -65,7 +65,7 @@ namespace TrackerDog.Configuration
         /// <returns>The configured trackable type by type, or returns null if it's not already configured</returns>
         public ITrackableType GetTrackableType(Type type)
         {
-            Contract.Requires(type != null, "Given type cannot be null");
+            Contract.Requires(() => type != null, "Given type cannot be null");
 
             lock (_syncLock)
                 return TrackableTypes.SingleOrDefault(t => t.Type == type);
@@ -73,8 +73,7 @@ namespace TrackerDog.Configuration
 
         public IEnumerable<ITrackableType> GetAllTrackableBaseTypes(ITrackableType trackableType)
         {
-            Contract.Requires(trackableType != null, "Given trackable type must be a non-null reference");
-            Contract.Ensures(Contract.Result<IEnumerable<ITrackableType>>() != null);
+            Contract.Requires(() => trackableType != null, "Given trackable type must be a non-null reference");
 
             lock (_syncLock)
                 return trackableType.Type.GetAllBaseTypes()
@@ -89,7 +88,7 @@ namespace TrackerDog.Configuration
         /// <returns><literal>true</literal> if it can be tracked, <literal>false</literal> if it can't be tracked</returns>
         public bool CanTrackType(Type someType)
         {
-            Contract.Requires(someType != null, "Given type cannot be null");
+            Contract.Requires(() => someType != null, "Given type cannot be null");
 
             lock (_syncLock)
                 return TrackableTypes.Any(t => t.Type == someType.GetActualTypeIfTrackable());
@@ -109,12 +108,12 @@ namespace TrackerDog.Configuration
         /// <returns><literal>true</literal> if helds an object type configured as a trackable type, <literal>false</literal> if not </returns>
         public bool CanTrackProperty(PropertyInfo property)
         {
-            Contract.Requires(property != null, "Property to check cannot be null");
-            Contract.Requires(CanTrackType(property.ReflectedType), "Declaring type must be configured as trackable");
+            Contract.Requires(() => property != null, "Property to check cannot be null");
+            Contract.Requires(() => CanTrackType(property.DeclaringType.GetActualTypeIfTrackable()), "Declaring type must be configured as trackable");
 
             lock (_syncLock)
             {
-                Contract.Assert(CanTrackType(property.GetBaseProperty().DeclaringType), "Declaring type must be configured as trackable even if it's a base class");
+                Contract.Assert(() => CanTrackType(property.GetBaseProperty().DeclaringType), "Declaring type must be configured as trackable even if it's a base class");
 
                 ITrackableType trackableType = GetTrackableType(property.GetBaseProperty().DeclaringType);
 
@@ -137,7 +136,7 @@ namespace TrackerDog.Configuration
             ConfigureWithAttributes(trackableType);
             configure?.Invoke(trackableType);
 
-            if (!trackableType.Type.IsInterface)
+            if (!trackableType.Type.GetTypeInfo().IsInterface)
                 TrackableTypes.Add(trackableType);
             else
                 TrackableInterfaceTypes.Add(trackableType);
@@ -151,7 +150,7 @@ namespace TrackerDog.Configuration
             ConfigureWithAttributes(trackableType);
             configure?.Invoke(trackableType);
 
-            if (!trackableType.Type.IsInterface)
+            if (!trackableType.Type.GetTypeInfo().IsInterface)
                 TrackableTypes.Add(trackableType);
             else
                 TrackableInterfaceTypes.Add(trackableType);
@@ -173,17 +172,17 @@ namespace TrackerDog.Configuration
             searchSettings = searchSettings ?? DefaultSearchSettings;
 
             if (searchSettings.Filter == null)
-                searchSettings.Filter = t => t.Assembly == rootType.Assembly;
+                searchSettings.Filter = t => t.GetTypeInfo().Assembly == rootType.GetTypeInfo().Assembly;
 
             if (searchSettings.Mode == TypeSearchMode.AttributeConfigurationOnly)
             {
                 Func<Type, bool> initialFilter = searchSettings.Filter;
-                searchSettings.Filter = t => initialFilter(t) && t.GetCustomAttribute<ChangeTrackableAttribute>() != null;
+                searchSettings.Filter = t => initialFilter(t) && t.GetTypeInfo().GetCustomAttribute<ChangeTrackableAttribute>() != null;
             }
 
             trackableTypes = new List<TrackableType>
             (
-                rootType.GetAllPropertyTypesRecursive(p => p.PropertyType.IsClass && searchSettings.Filter(p.PropertyType)).Select
+                rootType.GetAllPropertyTypesRecursive(p => p.PropertyType.GetTypeInfo().IsClass && searchSettings.Filter(p.PropertyType)).Select
                 (
                     t =>
                     {
@@ -199,7 +198,7 @@ namespace TrackerDog.Configuration
             trackableTypes.Insert(0, new TrackableType(this, rootType));
 
             foreach (ITrackableType trackableType in trackableTypes)
-                if (!trackableType.Type.IsInterface)
+                if (!trackableType.Type.GetTypeInfo().IsInterface)
                     TrackableTypes.Add(trackableType);
                 else
                     TrackableInterfaceTypes.Add(trackableType);
@@ -213,22 +212,22 @@ namespace TrackerDog.Configuration
 
         public IObjectChangeTrackingConfiguration TrackTypesFromAssembly(string assemblyName, Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null)
         {
-            return TrackTypesFromAssembly(Assembly.Load(assemblyName), configure, searchSettings);
+            return TrackTypesFromAssembly(Assembly.Load(new AssemblyName(assemblyName)), configure, searchSettings);
         }
 
         public IObjectChangeTrackingConfiguration TrackTypesFromAssembly(Assembly assembly, Action<IConfigurableTrackableType> configure = null, TypeSearchSettings searchSettings = null)
         {
             searchSettings = searchSettings ?? DefaultSearchSettings;
-            
+
             if (searchSettings.Mode == TypeSearchMode.AttributeConfigurationOnly)
             {
                 if (searchSettings.Filter != null)
                 {
                     Func<Type, bool> initialFilter = searchSettings.Filter;
-                    searchSettings.Filter = t => initialFilter(t) && t.GetCustomAttribute<ChangeTrackableAttribute>() != null;
+                    searchSettings.Filter = t => initialFilter(t) && t.GetTypeInfo().GetCustomAttribute<ChangeTrackableAttribute>() != null;
                 }
                 else
-                    searchSettings.Filter = t => t.GetCustomAttribute<ChangeTrackableAttribute>() != null;
+                    searchSettings.Filter = t => t.GetTypeInfo().GetCustomAttribute<ChangeTrackableAttribute>() != null;
             }
 
             foreach (Type type in assembly.GetTypes())

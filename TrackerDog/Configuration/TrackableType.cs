@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.Configuration
 {
@@ -18,8 +18,9 @@ namespace TrackerDog.Configuration
 
         public TrackableType(IObjectChangeTrackingConfiguration configuration, Type type)
         {
-            //Contract.Requires(type != null, "Give type reference must be non-null");
-            Contract.Assert((type.IsClass && !type.IsSealed) || type.IsInterface, $"Given type '{type.AssemblyQualifiedName}' must be either a non-sealed class or an interface");
+            TypeInfo typeInfo = type.GetTypeInfo();
+
+            Contract.Assert(() => (typeInfo.IsClass && !typeInfo.IsSealed) || typeInfo.IsInterface, $"Given type '{type.AssemblyQualifiedName}' must be either a non-sealed class or an interface");
 
             _type = type;
             _objectPaths = new Lazy<IImmutableSet<IObjectPropertyInfo>>
@@ -36,20 +37,25 @@ namespace TrackerDog.Configuration
 
         public IConfigurableTrackableType IncludeProperty(PropertyInfo property)
         {
-            Contract.Requires(property.GetMethod != null && property.SetMethod != null, "Selected property must own a getter and a setter");
-            //Contract.Requires(property.DeclaringType == typeof(T), $"Property '{property.DeclaringType.FullName}.{property.Name}' must be declared on the type being configured as trackable. If the property to include is declared on a base type, the whole base type must be also configured as trackable and the so-called property should be included on the particular base type.");
-            Contract.Assert(_includedProperties.Add(property), "Property must be included once");
+            Contract.Requires(() => property != null, "A property to include must be non-null reference");
+            Contract.Requires(() => property.GetMethod != null && property.SetMethod != null, $"Given property must implement both a getter and a setter");
+            Contract.Requires(() => property.GetMethod.IsVirtual, $"Given property must be virtual");
+            Contract.Assert(() => _includedProperties.Add(property), "Property must be included once");
 
             return this;
         }
 
         public IConfigurableTrackableType IncludeProperties(params PropertyInfo[] properties)
         {
+            Contract.Requires(() => properties != null && properties.Count() > 0, "Given properties must be a non-null reference and must be an enumerable with at least one property");
+
             return IncludeProperties((IEnumerable<PropertyInfo>)properties);
         }
 
         public IConfigurableTrackableType IncludeProperties(IEnumerable<PropertyInfo> properties)
         {
+            Contract.Requires(() => properties != null && properties.Count() > 0, "Given properties must be a non-null reference and must be an enumerable with at least one property");
+
             foreach (PropertyInfo property in properties)
                 IncludeProperty(property);
 

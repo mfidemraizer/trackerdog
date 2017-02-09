@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Serialization;
 using System;
 using System.Dynamic;
+using System.Reflection;
 
 namespace TrackerDog.Serialization.Json
 {
@@ -8,7 +9,7 @@ namespace TrackerDog.Serialization.Json
     {
         protected override JsonContract CreateContract(Type objectType)
         {
-            if (typeof(IDynamicMetaObjectProvider).IsAssignableFrom(objectType))
+            if (typeof(IDynamicMetaObjectProvider).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo()))
             {
                 return CreateObjectContract(objectType);
             }

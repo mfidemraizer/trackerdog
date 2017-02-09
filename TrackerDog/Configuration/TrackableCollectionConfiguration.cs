@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Reflection;
 using TrackerDog.CollectionHandling;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.Configuration
 {
@@ -37,14 +38,15 @@ namespace TrackerDog.Configuration
         /// <returns><literal>true</literal> if it can be tracked as collection, <literal>false if it can't be tracked as collection</literal></returns>
         public bool CanTrack(Type some)
         {
-            Contract.Requires(some != null, "A non-null reference to a type is mandatory to get its implementation");
+            Contract.Requires(() => some != null, "A non-null reference to a type is mandatory to get its implementation");
+            TypeInfo someTypeInfo = some.GetTypeInfo();
 
             lock (_syncLock)
             {
                 if (some == typeof(string))
                     return false;
 
-                Type someGenericTypeDefinition = some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
+                Type someGenericTypeDefinition = someTypeInfo.IsGenericType && !someTypeInfo.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
                 IEnumerable<Type> someInterfaces = some.GetInterfaces();
 
                 return Implementations.Any
@@ -54,7 +56,7 @@ namespace TrackerDog.Configuration
                         ||
                         someInterfaces.Any
                         (
-                            i => i.IsGenericType
+                            i => i.GetTypeInfo().IsGenericType
                                 && i.GetGenericTypeDefinition() == interfaceType.Key
                         )
                 );
@@ -70,12 +72,13 @@ namespace TrackerDog.Configuration
         /// <returns>A pair, where the key is the collection interface and value is the collection implementation</returns>
         public KeyValuePair<Type, CollectionImplementation> GetImplementation(Type some)
         {
-            Contract.Requires(some != null, "A non-null reference to a type is mandatory to get its implementation");
-            Contract.Ensures(Contract.Result<KeyValuePair<Type, CollectionImplementation>>().Key != null);
+            Contract.Requires(() => some != null, "A non-null reference to a type is mandatory to get its implementation");
+
+            TypeInfo someTypeInfo = some.GetTypeInfo();
 
             lock (_syncLock)
             {
-                Type someGenericTypeDefinition = some.IsGenericType && !some.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
+                Type someGenericTypeDefinition = someTypeInfo.IsGenericType && !someTypeInfo.IsGenericTypeDefinition ? some.GetGenericTypeDefinition() : null;
 
                 IEnumerable<Type> someInterfaces = some.GetInterfaces();
 
@@ -86,7 +89,7 @@ namespace TrackerDog.Configuration
                         ||
                         someInterfaces.Any
                         (
-                            i => i.IsGenericType
+                            i => i.GetTypeInfo().IsGenericType
                                 && i.GetGenericTypeDefinition() == interfaceType.Key
                         )
                 );
@@ -107,14 +110,14 @@ namespace TrackerDog.Configuration
         /// <param name="collectionChangeInterceptor">An implementation to interface type which intercepts calls to the whole collection type to handle changes</param>
         public void AddImplementation(Type interfaceType, Type implementationType, Type collectionChangeInterceptor)
         {
-            Contract.Requires(interfaceType != null, "Cannot add an implementation of a null interface");
-            Contract.Requires(interfaceType.IsInterface, "Given type must be an interface");
-            Contract.Requires(interfaceType.IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
-            Contract.Requires(collectionChangeInterceptor.GetInterfaces().Any(i => collectionChangeInterceptor.GetInterfaces().Any(i2 => i2 == i)), "Provided change interceptor type must be assignable to collection implementation type");
+            Contract.Requires(() => interfaceType != null, "Cannot add an implementation of a null interface");
+            Contract.Requires(() => interfaceType.GetTypeInfo().IsInterface, "Given type must be an interface");
+            Contract.Requires(() => interfaceType.GetTypeInfo().IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
+            Contract.Requires(() => collectionChangeInterceptor.GetInterfaces().Any(i => collectionChangeInterceptor.GetInterfaces().Any(i2 => i2 == i)), "Provided change interceptor type must be assignable to collection implementation type");
 
             lock (_syncLock)
             {
-                Contract.Assert(!Implementations.ContainsKey(interfaceType), "Adding an implementation can be done once");
+                Contract.Assert(() => !Implementations.ContainsKey(interfaceType), "Adding an implementation can be done once");
 
                 Implementations.Add(interfaceType, new CollectionImplementation(implementationType, collectionChangeInterceptor));
             }
@@ -128,10 +131,10 @@ namespace TrackerDog.Configuration
         /// <param name="collectionChangeInterceptor">An implementation to interface type which intercepts calls to the whole collection type to handle changes</param>
         public void ReplaceImplementation(Type interfaceType, Type implementationType, Type collectionChangeInterceptor)
         {
-            Contract.Requires(interfaceType != null, "Cannot add an implementation of a null interface");
-            Contract.Requires(interfaceType.IsInterface, "Given type must be an interface");
-            Contract.Requires(interfaceType.IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
-            Contract.Requires(interfaceType.IsAssignableFrom(collectionChangeInterceptor), "Provided change interceptor type must be assignable to collection implementation type");
+            Contract.Requires(() => interfaceType != null, "Cannot add an implementation of a null interface");
+            Contract.Requires(() => interfaceType.GetTypeInfo().IsInterface, "Given type must be an interface");
+            Contract.Requires(() => interfaceType.GetTypeInfo().IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
+            Contract.Requires(() => interfaceType.IsAssignableFrom(collectionChangeInterceptor), "Provided change interceptor type must be assignable to collection implementation type");
 
             lock (_syncLock)
             {

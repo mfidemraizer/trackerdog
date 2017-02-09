@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.Mixins
 {
@@ -27,6 +29,9 @@ namespace TrackerDog.Mixins
 
         public void RaiseCollectionChanged(NotifyCollectionChangedAction action, IEnumerable<object> changedItems)
         {
+            Contract.Requires(() => changedItems != null && changedItems.Count() > 0, "A collection change must change some item");
+            Contract.Assert(() => CollectionChanged != null, "This event cannot be raised with no event handler in the broadcast list");
+
             CollectionChanged?.Invoke
             (
                 this,
