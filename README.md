@@ -1,3 +1,10 @@
+## WARNING!
+
+**Current supported branch is [`v2-net-standard`](https://github.com/mfidemraizer/trackerdog/tree/v2-net-standard)**. Please [follow this link](https://github.com/mfidemraizer/trackerdog/tree/v2-net-standard) to switch to the new branch. 
+
+Until Visual Studio 2017 goes RTM, `v2-net-standard` won't be merged into `v2` branch. In the mean time, if you want to collaborate, please fork the `v2-net-standard` branch.
+
+
 # Welcome to TrackerDog!
 
 ![trackerdog build badge](https://mfidemraizer.visualstudio.com/_apis/public/build/definitions/6b21f8d5-b74c-4f26-8e06-f156bd0ab331/1/badge)
