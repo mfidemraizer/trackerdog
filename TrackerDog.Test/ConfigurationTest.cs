@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using TrackerDog.CollectionHandling;
 using TrackerDog.Configuration;
 
 namespace TrackerDog.Test
@@ -225,6 +226,14 @@ namespace TrackerDog.Test
             DerivedClassWithNestedEnum instance = factory.CreateOf<DerivedClassWithNestedEnum>();
 
             Assert.IsNotNull(instance);
+        }
+
+        [TestMethod]
+        public void CanReplaceCollectionChangeTrackingImplementation()
+        {
+            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+
+            config.Collections.AddOrUpdateImplementation<ICollection<string>, List<string>, DefaultCollectionChangeInterceptor<string>>();
         }
     }
 }

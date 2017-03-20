@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace TrackerDog.Configuration
@@ -21,22 +22,10 @@ namespace TrackerDog.Configuration
         /// <param name="some">A collection interface type</param>
         /// <returns></returns>
         KeyValuePair<Type, CollectionImplementation> GetImplementation(Type some);
-
-        /// <summary>
-        /// Adds a collection implementation
-        /// </summary>
-        /// <param name="interfaceType">Collection interface type</param>
-        /// <param name="implementationType">Implementation type to given collection interface type</param>
-        /// <param name="collectionChangeInterceptor">Collection change interceptor</param>
-        void AddImplementation(Type interfaceType, Type implementationType, Type collectionChangeInterceptor);
-
-
-        /// <summary>
-        /// Replaces an existing collection implementation and looks for it by given collection interface type.
-        /// </summary>
-        /// <param name="interfaceType">Collection interface type</param>
-        /// <param name="implementationType">Implementation type to given collection interface type</param>
-        /// <param name="collectionChangeInterceptor">Collection change interceptor</param>
-        void ReplaceImplementation(Type interfaceType, Type implementationType, Type collectionChangeInterceptor);
+        
+        void AddOrUpdateImplementation<TInterface, TImplementation, TCollectionChangeInterceptor>()
+            where TInterface : IEnumerable
+            where TImplementation : class, TInterface
+            where TCollectionChangeInterceptor : class;
     }
 }

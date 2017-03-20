@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,11 +20,11 @@ namespace TrackerDog.Configuration
         /// </summary>
         public TrackableCollectionConfiguration()
         {
-            AddImplementation(typeof(ISet<>), typeof(HashSet<>), typeof(SetChangeInterceptor<>));
-            AddImplementation(typeof(IList<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
-            AddImplementation(typeof(IDictionary<,>), typeof(Dictionary<,>), typeof(DefaultCollectionChangeInterceptor<>));
-            AddImplementation(typeof(ICollection<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
-            AddImplementation(typeof(IEnumerable<>), typeof(List<>), typeof(DefaultCollectionChangeInterceptor<>));
+            AddOrUpdateImplementation<ISet<string>, HashSet<string>, SetChangeInterceptor<string>>();
+            AddOrUpdateImplementation<IList<string>, List<string>, DefaultCollectionChangeInterceptor<string>>();
+            AddOrUpdateImplementation<IDictionary<string, string>, Dictionary<string, string>, DefaultCollectionChangeInterceptor<string>>();
+            AddOrUpdateImplementation<ICollection<string>, List<string>, DefaultCollectionChangeInterceptor<string>>();
+            AddOrUpdateImplementation<IEnumerable<string>, List<string>, DefaultCollectionChangeInterceptor<string>>();
         }
 
         /// <summary>
@@ -101,47 +102,20 @@ namespace TrackerDog.Configuration
             }
         }
 
-        /// <summary>
-        /// Adds a new implementation to some collection interface. This method will not support replacing
-        /// an already added interface/implementation pair.
-        /// </summary>
-        /// <param name="interfaceType">The collection interface</param>
-        /// <param name="implementationType">The collection implementation</param>
-        /// <param name="collectionChangeInterceptor">An implementation to interface type which intercepts calls to the whole collection type to handle changes</param>
-        public void AddImplementation(Type interfaceType, Type implementationType, Type collectionChangeInterceptor)
+        public void AddOrUpdateImplementation<TInterface, TImplementation, TCollectionChangeInterceptor>()
+            where TInterface : IEnumerable
+            where TImplementation : class, TInterface
+            where TCollectionChangeInterceptor : class
         {
-            Contract.Requires(() => interfaceType != null, "Cannot add an implementation of a null interface");
-            Contract.Requires(() => interfaceType.GetTypeInfo().IsInterface, "Given type must be an interface");
-            Contract.Requires(() => interfaceType.GetTypeInfo().IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
-            Contract.Requires(() => collectionChangeInterceptor.GetInterfaces().Any(i => collectionChangeInterceptor.GetInterfaces().Any(i2 => i2 == i)), "Provided change interceptor type must be assignable to collection implementation type");
+            Type interfaceType = typeof(TInterface).GetTypeInfo().GetGenericTypeDefinition();
+            Type implementationType = typeof(TImplementation).GetTypeInfo().GetGenericTypeDefinition();
+            Type collectionChangeInterceptorType = typeof(TCollectionChangeInterceptor).GetTypeInfo().GetGenericTypeDefinition();
+
+            Contract.Requires(() => interfaceType.GetTypeInfo().IsInterface, $"Given type in generic parameter '{nameof(TInterface)}' must be an interface");
 
             lock (_syncLock)
             {
-                Contract.Assert(() => !Implementations.ContainsKey(interfaceType), "Adding an implementation can be done once");
-
-                Implementations.Add(interfaceType, new CollectionImplementation(implementationType, collectionChangeInterceptor));
-            }
-        }
-
-        /// <summary>
-        /// Replaces an existing collection interface/implementation or adds it.
-        /// </summary>
-        /// <param name="interfaceType"></param>
-        /// <param name="implementationType"></param>
-        /// <param name="collectionChangeInterceptor">An implementation to interface type which intercepts calls to the whole collection type to handle changes</param>
-        public void ReplaceImplementation(Type interfaceType, Type implementationType, Type collectionChangeInterceptor)
-        {
-            Contract.Requires(() => interfaceType != null, "Cannot add an implementation of a null interface");
-            Contract.Requires(() => interfaceType.GetTypeInfo().IsInterface, "Given type must be an interface");
-            Contract.Requires(() => interfaceType.GetTypeInfo().IsGenericTypeDefinition, "Given collection interface must be provided as a generic type definition");
-            Contract.Requires(() => interfaceType.IsAssignableFrom(collectionChangeInterceptor), "Provided change interceptor type must be assignable to collection implementation type");
-
-            lock (_syncLock)
-            {
-                if (Implementations.ContainsKey(interfaceType))
-                    Implementations[interfaceType] = new CollectionImplementation(implementationType, collectionChangeInterceptor);
-                else
-                    AddImplementation(interfaceType, implementationType, collectionChangeInterceptor);
+                Implementations[interfaceType] = new CollectionImplementation(implementationType, collectionChangeInterceptorType);
             }
         }
     }
