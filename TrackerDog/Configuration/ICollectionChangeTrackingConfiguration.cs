@@ -23,6 +23,12 @@ namespace TrackerDog.Configuration
         /// <returns></returns>
         KeyValuePair<Type, CollectionImplementation> GetImplementation(Type some);
         
+        /// <summary>
+        /// Adds or updates a collection change tracking implementations.
+        /// </summary>
+        /// <typeparam name="TInterface">The collection interface of the collection to which the change tracking implementation should track</typeparam>
+        /// <typeparam name="TImplementation">The collection implementation of the given collection interface</typeparam>
+        /// <typeparam name="TCollectionChangeInterceptor">The collection change tracking implementation</typeparam>
         void AddOrUpdateImplementation<TInterface, TImplementation, TCollectionChangeInterceptor>()
             where TInterface : IEnumerable
             where TImplementation : class, TInterface

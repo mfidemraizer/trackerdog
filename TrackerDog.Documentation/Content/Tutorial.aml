@@ -412,8 +412,10 @@
           can set <codeEntityReference>P:TrackerDog.Configuration.TypeSearchSettings.Mode</codeEntityReference> property to <codeEntityReference>F:TrackerDog.Configuration.TypeSearchMode.AttributeConfigurationOnly</codeEntityReference> which
           exactly meant to do restrict configuration to attribute-based one only.
         </para>
-      
-         <para>This configuration approach is even more friendly <link xlink:href="#assemblyConfiguration">when configuring types for an entire assembly</link>!</para>
+
+        <para>
+          This configuration approach is even more friendly <link xlink:href="#assemblyConfiguration">when configuring types for an entire assembly</link>!
+        </para>
       </content>
     </section>
 
@@ -761,6 +763,10 @@
     <section address="collectionChanges">
       <title>Tracking collection changes</title>
       <content>
+        <para>
+          <token>projectName</token> supports tracking collection changes (i.e. it can observe collection changes). See the following
+          code snippet to see how to use collection change tracking (if you want to know how to customize this feature please jump to <link xlink:href="1e03762d-b9f5-44af-a4b0-c23c36064c24" />):
+        </para>
         <code language="c#">
           <![CDATA[
           public class App 
@@ -792,6 +798,21 @@
           // If you need typed items...
           IEnumerable<User> typedAddedUsers = addedItems.Cast<User>();
           IEnumerable<User> typedRemovedUsers = removedItems.Cast<User>();
+          ]]>
+        </code>
+        <para>
+          It might happen that you need to initialize some collection change tracking. For example, you want to consider
+          changes after some other ones. Therefore, you would use <codeEntityReference>M:TrackerDog.CollectionExtensions.ClearChanges``1(System.Collections.Generic.ICollection{``0})</codeEntityReference>:
+        </para>
+        <code language="c#">
+          <![CDATA[
+          App app = trackableObjectFactory.CreateOf<App>();
+          app.Users.Add(new User { Name = "Matías", Age = 30 });
+          
+          app.Users.ClearChanges();
+          
+          // Now TrackerDog will only know about this new user on App.Users
+          app.Users.Add(new User { Name = "John", Age = 50 });
           ]]>
         </code>
       </content>

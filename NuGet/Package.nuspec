@@ -2,13 +2,13 @@
 <package>
   <metadata>
     <id>TrackerDog$flavor$</id>
-    <version>2.2.0</version>
+    <version>2.2.1</version>
     <title>TrackerDog: A generic .NET object change tracker</title>
     <authors>Matías Fidemraizer</authors>
     <owners>Matías Fidemraizer</owners>
     <summary>Track changes of any .NET object and full object graphs</summary>
     <description>TrackerDog turns any .NET object or full object graph into a change-trackable object</description>
-    <releaseNotes>See release notes here: https://github.com/mfidemraizer/trackerdog/releases/tag/v2.2.0</releaseNotes>
+    <releaseNotes>See release notes here: https://github.com/mfidemraizer/trackerdog/releases/tag/v2.2.1</releaseNotes>
     <projectUrl>http://matiasfidemrazer.com/trackerdog/</projectUrl>
     <licenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</licenseUrl>
     <copyright>Copyright © Matías Fidemraizer</copyright>
