@@ -20,6 +20,7 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
@@ -31,199 +32,40 @@
             <td class="logoColumn">
               <img width="50px" height="40px" src="../icons/dogtracker.png" />
             </td>
-            <td class="titleColumn">IObjectChangeTrackingConfiguration Methods</td>
+            <td class="titleColumn">
+              <h1>IObjectChangeTrackingConfiguration Methods</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration.htm">IObjectChangeTrackingConfiguration</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration.htm">IObjectChangeTrackingConfiguration</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="methodList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_CanTrackProperty.htm">CanTrackProperty</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_CanTrackProperty.htm">CanTrackProperty</a></td><td><div class="summary">
             Given an arbitrary reflected property, determines if it is configured to be trackable in some already configured trackable type.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_CanTrackType.htm">CanTrackType</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_CanTrackType.htm">CanTrackType</a></td><td><div class="summary">
             Given an arbitrary type, returns if it is an already configured trackable type
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_CreateTrackableObjectFactory.htm">CreateTrackableObjectFactory</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_CreateTrackableObjectFactory.htm">CreateTrackableObjectFactory</a></td><td><div class="summary">
             Creates a factory to turn any elegible object into a change-trackable one
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_GetAllTrackableBaseTypes.htm">GetAllTrackableBaseTypes</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_GetAllTrackableBaseTypes.htm">GetAllTrackableBaseTypes</a></td><td><div class="summary">
             Gets all base trackable types of a given other trackable type
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_GetTrackableType.htm">GetTrackableType</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_GetTrackableType.htm">GetTrackableType</a></td><td><div class="summary">
             Gets a trackable type configuration by giving its type
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_ImplementsBaseType.htm">ImplementsBaseType</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_ImplementsBaseType.htm">ImplementsBaseType</a></td><td><div class="summary">
             Given an arbitrary type, returns if there is some already configured trackable type that is a base type of itself.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisType.htm">TrackThisType(Type, Action<span id="LSTB2AD2DD1_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_0?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_1?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisType.htm">TrackThisType(Type, Action<span id="LSTB2AD2DD1_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_0?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_1?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a></td><td><div class="summary">
             Configures given type to be change-trackable
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisType__1.htm">TrackThisType<span id="LSTB2AD2DD1_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_2?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T<span id="LSTB2AD2DD1_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_3?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(Action<span id="LSTB2AD2DD1_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_4?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_5"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_5?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T<span id="LSTB2AD2DD1_6"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_6?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script><span id="LSTB2AD2DD1_7"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_7?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisType__1.htm">TrackThisType<span id="LSTB2AD2DD1_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_2?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T<span id="LSTB2AD2DD1_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_3?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(Action<span id="LSTB2AD2DD1_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_4?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_5"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_5?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T<span id="LSTB2AD2DD1_6"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_6?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script><span id="LSTB2AD2DD1_7"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_7?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a></td><td><div class="summary">
             Configures given type as generic parameter to be change-trackable
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisTypeRecursive.htm">TrackThisTypeRecursive(Type, Action<span id="LSTB2AD2DD1_8"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_8?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_9"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_9?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisTypeRecursive.htm">TrackThisTypeRecursive(Type, Action<span id="LSTB2AD2DD1_8"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_8?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_9"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_9?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a></td><td><div class="summary">
             Configures given type given as parameter to be change-trackable and recurisvely configures all associated types within 
             any nesting level to be also change-trackable.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisTypeRecursive__1.htm">TrackThisTypeRecursive<span id="LSTB2AD2DD1_10"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_10?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>TRoot<span id="LSTB2AD2DD1_11"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_11?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(Action<span id="LSTB2AD2DD1_12"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_12?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_13"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_13?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackThisTypeRecursive__1.htm">TrackThisTypeRecursive<span id="LSTB2AD2DD1_10"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_10?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>TRoot<span id="LSTB2AD2DD1_11"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_11?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(Action<span id="LSTB2AD2DD1_12"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_12?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_13"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_13?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a></td><td><div class="summary">
             Configures given type given as generic parameter to be change-trackable and recurisvely configures all associated types within 
             any nesting level to be also change-trackable.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackTypesFromAssembly.htm">TrackTypesFromAssembly(Assembly, Action<span id="LSTB2AD2DD1_14"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_14?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_15"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_15?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackTypesFromAssembly.htm">TrackTypesFromAssembly(Assembly, Action<span id="LSTB2AD2DD1_14"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_14?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_15"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_15?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a></td><td><div class="summary">
             Configures types from a given assembly to be change-trackable based on provided search settings
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackTypesFromAssembly_1.htm">TrackTypesFromAssembly(String, Action<span id="LSTB2AD2DD1_16"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_16?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_17"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_17?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="M_TrackerDog_Configuration_IObjectChangeTrackingConfiguration_TrackTypesFromAssembly_1.htm">TrackTypesFromAssembly(String, Action<span id="LSTB2AD2DD1_16"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_16?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>IConfigurableTrackableType<span id="LSTB2AD2DD1_17"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB2AD2DD1_17?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, TypeSearchSettings)</a></td><td><div class="summary">
             Configures types from a given assembly to be change-trackable based on provided search settings
-            </div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration.htm">IObjectChangeTrackingConfiguration Interface</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="N_TrackerDog_Configuration.htm">TrackerDog.Configuration Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration.htm">IObjectChangeTrackingConfiguration Interface</a></div><div class="seeAlsoStyle"><a href="N_TrackerDog_Configuration.htm">TrackerDog.Configuration Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
@@ -28,32 +29,22 @@
             <td class="logoColumn">
               <img width="50px" height="40px" src="../icons/dogtracker.png" />
             </td>
-            <td class="titleColumn">How does it work?</td>
+            <td class="titleColumn">
+              <h1>How does it work?</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="introduction">
-          <p>
+        <span class="introStyle"></span> <div class="introduction"><p>
         Discover how TrackerDog works.
-      </p>
-        </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />
-        Inside TrackerDog</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <p>TrackerDog produces proxies of your POCO class instances to intercept its properties
+      </p></div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />
+        Inside TrackerDog</span></div><div id="ID0RBSection" class="collapsibleSection"><p>TrackerDog produces proxies of your POCO class instances to intercept its properties
           and detect changes. Actually, when you turn a POCO instance into a change-trackable object, you don't get
           the same instance but a proxy that derives from your POCO class as a new instance.
-        </p>
-          <p>
+        </p><p>
           In addition, proxies implement <a href="http://msdn2.microsoft.com/en-us/library/ms133020" target="_blank">INotifyPropertyChanged</a> and collection property object proxies
           implement <a href="http://msdn2.microsoft.com/en-us/library/ms668629" target="_blank">INotifyCollectionChanged</a> which let you listen changes easily without
           wasting your time implementing these interfaces manually!
-        </p>
-        </div>
-      </div>
+        </p></div></div>
     </div>
     <div id="pageFooter" class="pageFooter" />
   </body>

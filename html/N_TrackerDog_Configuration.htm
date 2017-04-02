@@ -22,212 +22,53 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">TrackerDog<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="0e46d6ac-6f64-4d54-98fd-3813df42cb8e.htm" title="TrackerDog" tocid="roottoc">TrackerDog</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="G_TrackerDog.htm" title="TrackerDog Namespaces" tocid="G_TrackerDog">TrackerDog Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="N_TrackerDog_Configuration.htm" title="TrackerDog.Configuration" tocid="N_TrackerDog_Configuration">TrackerDog.Configuration</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_ChangeTrackableAttribute.htm" title="ChangeTrackableAttribute Class" tocid="T_TrackerDog_Configuration_ChangeTrackableAttribute">ChangeTrackableAttribute Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_CollectionImplementation.htm" title="CollectionImplementation Class" tocid="T_TrackerDog_Configuration_CollectionImplementation">CollectionImplementation Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_DoNotTrackChangesAttribute.htm" title="DoNotTrackChangesAttribute Class" tocid="T_TrackerDog_Configuration_DoNotTrackChangesAttribute">DoNotTrackChangesAttribute Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_ICollectionChangeTrackingConfiguration.htm" title="ICollectionChangeTrackingConfiguration Interface" tocid="T_TrackerDog_Configuration_ICollectionChangeTrackingConfiguration">ICollectionChangeTrackingConfiguration Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_IConfigurableTrackableType.htm" title="IConfigurableTrackableType Interface" tocid="T_TrackerDog_Configuration_IConfigurableTrackableType">IConfigurableTrackableType Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_IConfigurableTrackableType_1.htm" title="IConfigurableTrackableType(T) Interface" tocid="T_TrackerDog_Configuration_IConfigurableTrackableType_1">IConfigurableTrackableType(T) Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration.htm" title="IObjectChangeTrackingConfiguration Interface" tocid="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration">IObjectChangeTrackingConfiguration Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_ITrackableType.htm" title="ITrackableType Interface" tocid="T_TrackerDog_Configuration_ITrackableType">ITrackableType Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_ITrackableType_1.htm" title="ITrackableType(T) Interface" tocid="T_TrackerDog_Configuration_ITrackableType_1">ITrackableType(T) Interface</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="T_TrackerDog_Configuration_TypeSearchMode.htm" title="TypeSearchMode Enumeration" tocid="T_TrackerDog_Configuration_TypeSearchMode">TypeSearchMode Enumeration</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_TypeSearchSettings.htm" title="TypeSearchSettings Class" tocid="T_TrackerDog_Configuration_TypeSearchSettings">TypeSearchSettings Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="0e46d6ac-6f64-4d54-98fd-3813df42cb8e.htm" title="TrackerDog" tocid="roottoc">TrackerDog</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="G_TrackerDog.htm" title="TrackerDog Namespaces" tocid="G_TrackerDog">TrackerDog Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="N_TrackerDog_Configuration.htm" title="TrackerDog.Configuration" tocid="N_TrackerDog_Configuration">TrackerDog.Configuration</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_ChangeTrackableAttribute.htm" title="ChangeTrackableAttribute Class" tocid="T_TrackerDog_Configuration_ChangeTrackableAttribute">ChangeTrackableAttribute Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_CollectionImplementation.htm" title="CollectionImplementation Class" tocid="T_TrackerDog_Configuration_CollectionImplementation">CollectionImplementation Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_DoNotTrackChangesAttribute.htm" title="DoNotTrackChangesAttribute Class" tocid="T_TrackerDog_Configuration_DoNotTrackChangesAttribute">DoNotTrackChangesAttribute Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_ICollectionChangeTrackingConfiguration.htm" title="ICollectionChangeTrackingConfiguration Interface" tocid="T_TrackerDog_Configuration_ICollectionChangeTrackingConfiguration">ICollectionChangeTrackingConfiguration Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_IConfigurableTrackableType.htm" title="IConfigurableTrackableType Interface" tocid="T_TrackerDog_Configuration_IConfigurableTrackableType">IConfigurableTrackableType Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_IConfigurableTrackableType_1.htm" title="IConfigurableTrackableType(T) Interface" tocid="T_TrackerDog_Configuration_IConfigurableTrackableType_1">IConfigurableTrackableType(T) Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_IConfigurableTrackableTypeContract.htm" title="IConfigurableTrackableTypeContract Class" tocid="T_TrackerDog_Configuration_IConfigurableTrackableTypeContract">IConfigurableTrackableTypeContract Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration.htm" title="IObjectChangeTrackingConfiguration Interface" tocid="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration">IObjectChangeTrackingConfiguration Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_ITrackableType.htm" title="ITrackableType Interface" tocid="T_TrackerDog_Configuration_ITrackableType">ITrackableType Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_ITrackableType_1.htm" title="ITrackableType(T) Interface" tocid="T_TrackerDog_Configuration_ITrackableType_1">ITrackableType(T) Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_ITrackableTypeContract.htm" title="ITrackableTypeContract Class" tocid="T_TrackerDog_Configuration_ITrackableTypeContract">ITrackableTypeContract Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="T_TrackerDog_Configuration_TypeSearchMode.htm" title="TypeSearchMode Enumeration" tocid="T_TrackerDog_Configuration_TypeSearchMode">TypeSearchMode Enumeration</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="T_TrackerDog_Configuration_TypeSearchSettings.htm" title="TypeSearchSettings Class" tocid="T_TrackerDog_Configuration_TypeSearchSettings">TypeSearchSettings Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
             <td class="logoColumn">
               <img width="50px" height="40px" src="../icons/dogtracker.png" />
             </td>
-            <td class="titleColumn">TrackerDog.Configuration Namespace</td>
+            <td class="titleColumn">
+              <h1>TrackerDog.Configuration Namespace</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="summary"> </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="summary"> </div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="classList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Class</th>
-              <th>Description</th>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_ChangeTrackableAttribute.htm">ChangeTrackableAttribute</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Class</th><th>Description</th></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="T_TrackerDog_Configuration_ChangeTrackableAttribute.htm">ChangeTrackableAttribute</a></td><td><div class="summary">
             Either marks a class, interface or a property to be change-trackable
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_CollectionImplementation.htm">CollectionImplementation</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="T_TrackerDog_Configuration_CollectionImplementation.htm">CollectionImplementation</a></td><td><div class="summary">
             Represents a collection implementation information
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_DoNotTrackChangesAttribute.htm">DoNotTrackChangesAttribute</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="T_TrackerDog_Configuration_DoNotTrackChangesAttribute.htm">DoNotTrackChangesAttribute</a></td><td><div class="summary">
             Marks a property to be ignored from being change-tracked
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_TypeSearchSettings.htm">TypeSearchSettings</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="T_TrackerDog_Configuration_IConfigurableTrackableTypeContract.htm">IConfigurableTrackableTypeContract</a></td><td /></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="T_TrackerDog_Configuration_ITrackableTypeContract.htm">ITrackableTypeContract</a></td><td /></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="T_TrackerDog_Configuration_TypeSearchSettings.htm">TypeSearchSettings</a></td><td><div class="summary">
             Defines specific settings when supporting operations search types
             during configuration stages.
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Interfaces</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+            </div></td></tr></table></div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Interfaces</span></div><div id="ID1RBSection" class="collapsibleSection"><table class="members" id="interfaceList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Interface</th>
-              <th>Description</th>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_ICollectionChangeTrackingConfiguration.htm">ICollectionChangeTrackingConfiguration</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Interface</th><th>Description</th></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="T_TrackerDog_Configuration_ICollectionChangeTrackingConfiguration.htm">ICollectionChangeTrackingConfiguration</a></td><td><div class="summary">
             Defines collection change-tracking configuration 
-            </div>
-              </td>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_IConfigurableTrackableType.htm">IConfigurableTrackableType</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="T_TrackerDog_Configuration_IConfigurableTrackableType.htm">IConfigurableTrackableType</a></td><td><div class="summary">
             Defines how a trackable type can be configured
-            </div>
-              </td>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_IConfigurableTrackableType_1.htm">IConfigurableTrackableType<span id="LST7B912BC8_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST7B912BC8_0?cs=&lt;|vb=(Of |cpp=&lt;|nu=(|fs=&lt;'");</script>T<span id="LST7B912BC8_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST7B912BC8_1?cs=&gt;|vb=)|cpp=&gt;|nu=)|fs=&gt;");</script></a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="T_TrackerDog_Configuration_IConfigurableTrackableType_1.htm">IConfigurableTrackableType<span id="LST7B912BC8_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST7B912BC8_0?cs=&lt;|vb=(Of |cpp=&lt;|nu=(|fs=&lt;'");</script>T<span id="LST7B912BC8_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST7B912BC8_1?cs=&gt;|vb=)|cpp=&gt;|nu=)|fs=&gt;");</script></a></td><td><div class="summary">
             Defines how a trackable type can be configured
-            </div>
-              </td>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration.htm">IObjectChangeTrackingConfiguration</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="T_TrackerDog_Configuration_IObjectChangeTrackingConfiguration.htm">IObjectChangeTrackingConfiguration</a></td><td><div class="summary">
             Defines the required set of members to configure object change tracking
-            </div>
-              </td>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_ITrackableType.htm">ITrackableType</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="T_TrackerDog_Configuration_ITrackableType.htm">ITrackableType</a></td><td><div class="summary">
             Defines the configuration of a trackable type
-            </div>
-              </td>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_ITrackableType_1.htm">ITrackableType<span id="LST7B912BC8_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST7B912BC8_2?cs=&lt;|vb=(Of |cpp=&lt;|nu=(|fs=&lt;'");</script>T<span id="LST7B912BC8_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST7B912BC8_3?cs=&gt;|vb=)|cpp=&gt;|nu=)|fs=&gt;");</script></a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="T_TrackerDog_Configuration_ITrackableType_1.htm">ITrackableType<span id="LST7B912BC8_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST7B912BC8_2?cs=&lt;|vb=(Of |cpp=&lt;|nu=(|fs=&lt;'");</script>T<span id="LST7B912BC8_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST7B912BC8_3?cs=&gt;|vb=)|cpp=&gt;|nu=)|fs=&gt;");</script></a></td><td><div class="summary">
             Defines the configuration of a trackable type
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID2RB')" onkeypress="SectionExpandCollapse_CheckKey('ID2RB', event)" tabindex="0">
-            <img id="ID2RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Enumerations</span>
-        </div>
-        <div id="ID2RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+            </div></td></tr></table></div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID2RB')" onkeypress="SectionExpandCollapse_CheckKey('ID2RB', event)" tabindex="0"><img id="ID2RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Enumerations</span></div><div id="ID2RBSection" class="collapsibleSection"><table class="members" id="enumerationList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Enumeration</th>
-              <th>Description</th>
-            </tr>
-            <tr data="enumeration; public">
-              <td>
-                <img src="../icons/pubenumeration.gif" alt="Public enumeration" title="Public enumeration" />
-              </td>
-              <td>
-                <a href="T_TrackerDog_Configuration_TypeSearchMode.htm">TypeSearchMode</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Enumeration</th><th>Description</th></tr><tr data="enumeration; public"><td><img src="../icons/pubenumeration.gif" alt="Public enumeration" title="Public enumeration" /></td><td><a href="T_TrackerDog_Configuration_TypeSearchMode.htm">TypeSearchMode</a></td><td><div class="summary">
             Defines how type search must be performed during configuration stage
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+            </div></td></tr></table></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

@@ -20,6 +20,7 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
@@ -31,119 +32,26 @@
             <td class="logoColumn">
               <img width="50px" height="40px" src="../icons/dogtracker.png" />
             </td>
-            <td class="titleColumn">IObjectPropertyChangeTracking Properties</td>
+            <td class="titleColumn">
+              <h1>IObjectPropertyChangeTracking Properties</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="T_TrackerDog_IObjectPropertyChangeTracking.htm">IObjectPropertyChangeTracking</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="T_TrackerDog_IObjectPropertyChangeTracking.htm">IObjectPropertyChangeTracking</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="propertyList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="P_TrackerDog_IObjectPropertyChangeTracking_CurrentValue.htm">CurrentValue</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="P_TrackerDog_IObjectPropertyChangeTracking_CurrentValue.htm">CurrentValue</a></td><td><div class="summary">
             Gets latest tracked property value
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="P_TrackerDog_IObjectPropertyChangeTracking_HasChanged.htm">HasChanged</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="P_TrackerDog_IObjectPropertyChangeTracking_HasChanged.htm">HasChanged</a></td><td><div class="summary">
             Gets a flag to determine if the tracked property has changed since its tracking was started
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="P_TrackerDog_IObjectPropertyChangeTracking_OldValue.htm">OldValue</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="P_TrackerDog_IObjectPropertyChangeTracking_OldValue.htm">OldValue</a></td><td><div class="summary">
             Gets the value that had the whole tracked property when the tracking was started
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="P_TrackerDog_IObjectPropertyChangeTracking_PropertyName.htm">PropertyName</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="P_TrackerDog_IObjectPropertyChangeTracking_PropertyName.htm">PropertyName</a></td><td><div class="summary">
             Gets the tracked property name
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="P_TrackerDog_IObjectPropertyChangeTracking_TargetObject.htm">TargetObject</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="P_TrackerDog_IObjectPropertyChangeTracking_TargetObject.htm">TargetObject</a></td><td><div class="summary">
             Gets the object that owns current property change tracking
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="P_TrackerDog_IObjectPropertyChangeTracking_Tracker.htm">Tracker</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="P_TrackerDog_IObjectPropertyChangeTracking_Tracker.htm">Tracker</a></td><td><div class="summary">
             Gets the associated tracker
-            </div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="T_TrackerDog_IObjectPropertyChangeTracking.htm">IObjectPropertyChangeTracking Interface</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="N_TrackerDog.htm">TrackerDog Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="T_TrackerDog_IObjectPropertyChangeTracking.htm">IObjectPropertyChangeTracking Interface</a></div><div class="seeAlsoStyle"><a href="N_TrackerDog.htm">TrackerDog Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

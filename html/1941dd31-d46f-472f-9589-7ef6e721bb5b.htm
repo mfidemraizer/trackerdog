@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
@@ -28,39 +29,17 @@
             <td class="logoColumn">
               <img width="50px" height="40px" src="../icons/dogtracker.png" />
             </td>
-            <td class="titleColumn">What changes are tracked?</td>
+            <td class="titleColumn">
+              <h1>What changes are tracked?</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="introduction">
-          <p>
-        Discover what can track </p>
-        </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />What changes are tracked?</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <ul>
-            <li>
-              <p>
+        <span class="introStyle"></span> <div class="introduction"><p>
+        Discover what can track </p></div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />What changes are tracked?</span></div><div id="ID0RBSection" class="collapsibleSection"><ul><li><p>
               Changing any property on the tracked object either if you're setting its default value (for example <span class="literal">null</span> or an instance of a reference or value type).
-            </p>
-            </li>
-            <li>
-              <p>Adding, removing or updating an item in a collection property on some tracked object.</p>
-            </li>
-            <li>
-              <p>
+            </p></li><li><p>Adding, removing or updating an item in a collection property on some tracked object.</p></li><li><p>
               As above case, with <span class="phrase">sets</span>, an intersection or exception will also be tracked as adding or removing items to the collection.
-            </p>
-            </li>
-            <li>
-              <p>Any of above cases on any level of associated objects with the one that was turned into a change-trackable object.</p>
-            </li>
-          </ul>
-        </div>
-      </div>
+            </p></li><li><p>Any of above cases on any level of associated objects with the one that was turned into a change-trackable object.</p></li></ul></div></div>
     </div>
     <div id="pageFooter" class="pageFooter" />
   </body>
