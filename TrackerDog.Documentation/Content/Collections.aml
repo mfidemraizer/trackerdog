@@ -166,14 +166,11 @@
 
         <para>
           You can either add new collection interfaces or replace default implementations to already configured
-          collection interfaces using the following methods:
+          collection interfaces using the following method:
         </para>
         <list class="bullet">
           <listItem>
-            <codeEntityReference>M:TrackerDog.Configuration.ICollectionChangeTrackingConfiguration.AddImplementation(System.Type,System.Type,System.Type)</codeEntityReference>
-          </listItem>
-          <listItem>
-            <codeEntityReference>M:TrackerDog.Configuration.ICollectionChangeTrackingConfiguration.ReplaceImplementation(System.Type,System.Type,System.Type)</codeEntityReference>
+            <codeEntityReference>M:TrackerDog.Configuration.ICollectionChangeTrackingConfiguration.AddOrUpdateImplementation``3</codeEntityReference>
           </listItem>
         </list>
         <para>
@@ -239,12 +236,13 @@
         <code language="c#">
           <![CDATA[
           IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
-          config.Collections.ReplaceImplementation
-          (
-              typeof(IList<>),
-              typeof(MyIListImplementation<>)
-              typeof(SomeIListInterceptor<>)
-          );
+          
+          // Why IList<string>, MyIListImplementation<string> and SomeIListInterceptor<string>?
+          // TrackerDog has opted-in to provide collection change tracking details as generic arguments to enforce some 
+          // rules during compile-time, and you can't provide generic arguments as generic type definitions. Hence, the collection 
+          // item type is just a dummy argument. You can provide int, object or whatever: TrackerDog won't use, it's just for the sake
+          // of being able to compile the code.
+          config.Collections.AddOrUpdateImplementation<IList<string>, MyIListImplementation<string>, SomeIListInterceptor<string>>();
           ]]>
         </code>
       </content>

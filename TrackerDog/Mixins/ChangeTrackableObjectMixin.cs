@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using TrackerDog.Configuration;
+using TrackerDog.Contracts;
 using TrackerDog.Interceptors;
 
 namespace TrackerDog.Mixins
@@ -35,20 +35,22 @@ namespace TrackerDog.Mixins
 
         private void ToTrackableCollection(PropertyInfo property, IChangeTrackableObject parentObject)
         {
-            Contract.Requires(property != null, "Cannot turn the object held by the property because the given property is null");
-            Contract.Requires(parentObject != null, "A non-null reference to the object owning given property is mandatory");
+            Contract.Requires(() => property != null, "Cannot turn the object held by the property because the given property is null");
+            Contract.Requires(() => parentObject != null, "A non-null reference to the object owning given property is mandatory");
 
             if (property.IsEnumerable() && !property.PropertyType.IsArray && ChangeTrackingContext.Configuration.Collections.CanTrack(property.PropertyType))
             {
                 object proxiedCollection = TrackableObjectFactory.CreateForCollection(property.GetValue(parentObject), parentObject, property);
 
-                Contract.Assert(property.SetMethod != null, $"Property '{property.Name} must implement a setter");
+                Contract.Assert(() => property.SetMethod != null, $"Property '{property.Name} must implement a setter");
                 property.SetValue(parentObject, proxiedCollection);
             }
         }
 
         public void StartTracking(IChangeTrackableObject trackableObject, ObjectChangeTracker currentTracker = null)
         {
+            Contract.Requires(() => trackableObject != null, "Given reference must be non-null to be able to track it");
+
             ChangeTrackingContext.ChangeTracker = currentTracker ?? new ObjectChangeTracker(ChangeTrackingContext.Configuration, TrackableObjectFactory, trackableObject);
             PropertyChanged += (sender, e) => TrackProperty(trackableObject, e.PropertyName);
 
@@ -93,7 +95,7 @@ namespace TrackerDog.Mixins
 
         private void TrackProperty(IChangeTrackableObject trackableObject, string propertyName = null, PropertyInfo property = null)
         {
-            Contract.Assert(ChangeTrackingContext.ChangeTracker != null);
+            Contract.Assert(() => ChangeTrackingContext.ChangeTracker != null);
 
             DynamicObject dynamicObject = trackableObject as DynamicObject;
             property = property ?? trackableObject.GetType().GetProperty(propertyName, DefaultBindingFlags);
@@ -117,6 +119,10 @@ namespace TrackerDog.Mixins
 
         public void RaisePropertyChanged(IChangeTrackableObject trackableObject, string propertyName)
         {
+            Contract.Requires(() => trackableObject != null, "A non null reference to a trackable object is mandatory");
+            Contract.Requires(() => !string.IsNullOrEmpty(propertyName), "Changed property must have a name");
+            Contract.Assert(() => PropertyChanged != null, "This event requires at least an event handler to be raised");
+
             PropertyChanged(trackableObject, new PropertyChangedEventArgs(propertyName));
         }
 

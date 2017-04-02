@@ -1,6 +1,6 @@
 ﻿using Castle.DynamicProxy;
-using System.Diagnostics.Contracts;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.Interceptors
 {
@@ -10,7 +10,7 @@ namespace TrackerDog.Interceptors
 
         public void Intercept(IInvocation invocation)
         {
-            Contract.Assume(invocation != null);
+            Contract.Requires(() => invocation != null);
 
             IHasParent withParent = invocation.Proxy as IHasParent;
 

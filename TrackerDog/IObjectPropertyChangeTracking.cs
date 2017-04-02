@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace TrackerDog
 {
-    [ContractClass(typeof(IObjectPropertyChangeTrackingContract))]
     public interface IObjectPropertyChangeTracking : IEquatable<IObjectPropertyChangeTracking>
     {
         /// <summary>

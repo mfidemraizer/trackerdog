@@ -1,0 +1,121 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <AssemblyName>TrackerDog</AssemblyName>
+    <RootNamespace>TrackerDog</RootNamespace>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)key.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+    <Version>2.2.0.0</Version>
+    <Authors>Matías Fidemraizer</Authors>
+    <Description />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.3\TrackerDog.xml</DocumentationFile>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SignedRelease|AnyCPU'">
+    <DocumentationFile>bin\SignedRelease\netstandard1.3\TrackerDog.xml</DocumentationFile>
+    <SignAssembly>True</SignAssembly>
+    <NoWarn>1701;1702;1705;1591;1573</NoWarn>
+    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\SignedRelease\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.3\TrackerDog.xml</DocumentationFile>
+    <DefineConstants>DEBUG</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\TrackerDog\ChangeTrackableObjectState.cs" Link="ChangeTrackableObjectState.cs" />
+    <Compile Include="..\TrackerDog\CollectionChangeTrackingContext.cs" Link="CollectionChangeTrackingContext.cs" />
+    <Compile Include="..\TrackerDog\CollectionExtensions.cs" Link="CollectionExtensions.cs" />
+    <Compile Include="..\TrackerDog\CollectionHandling\CollectionChange.cs" Link="CollectionHandling\CollectionChange.cs" />
+    <Compile Include="..\TrackerDog\CollectionHandling\CollectionChangeContext.cs" Link="CollectionHandling\CollectionChangeContext.cs" />
+    <Compile Include="..\TrackerDog\CollectionHandling\DefaultCollectionChangeInterceptor.cs" Link="CollectionHandling\DefaultCollectionChangeInterceptor.cs" />
+    <Compile Include="..\TrackerDog\CollectionHandling\SetChangeInterceptor.cs" Link="CollectionHandling\SetChangeInterceptor.cs" />
+    <Compile Include="..\TrackerDog\Configuration\AttributeConfigurationBuilder.cs" Link="Configuration\AttributeConfigurationBuilder.cs" />
+    <Compile Include="..\TrackerDog\Configuration\ChangeTrackableAttribute.cs" Link="Configuration\ChangeTrackableAttribute.cs" />
+    <Compile Include="..\TrackerDog\Configuration\CollectionImplementation.cs" Link="Configuration\CollectionImplementation.cs" />
+    <Compile Include="..\TrackerDog\Configuration\DoNotTrackChangesAttribute.cs" Link="Configuration\DoNotTrackChangesAttribute.cs" />
+    <Compile Include="..\TrackerDog\Configuration\GenericITrackableType.cs" Link="Configuration\GenericITrackableType.cs" />
+    <Compile Include="..\TrackerDog\Configuration\GenericTrackableType.cs" Link="Configuration\GenericTrackableType.cs" />
+    <Compile Include="..\TrackerDog\Configuration\ICollectionChangeTrackingConfiguration.cs" Link="Configuration\ICollectionChangeTrackingConfiguration.cs" />
+    <Compile Include="..\TrackerDog\Configuration\IConfigurableTrackableType.cs" Link="Configuration\IConfigurableTrackableType.cs" />
+    <Compile Include="..\TrackerDog\Configuration\IGenericConfigurableTrackableType.cs" Link="Configuration\IGenericConfigurableTrackableType.cs" />
+    <Compile Include="..\TrackerDog\Configuration\IObjectChangeTrackingConfiguration.cs" Link="Configuration\IObjectChangeTrackingConfiguration.cs" />
+    <Compile Include="..\TrackerDog\Configuration\ITrackableType.cs" Link="Configuration\ITrackableType.cs" />
+    <Compile Include="..\TrackerDog\Configuration\ITrackableTypeEqualityComparer.cs" Link="Configuration\ITrackableTypeEqualityComparer.cs" />
+    <Compile Include="..\TrackerDog\Configuration\ObjectChangeTrackingConfiguration.cs" Link="Configuration\ObjectChangeTrackingConfiguration.cs" />
+    <Compile Include="..\TrackerDog\Configuration\TrackableCollectionConfiguration.cs" Link="Configuration\TrackableCollectionConfiguration.cs" />
+    <Compile Include="..\TrackerDog\Configuration\TrackableType.cs" Link="Configuration\TrackableType.cs" />
+    <Compile Include="..\TrackerDog\Configuration\TypeSearchMode.cs" Link="Configuration\TypeSearchMode.cs" />
+    <Compile Include="..\TrackerDog\Configuration\TypeSearchSettings.cs" Link="Configuration\TypeSearchSettings.cs" />
+    <Compile Include="..\TrackerDog\Contracts\Contract.cs" Link="Contracts\Contract.cs" />
+    <Compile Include="..\TrackerDog\Contracts\ContractException.cs" Link="Contracts\ContractException.cs" />
+    <Compile Include="..\TrackerDog\DeclaredObjectPropertyChangeEventArgs.cs" Link="DeclaredObjectPropertyChangeEventArgs.cs" />
+    <Compile Include="..\TrackerDog\DeclaredObjectPropertyChangeTracking.cs" Link="DeclaredObjectPropertyChangeTracking.cs" />
+    <Compile Include="..\TrackerDog\DynamicObjectExtensions.cs" Link="DynamicObjectExtensions.cs" />
+    <Compile Include="..\TrackerDog\EnumerableExtensions.cs" Link="EnumerableExtensions.cs" />
+    <Compile Include="..\TrackerDog\ExpressionExtensions.cs" Link="ExpressionExtensions.cs" />
+    <Compile Include="..\TrackerDog\Hooks\CollectionterceptionHook.cs" Link="Hooks\CollectionterceptionHook.cs" />
+    <Compile Include="..\TrackerDog\Hooks\SimplePropertyInterceptionHook.cs" Link="Hooks\SimplePropertyInterceptionHook.cs" />
+    <Compile Include="..\TrackerDog\ICanClearChanges.cs" Link="ICanClearChanges.cs" />
+    <Compile Include="..\TrackerDog\IChangeTrackableCollection.cs" Link="IChangeTrackableCollection.cs" />
+    <Compile Include="..\TrackerDog\IChangeTrackableObject.cs" Link="IChangeTrackableObject.cs" />
+    <Compile Include="..\TrackerDog\IDeclaredObjectPropertyChangeTracking.cs" Link="IDeclaredObjectPropertyChangeTracking.cs" />
+    <Compile Include="..\TrackerDog\IHasParent.cs" Link="IHasParent.cs" />
+    <Compile Include="..\TrackerDog\Interceptors\CollectionPropertyInterceptor.cs" Link="Interceptors\CollectionPropertyInterceptor.cs" />
+    <Compile Include="..\TrackerDog\Interceptors\DynamicObjectInterceptor.cs" Link="Interceptors\DynamicObjectInterceptor.cs" />
+    <Compile Include="..\TrackerDog\Interceptors\MethodInterceptor.cs" Link="Interceptors\MethodInterceptor.cs" />
+    <Compile Include="..\TrackerDog\Interceptors\PropertyInterceptor.cs" Link="Interceptors\PropertyInterceptor.cs" />
+    <Compile Include="..\TrackerDog\Interceptors\SimplePropertyInterceptor.cs" Link="Interceptors\SimplePropertyInterceptor.cs" />
+    <Compile Include="..\TrackerDog\IObjectChangeTracker.cs" Link="IObjectChangeTracker.cs" />
+    <Compile Include="..\TrackerDog\IObjectGraphTrackingInfo.cs" Link="IObjectGraphTrackingInfo.cs" />
+    <Compile Include="..\TrackerDog\IObjectPropertyChangeTracking.cs" Link="IObjectPropertyChangeTracking.cs" />
+    <Compile Include="..\TrackerDog\IObjectPropertyInfo.cs" Link="IObjectPropertyInfo.cs" />
+    <Compile Include="..\TrackerDog\IReadOnlyChangeTrackableCollection.cs" Link="IReadOnlyChangeTrackableCollection.cs" />
+    <Compile Include="..\TrackerDog\ITrackableObjectFactory.cs" Link="ITrackableObjectFactory.cs" />
+    <Compile Include="..\TrackerDog\ITrackableObjectFactoryInternal.cs" Link="ITrackableObjectFactoryInternal.cs" />
+    <Compile Include="..\TrackerDog\Mixins\ChangeTrackableCollectionMixin.cs" Link="Mixins\ChangeTrackableCollectionMixin.cs" />
+    <Compile Include="..\TrackerDog\Mixins\ChangeTrackableObjectMixin.cs" Link="Mixins\ChangeTrackableObjectMixin.cs" />
+    <Compile Include="..\TrackerDog\ObjectChangeEventArgs.cs" Link="ObjectChangeEventArgs.cs" />
+    <Compile Include="..\TrackerDog\ObjectChangeTracker.cs" Link="ObjectChangeTracker.cs" />
+    <Compile Include="..\TrackerDog\ObjectChangeTracking.cs" Link="ObjectChangeTracking.cs" />
+    <Compile Include="..\TrackerDog\ObjectChangeTrackingContext.cs" Link="ObjectChangeTrackingContext.cs" />
+    <Compile Include="..\TrackerDog\ObjectChangeTrackingExtensions.cs" Link="ObjectChangeTrackingExtensions.cs" />
+    <Compile Include="..\TrackerDog\ObjectExtensions.cs" Link="ObjectExtensions.cs" />
+    <Compile Include="..\TrackerDog\ObjectGraphTrackingInfo.cs" Link="ObjectGraphTrackingInfo.cs" />
+    <Compile Include="..\TrackerDog\ObjectPropertyChangeTracking.cs" Link="ObjectPropertyChangeTracking.cs" />
+    <Compile Include="..\TrackerDog\ObjectPropertyInfo.cs" Link="ObjectPropertyInfo.cs" />
+    <Compile Include="..\TrackerDog\Patterns\IObjectChangeUnitOfWork.cs" Link="Patterns\IObjectChangeUnitOfWork.cs" />
+    <Compile Include="..\TrackerDog\Properties\AssemblyInfo.cs" Link="AssemblyInfo.cs" />
+    <Compile Include="..\TrackerDog\PropertyInfoEqualityComparer.cs" Link="PropertyInfoEqualityComparer.cs" />
+    <Compile Include="..\TrackerDog\ReflectionExtensions.cs" Link="ReflectionExtensions.cs" />
+    <Compile Include="..\TrackerDog\Serialization\Json\CustomObjectContractResolver.cs" Link="Serialization\Json\CustomObjectContractResolver.cs" />
+    <Compile Include="..\TrackerDog\Serialization\Json\DynamicObjectWithDeclaredPropertiesConverter.cs" Link="Serialization\Json\DynamicObjectWithDeclaredPropertiesConverter.cs" />
+    <Compile Include="..\TrackerDog\TrackableObjectFactoryInternal.cs" Link="TrackableObjectFactoryInternal.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="4.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.3.1" />
+    <PackageReference Include="FastMember.Signed" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CollectionHandling\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Hooks\" />
+    <Folder Include="Interceptors\" />
+    <Folder Include="Mixins\" />
+    <Folder Include="Contracts\" />
+    <Folder Include="Patterns\" />
+    <Folder Include="Serialization\Json\" />
+  </ItemGroup>
+
+</Project>

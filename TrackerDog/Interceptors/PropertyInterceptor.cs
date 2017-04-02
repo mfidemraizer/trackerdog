@@ -1,8 +1,8 @@
 ﻿using Castle.DynamicProxy;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.Interceptors
 {
@@ -10,7 +10,7 @@ namespace TrackerDog.Interceptors
     {
         private readonly static HashSet<string> _changeTrackingMembers;
         private const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance;
-        
+
         static PropertyInterceptor()
         {
             _changeTrackingMembers =
@@ -21,7 +21,7 @@ namespace TrackerDog.Interceptors
 
         public void Intercept(IInvocation invocation)
         {
-            Contract.Assume(invocation != null);
+            Contract.Requires(() => invocation != null);
 
             invocation.Proceed();
 
@@ -33,7 +33,7 @@ namespace TrackerDog.Interceptors
                 {
                     IChangeTrackableObject trackableObject = invocation.Proxy as IChangeTrackableObject;
 
-                    Contract.Assert(trackableObject != null);
+                    Contract.Assert(() => trackableObject != null);
 
                     if (trackableObject.GetChangeTrackingContext().State == ChangeTrackableObjectState.Constructing)
                         return;

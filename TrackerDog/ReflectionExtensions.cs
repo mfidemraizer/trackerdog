@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics.Contracts;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog
 {
@@ -48,17 +48,16 @@ namespace TrackerDog
         /// <returns></returns>
         internal static IEnumerable<Type> GetAllBaseTypes(this Type derivedType)
         {
-            Contract.Requires(derivedType != null, "Given derived type must be a non-null reference");
-            Contract.Ensures(Contract.Result<IEnumerable<Type>>() != null);
+            Contract.Requires(() => derivedType != null, "Given derived type must be a non-null reference");
 
-            Type baseType = derivedType.BaseType;
+            Type baseType = derivedType.GetTypeInfo().BaseType;
 
             IEnumerable<object> excludedBaseTypeValues = new object[] { null, typeof(object) };
 
             yield return baseType;
 
             while (baseType != null)
-                if (!excludedBaseTypeValues.Contains((baseType = baseType.BaseType)))
+                if (!excludedBaseTypeValues.Contains((baseType = baseType.GetTypeInfo().BaseType)))
                     yield return baseType;
         }
 
@@ -71,12 +70,12 @@ namespace TrackerDog
         /// <returns><literal>true</literal> if it implements <see cref="System.Collections.Generic.IEnumerable{T}"/>, <literal>false</literal> if it doesn't implement <see cref="System.Collections.Generic.IEnumerable{T}"/></returns>
         internal static bool IsEnumerable(this Type some)
         {
-            Contract.Requires(some != null, "Given type must be a non-null reference");
+            Contract.Requires(() => some != null, "Given type must be a non-null reference");
 
             return some != typeof(string) && some.GetInterfaces().Any
             (
                 someInterface =>
-                    someInterface.IsGenericType
+                    someInterface.GetTypeInfo().IsGenericType
                     && someInterface.GetGenericTypeDefinition() == typeof(IEnumerable<>)
             );
         }
@@ -88,7 +87,7 @@ namespace TrackerDog
         /// <returns><literal>true</literal> if it implements <see cref="System.Collections.Generic.IEnumerable{T}"/>, <literal>false</literal> if it doesn't implement <see cref="System.Collections.Generic.IEnumerable{T}"/></returns>
         internal static bool IsEnumerable(this PropertyInfo some)
         {
-            Contract.Requires(some != null, "Given property must be a non-null reference");
+            Contract.Requires(() => some != null, "Given property must be a non-null reference");
 
             return some.PropertyType.IsEnumerable();
         }
@@ -102,9 +101,8 @@ namespace TrackerDog
         /// <returns>The instance of given type</returns>
         internal static object CreateInstanceWithGenericArgs(this Type some, IEnumerable<object> args, params Type[] genericArgs)
         {
-            Contract.Requires(some != null, "Cannot create an instance of a null type");
-            Contract.Requires(genericArgs?.Count() != null, "One generic argument must be provided at least");
-            Contract.Ensures(Contract.Result<object>() != null);
+            Contract.Requires(() => some != null, "Cannot create an instance of a null type");
+            Contract.Requires(() => genericArgs != null && genericArgs.Count() > 0, "One generic argument must be provided at least");
 
             return Activator.CreateInstance(some.MakeGenericType(genericArgs), args?.ToArray());
         }
@@ -116,7 +114,7 @@ namespace TrackerDog
         /// <returns><codeInline>true</codeInline> if it's a property getter, <codeInline>false</codeInline> if it's not a property getter</returns>
         internal static bool IsPropertyGetter(this MemberInfo member)
         {
-            Contract.Requires(member != null, "Given member cannot be null");
+            Contract.Requires(() => member != null, "Given member cannot be null");
 
             return member.Name.StartsWith("get_");
         }
@@ -128,7 +126,7 @@ namespace TrackerDog
         /// <returns><literal>true</literal> if it's an indexer, <literal>false</literal> if it's not an indexer</returns>
         internal static bool IsIndexer(this PropertyInfo property)
         {
-            Contract.Requires(property != null, "Given property cannot be null");
+            Contract.Requires(() => property != null, "Given property cannot be null");
 
             return property.GetIndexParameters().Length > 0;
         }
@@ -140,27 +138,27 @@ namespace TrackerDog
         /// <returns><codeInline>true</codeInline> if it's a property setter, <codeInline>false</codeInline> if it's not a property setter</returns>
         internal static bool IsPropertySetter(this MemberInfo member)
         {
-            Contract.Requires(member != null, "Given member cannot be null");
+            Contract.Requires(() => member != null, "Given member cannot be null");
 
             return member.Name.StartsWith("set_");
         }
 
         internal static string GetPropertyNameFromAccessor(this MemberInfo accessor)
         {
-            Contract.Requires(accessor != null);
+            Contract.Requires(() => accessor != null);
 
             return accessor.Name.Replace("get_", "").Replace("set_", "");
         }
 
         internal static bool MethodIsPropertyAccessorOfReadWriteProperty(this MemberInfo accessor, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            Contract.Requires(accessor != null);
+            Contract.Requires(() => accessor != null);
 
             PropertyInfo property = accessor.DeclaringType.GetProperty(accessor.GetPropertyNameFromAccessor(), bindingFlags);
 
             if (property == null)
                 return false;
-            
+
             return property.GetMethod != null && property.SetMethod != null;
         }
 
@@ -182,7 +180,7 @@ namespace TrackerDog
         /// <returns></returns>
         internal static string NormalizePropertyGetterSetterName(this MemberInfo member)
         {
-            Contract.Requires(member != null, "Given member cannot be null");
+            Contract.Requires(() => member != null, "Given member cannot be null");
 
             return member.Name.Replace("get_", string.Empty).Replace("set_", string.Empty);
         }
@@ -194,11 +192,10 @@ namespace TrackerDog
         /// <returns>The base property implementation</returns>
         internal static PropertyInfo GetBaseProperty(this PropertyInfo property)
         {
-            Contract.Requires(property != null, "Given property cannot be null");
-            Contract.Ensures(Contract.Result<PropertyInfo>() != null);
+            Contract.Requires(() => property != null, "Given property cannot be null");
 
             if (property.DeclaringType.IsTrackable())
-                return property.DeclaringType.BaseType.GetProperty(property.Name);
+                return property.DeclaringType.GetTypeInfo().BaseType.GetProperty(property.Name);
             else
                 return property;
         }
@@ -210,9 +207,9 @@ namespace TrackerDog
         /// <returns><codeInline>true</codeInline> if its an implementation of <see cref="System.Collections.Generic.IList{T}"/>, <codeInline>false</codeInline> if it's not an implementation of <see cref="System.Collections.Generic.IList{T}"/></returns>
         internal static bool IsList(this PropertyInfo property)
         {
-            Contract.Requires(property != null, "Given property cannot be null");
+            Contract.Requires(() => property != null, "Given property cannot be null");
 
-            return property.PropertyType.IsGenericType
+            return property.PropertyType.GetTypeInfo().IsGenericType
                 &&
                 (
                     property.PropertyType.IsList()
@@ -227,9 +224,9 @@ namespace TrackerDog
         /// <returns><codeInline>true</codeInline> if its an implementation of <see cref="System.Collections.Generic.IList{T}"/>, <codeInline>false</codeInline> if it's not an implementation of <see cref="System.Collections.Generic.IList{T}"/></returns>
         internal static bool IsList(this Type type)
         {
-            Contract.Requires(type != null, "Given type cannot be null");
+            Contract.Requires(() => type != null, "Given type cannot be null");
 
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IList<>);
+            return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(IList<>);
         }
 
         /// <summary>
@@ -239,9 +236,9 @@ namespace TrackerDog
         /// <returns><codeInline>true</codeInline> if its an implementation of <see cref="System.Collections.Generic.ISet{T}"/>, <codeInline>false</codeInline> if it's not an implementation of <see cref="System.Collections.Generic.ISet{T}"/></returns>
         internal static bool IsSet(this PropertyInfo property)
         {
-            Contract.Requires(property != null, "Given property cannot be null");
+            Contract.Requires(() => property != null, "Given property cannot be null");
 
-            return property.PropertyType.IsGenericType && typeof(ISet<>).IsAssignableFrom(property.PropertyType.GetGenericTypeDefinition());
+            return property.PropertyType.GetTypeInfo().IsGenericType && typeof(ISet<>).IsAssignableFrom(property.PropertyType.GetGenericTypeDefinition());
         }
         /// <summary>
         /// Determines if a given type is an implementation of <see cref="System.Collections.Generic.ISet{T}"/>
@@ -250,9 +247,9 @@ namespace TrackerDog
         /// <returns><codeInline>true</codeInline> if its an implementation of <see cref="System.Collections.Generic.ISet{T}"/>, <codeInline>false</codeInline> if it's not an implementation of <see cref="System.Collections.Generic.ISet{T}"/></returns>
         internal static bool IsSet(this Type type)
         {
-            Contract.Requires(type != null, "Given type cannot be null");
+            Contract.Requires(() => type != null, "Given type cannot be null");
 
-            return type.IsGenericType && typeof(ISet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
+            return type.GetTypeInfo().IsGenericType && typeof(ISet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
         }
 
         /// <summary>
@@ -263,19 +260,18 @@ namespace TrackerDog
         /// <returns>The type of collection items</returns>
         internal static Type GetCollectionItemType(this object some)
         {
-            Contract.Requires(some != null, "Given collection object cannot be null");
-            Contract.Ensures(Contract.Result<Type>() != null);
+            Contract.Requires(() => some != null, "Given collection object cannot be null");
 
             Type enumerableInterface = some.GetType().GetInterfaces()
                                            .SingleOrDefault
                                            (
-                                                i => i.IsGenericType
+                                                i => i.GetTypeInfo().IsGenericType
                                                 && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
                                                 && i.GetGenericTypeDefinition().GetGenericArguments().Length == 1
                                             );
 
-            Contract.Assert(enumerableInterface != null, "Given object is not a supported collection");
-            Contract.Assert(enumerableInterface.GetGenericArguments().Length == 1, "Given collection has no generic type parameter or has more than a parameter");
+            Contract.Assert(() => enumerableInterface != null, "Given object is not a supported collection");
+            Contract.Assert(() => enumerableInterface.GetGenericArguments().Length == 1, "Given collection has no generic type parameter or has more than a parameter");
 
             return enumerableInterface.GetGenericArguments()[0];
         }
@@ -287,7 +283,7 @@ namespace TrackerDog
         /// <returns><literal>true</literal> if it's a dynamic object, <literal>false</literal> if it's not a dynamic object</returns>
         internal static bool IsDynamicObject(this Type some)
         {
-            Contract.Requires(some != null, "Given type cannot be null");
+            Contract.Requires(() => some != null, "Given type cannot be null");
 
             return typeof(DynamicObject).IsAssignableFrom(some);
         }
@@ -299,7 +295,7 @@ namespace TrackerDog
         /// <returns><literal>true</literal> if it's of <see cref="System.Dynamic.DynamicObject"/>, <literal>false</literal> if it's not.</returns>
         internal static bool IsPropertyOfDynamicObject(this PropertyInfo property)
         {
-            Contract.Requires(property != null, "Property must be provided");
+            Contract.Requires(() => property != null, "Property must be provided");
 
             return property.GetBaseProperty().DeclaringType != typeof(DynamicObject);
         }
@@ -311,7 +307,7 @@ namespace TrackerDog
         /// <returns><literal>true</literal> if it's of <see cref="System.Dynamic.DynamicObject"/>, <literal>false</literal> if it's not.</returns>
         internal static bool IsMethodOfDynamicObject(this MethodInfo method)
         {
-            Contract.Requires(method != null, "Method must be provided");
+            Contract.Requires(() => method != null, "Method must be provided");
 
             return method.GetRuntimeBaseDefinition().DeclaringType == typeof(DynamicObject);
         }
@@ -323,7 +319,7 @@ namespace TrackerDog
         /// <returns><literal>true</literal> if it's a dynamic object, <literal>false</literal> if it's not a dynamic object</returns>
         internal static bool IsDynamicObject(this object some)
         {
-            Contract.Requires(some != null, "Given object cannot be null");
+            Contract.Requires(() => some != null, "Given object cannot be null");
 
             return IsDynamicObject(some.GetType());
         }

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 
 namespace TrackerDog.Configuration
 {
-    [ContractClass(typeof(IConfigurableTrackableTypeContract))]
     /// <summary>
     /// Defines how a trackable type can be configured
     /// </summary>

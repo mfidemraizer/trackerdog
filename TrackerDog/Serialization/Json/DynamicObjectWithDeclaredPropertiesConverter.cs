@@ -42,11 +42,11 @@ namespace TrackerDog.Serialization.Json
                                     (
                                         p => p.PropertyType != typeof(DynamicObject)
                                              && p.GetIndexParameters().Length == 0
-                                             && !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute))
+                                             && p.GetCustomAttribute<JsonIgnoreAttribute>() == null
                                     ).ToList();
 
             JObject o = (JObject)JToken.FromObject(value, serializer);
-            
+
             foreach (PropertyInfo property in properties)
                 if (o[property.Name] == null)
                     o.AddFirst(new JProperty(property.Name, property.GetValue(value)));

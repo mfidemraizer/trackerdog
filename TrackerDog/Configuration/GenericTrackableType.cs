@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
+using TrackerDog.Contracts;
 
 namespace TrackerDog.Configuration
 {
@@ -26,8 +26,7 @@ namespace TrackerDog.Configuration
         /// <returns>Current trackable type configuration</returns>
         public IConfigurableTrackableType<T> IncludeProperty(Expression<Func<T, object>> propertySelector)
         {
-            Contract.Requires(propertySelector != null);
-            Contract.Ensures(Contract.Result<IConfigurableTrackableType<T>>() != null);
+            Contract.Requires(() => propertySelector != null);
 
             PropertyInfo property = propertySelector.ExtractProperty();
 

@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
+    <TargetFramework>netcoreapp1.1</TargetFramework>    
+    <AssemblyOriginatorKeyFile>$(SolutionDir)key.snk</AssemblyOriginatorKeyFile>    
+    <DelaySign>False</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SignedRelease|AnyCPU'">
+    <DefineConstants>TRACE;SIGNEDRELEASE;NETCOREAPP1_1</DefineConstants>
+    <SignAssembly>True</SignAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\TrackerDog.Test\CollectionTest.cs" Link="CollectionTest.cs" />
+    <Compile Include="..\TrackerDog.Test\ConfigurationTest.cs" Link="ConfigurationTest.cs" />
+    <Compile Include="..\TrackerDog.Test\DynamicObjectTest.cs" Link="DynamicObjectTest.cs" />
+    <Compile Include="..\TrackerDog.Test\InterfaceTrackingTest.cs" Link="InterfaceTrackingTest.cs" />
+    <Compile Include="..\TrackerDog.Test\ObjectContainer.cs" Link="ObjectContainer.cs" />
+    <Compile Include="..\TrackerDog.Test\ProxyCreationTest.cs" Link="ProxyCreationTest.cs" />
+    <Compile Include="..\TrackerDog.Test\SimplePropertyTest.cs" Link="SimplePropertyTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="4.0.0" />
+    <PackageReference Include="FastMember.Signed" Version="1.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170125-04" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.1.10-rc2" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.0.8-rc2" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrackerDog.NetStandard\TrackerDog.NetStandard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+</Project>

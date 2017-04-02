@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using TrackerDog.CollectionHandling;
 using TrackerDog.Configuration;
 
 namespace TrackerDog.Test
@@ -90,7 +92,7 @@ namespace TrackerDog.Test
         public void ConfiguresClassWithTwoPropertiesButOneIsTrackable()
         {
             IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
-            config.TrackTypesFromAssembly(typeof(ConfigurationTest).Assembly, searchSettings: new TypeSearchSettings
+            config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
             {
                 Mode = TypeSearchMode.AttributeConfigurationOnly,
                 Filter = t => t == typeof(TwoPropertiesOneTrackable)
@@ -106,7 +108,7 @@ namespace TrackerDog.Test
         public void ConfiguresClassWithAllPropertiesExceptingNonTrackable()
         {
             IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
-            config.TrackTypesFromAssembly(typeof(ConfigurationTest).Assembly, searchSettings: new TypeSearchSettings
+            config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
             {
                 Mode = TypeSearchMode.AttributeConfigurationOnly,
                 Filter = t => t == typeof(TwoPropertiesOneTrackable)
@@ -122,7 +124,7 @@ namespace TrackerDog.Test
         public void ConfiguresClassWithAllProperties()
         {
             IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
-            config.TrackTypesFromAssembly(typeof(ConfigurationTest).Assembly, searchSettings: new TypeSearchSettings
+            config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
             {
                 Mode = TypeSearchMode.AttributeConfigurationOnly,
                 Filter = t => t == typeof(AllProperties)
@@ -139,10 +141,13 @@ namespace TrackerDog.Test
         public void ConfiguresWithAttributesOnly()
         {
             IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
-            config.TrackTypesFromAssembly(typeof(ConfigurationTest).Assembly, searchSettings: new TypeSearchSettings
+            config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
             {
                 Mode = TypeSearchMode.AttributeConfigurationOnly,
-                Filter = t => t.ReflectedType == typeof(ConfigurationTest)
+                Filter = t =>
+                {
+                    return t.DeclaringType == typeof(ConfigurationTest);
+                }
             });
 
             IList<Type> trackables = config.TrackableTypes.Select(t => t.Type).ToList();
@@ -158,7 +163,7 @@ namespace TrackerDog.Test
         public void CanConfigureClassWithReadOnlyProperties()
         {
             IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
-            config.TrackTypesFromAssembly(typeof(ConfigurationTest).Assembly, searchSettings: new TypeSearchSettings
+            config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
             {
                 Mode = TypeSearchMode.AttributeConfigurationOnly,
                 Filter = t => t == typeof(ClassWithReadOnlyProperties)
@@ -179,7 +184,7 @@ namespace TrackerDog.Test
         public void CanConfigureAbstractClass()
         {
             IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
-            config.TrackTypesFromAssembly(typeof(ConfigurationTest).Assembly, searchSettings: new TypeSearchSettings
+            config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
             {
                 Mode = TypeSearchMode.AttributeConfigurationOnly,
                 Filter = t => t == typeof(AbstractClass) || t == typeof(DerivesAbstractClass)
@@ -193,7 +198,7 @@ namespace TrackerDog.Test
         public void CanConfigureClassWithMultipleConstructors()
         {
             IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
-            config.TrackTypesFromAssembly(typeof(ConfigurationTest).Assembly, searchSettings: new TypeSearchSettings
+            config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
             {
                 Mode = TypeSearchMode.AttributeConfigurationOnly,
                 Filter = t => t == typeof(WithMultipleConstructors)
@@ -210,7 +215,7 @@ namespace TrackerDog.Test
         public void CanConfigureWithNestedTypes()
         {
             IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
-            config.TrackTypesFromAssembly(typeof(ConfigurationTest).Assembly, searchSettings: new TypeSearchSettings
+            config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
             {
                 Mode = TypeSearchMode.AttributeConfigurationOnly,
                 Filter = t => t == typeof(ClassWithNestedEnum) || t == typeof(DerivedClassWithNestedEnum)
@@ -221,6 +226,14 @@ namespace TrackerDog.Test
             DerivedClassWithNestedEnum instance = factory.CreateOf<DerivedClassWithNestedEnum>();
 
             Assert.IsNotNull(instance);
+        }
+
+        [TestMethod]
+        public void CanReplaceCollectionChangeTrackingImplementation()
+        {
+            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+
+            config.Collections.AddOrUpdateImplementation<ICollection<string>, List<string>, DefaultCollectionChangeInterceptor<string>>();
         }
     }
 }
