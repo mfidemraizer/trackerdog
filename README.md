@@ -9,9 +9,7 @@ TrackerDog works on seamlessly turning your .NET objects into change-tracked obj
 
 Also, since version 2.2.0, **TrackerDog works on both full .NET Framework and .NET Standard-compliant platforms like .NET Core or Xamarin**!
 
-<img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/netcore.svg" width="100"> 
-<img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/net.svg" width="100"> 
-<img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/xamarin.svg" width="100">
+<img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/netcore.svg" width="100">   <img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/net.svg" width="100">   <img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/xamarin.svg" width="100">
 
 ## How to install it?
 
@@ -30,7 +28,7 @@ Most enterprise applications work with _object-relational mappers (OR/M)_ like _
 
 At the end of the day, these _OR/M_ frameworks implement change tracking turning your POCO class instances into _proxies_ that intercept your POCO property changes and once you call the _commit_-specific method of their built-in _unit of work_ they can persist changes to the database without your intervention.
 
-So, what happens when you don't use an _OR/M_ or, even worse: **what happens when you don't use an _OR/M_ but you want to implement an _unit of work_ capable of tracking your POCO changes?**
+So, what happens when you don't use an _OR/M_ or, even worse: **what happens when you don't use an _OR/M_ but you want to implement a _unit of work_ capable of tracking your POCO changes?**
 
 A good example of implementing a change tracking can be an _unit of work_ to provide an abstraction layer over a NoSQL driver like Mongo, Couch, Cassandra, Redis... Even when some of them have some kind of atomically-executed set of commands, they will not track changes in your application layer. Actually there should be more possible use cases, but one of most important use cases is implementing a true _domain-driven design_ architecture ensuring that a domain unit of work can track changes either when you use a regular _data mapper_ (for which you won't use TrackerDog) or you want to implement _repositories_ that return change-trackable domain objects!
 
