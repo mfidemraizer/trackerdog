@@ -9,9 +9,7 @@ TrackerDog works on seamlessly turning your .NET objects into change-tracked obj
 
 Also, since version 2.2.0, **TrackerDog works on both full .NET Framework and .NET Standard-compliant platforms like .NET Core or Xamarin**!
 
-<img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/netcore.svg" width="100"> 
-<img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/net.svg" width="100"> 
-<img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/xamarin.svg" width="100">
+<img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/netcore.svg" width="100">   <img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/net.svg" width="100">   <img src="https://docs.microsoft.com/en-us/dotnet/articles/images/hub/xamarin.svg" width="100">
 
 ## How to install it?
 
