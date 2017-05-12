@@ -10,7 +10,7 @@ using TrackerDog.Interceptors;
 
 namespace TrackerDog.Mixins
 {
-    internal class ChangeTrackableObjectMixin : IChangeTrackableObject
+    internal class ChangeTrackableObjectMixin : IChangeTrackableObject, IRevertibleChangeTracking
     {
         public ChangeTrackableObjectMixin(IObjectChangeTrackingConfiguration configuration, ITrackableObjectFactoryInternal trackableObjectFactory)
         {
@@ -138,5 +138,11 @@ namespace TrackerDog.Mixins
         }
 
         public override int GetHashCode() => Id.GetHashCode();
+
+        public void RejectChanges() => this.UndoChanges();
+
+        public void AcceptChanges() => ObjectChangeTrackingExtensions.AcceptChanges(this);
+
+        public bool IsChanged => this.GetChangeTracker().ChangedProperties.Count > 0;
     }
 }
