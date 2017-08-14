@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using TrackerDog.CollectionHandling;
@@ -39,6 +40,19 @@ namespace TrackerDog.Test
         }
 
         [ChangeTrackable]
+        public class BaseClassWithNonTrackableProperty
+        {
+            [DoNotTrackChanges]
+            public virtual string Text { get; set; }
+        }
+
+        [ChangeTrackable]
+        public class DerivedClassOfBaseClassWithNonTrackableProperty : BaseClassWithNonTrackableProperty
+        {
+            public virtual string Text2 { get; set; }
+        }
+
+        [ChangeTrackable]
         public class ClassWithReadOnlyProperties
         {
             public virtual string Text { get; set; } = "hello world";
@@ -56,11 +70,15 @@ namespace TrackerDog.Test
             public AbstractClass(int a) { }
 
             public virtual string Text { get; set; }
+            public virtual XXX XXX { get; set; }
         }
+
+        public enum XXX { A, B, C }
 
         [ChangeTrackable]
         public class DerivesAbstractClass : AbstractClass
         {
+            public virtual string DerivedText { get; set; }
         }
 
         [ChangeTrackable]
@@ -187,11 +205,12 @@ namespace TrackerDog.Test
             config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
             {
                 Mode = TypeSearchMode.AttributeConfigurationOnly,
-                Filter = t => t == typeof(AbstractClass) || t == typeof(DerivesAbstractClass)
+                /*Filter = t => t == typeof(AbstractClass) || t == typeof(DerivesAbstractClass),*/
+                Recursive = true
             });
 
             ITrackableObjectFactory factory = config.CreateTrackableObjectFactory();
-            factory.CreateFrom(new DerivesAbstractClass());
+            var x = factory.CreateFrom(new DerivesAbstractClass());
         }
 
         [TestMethod]
@@ -234,6 +253,29 @@ namespace TrackerDog.Test
             IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
 
             config.Collections.AddOrUpdateImplementation<ICollection<string>, List<string>, DefaultCollectionChangeInterceptor<string>>();
+        }
+
+        [TestMethod]
+        public void CanConfigureNonTrackablePropertiesFromBaseClasses()
+        {
+            IObjectChangeTrackingConfiguration config = ObjectChangeTracking.CreateConfiguration();
+            config.TrackTypesFromAssembly(typeof(ConfigurationTest).GetTypeInfo().Assembly, searchSettings: new TypeSearchSettings
+            {
+                Mode = TypeSearchMode.AttributeConfigurationOnly,
+                Recursive = true,
+                Filter = t =>
+                {
+                    return t.DeclaringType == typeof(ConfigurationTest);
+                }
+            });
+
+            ITrackableObjectFactory trackableObjectFactory = config.CreateTrackableObjectFactory();
+            DerivedClassOfBaseClassWithNonTrackableProperty obj = trackableObjectFactory.CreateOf<DerivedClassOfBaseClassWithNonTrackableProperty>();
+
+            IObjectChangeTracker changeTracker = obj.GetChangeTracker();
+
+            Assert.AreEqual(1, changeTracker.Count());
+            Assert.IsTrue(changeTracker.First().PropertyName == "Text2");
         }
     }
 }

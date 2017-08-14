@@ -66,7 +66,7 @@ namespace TrackerDog.Mixins
             else
                 trackableProperties = new HashSet<PropertyInfo>
                 (
-                    trackableObject.GetType().GetProperties(DefaultBindingFlags)
+                    trackableObject.GetType().GetProperties(DefaultBindingFlags | BindingFlags.DeclaredOnly)
                                         .Where(p => p.CanReadAndWrite())
                 );
 
@@ -77,11 +77,12 @@ namespace TrackerDog.Mixins
                 foreach (Type baseType in baseTypes)
                     if (ChangeTrackingContext.Configuration.CanTrackType(baseType))
                         foreach (PropertyInfo property in ChangeTrackingContext.Configuration.GetTrackableType(baseType).IncludedProperties)
-                            trackableProperties.Add(property);
+                            if (property.GetCustomAttribute<DoNotTrackChangesAttribute>() == null)
+                                trackableProperties.Add(property);
             }
 
             foreach (PropertyInfo property in trackableProperties)
-                if (!property.IsIndexer() && !PropertyInterceptor.ChangeTrackingMembers.Contains(property.Name))
+                if (property.GetCustomAttribute<DoNotTrackChangesAttribute>() == null && !property.IsIndexer() && !PropertyInterceptor.ChangeTrackingMembers.Contains(property.Name))
                 {
                     if (property.IsEnumerable())
                     {

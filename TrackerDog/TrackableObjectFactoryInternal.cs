@@ -26,7 +26,7 @@ namespace TrackerDog
         /// Gets current proxy generator
         /// </summary>
         private ProxyGenerator ProxyGenerator { get; } = new ProxyGenerator();
-
+        
         public object Create(object some = null, Type typeToTrack = null, ObjectChangeTracker reusedTracker = null, object parentObject = null, PropertyInfo propertyToSet = null, object[] constructorArguments = null)
         {
             typeToTrack = typeToTrack ?? some.GetType();
@@ -128,6 +128,10 @@ namespace TrackerDog
         {
             return (TObject)Create(some, some == null ? typeof(TObject) : null, reusedTracker, parentObject, propertyToSet, constructorArguments);
         }
+        public object Create(Type type, object some = null, ObjectChangeTracker reusedTracker = null, object parentObject = null, PropertyInfo propertyToSet = null, object[] constructorArguments = null)   
+        {
+            return Create(some, some == null ? type : null, reusedTracker, parentObject, propertyToSet, constructorArguments);
+        }
 
         public object CreateForCollection(object some, IChangeTrackableObject parentObject, PropertyInfo parentObjectProperty)
         {
@@ -210,6 +214,10 @@ namespace TrackerDog
 
         public TObject CreateFrom<TObject>(TObject some) where TObject : class => Create(some: some);
 
-        public TObject CreateOf<TObject>(params object[] args) where TObject : class => Create<TObject>(constructorArguments: args);
+        public object CreateFrom(object some) => Create(some: some, typeToTrack: null);
+
+        public TObject CreateOf<TObject>(params object[] constructorArguments) where TObject : class => Create<TObject>(constructorArguments: constructorArguments);
+
+        public object CreateOf(Type typeToTrack, params object[] constructorArguments) => Create(typeToTrack: typeToTrack, constructorArguments: constructorArguments);
     }
 }
