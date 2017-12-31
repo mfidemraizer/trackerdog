@@ -2,14 +2,14 @@
 <package>
   <metadata>
     <id>TrackerDog$flavor$</id>
-    <version>2.2.2</version>
+    <version>2.2.4</version>
     <title>TrackerDog: A generic .NET object change tracker</title>
     <authors>Matías Fidemraizer</authors>
     <owners>Matías Fidemraizer</owners>
     <summary>Track changes of any .NET object and full object graphs</summary>
     <description>TrackerDog turns any .NET object or full object graph into a change-trackable object</description>
-    <releaseNotes>See release notes here: https://github.com/mfidemraizer/trackerdog/releases/tag/v2.2.2</releaseNotes>
-    <projectUrl>http://matiasfidemrazer.com/trackerdog/</projectUrl>
+    <releaseNotes>See release notes here: https://github.com/mfidemraizer/trackerdog/releases/tag/v2.2.4</releaseNotes>
+    <projectUrl>http://matiasfidemraizer.com/trackerdog/</projectUrl>
     <licenseUrl>https://github.com/mfidemraizer/trackerdog/blob/master/LICENSE</licenseUrl>
     <copyright>Copyright © Matías Fidemraizer</copyright>
     <tags>changetracking dynamicproxy changetracker change-tracker change-tracking poco objects oop proxy object object-graph objects unitofwork</tags>

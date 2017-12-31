@@ -11,8 +11,6 @@ namespace TrackerDog
     [DebuggerDisplay("{Property.DeclaringType}.{Property.Name} = {CurrentValue} (Has changed? {HasChanged})")]
     internal sealed class DeclaredObjectPropertyChangeTracking : IDeclaredObjectPropertyChangeTracking
     {
-        private readonly ObjectChangeTracker _tracker;
-        private readonly object _targetObject;
         private object _oldValue;
         private object _currentValue;
         private IEnumerable _oldCollectionValue;
@@ -22,8 +20,8 @@ namespace TrackerDog
         {
             Configuration = configuration;
             TrackableObjectFactory = trackableObjectFactory;
-            _tracker = tracker;
-            _targetObject = targetObject;
+            Tracker = tracker;
+            TargetObject = targetObject;
             Property = property;
             OldValue = currentValue;
             CurrentValue = currentValue;
@@ -33,9 +31,9 @@ namespace TrackerDog
 
         private ITrackableObjectFactoryInternal TrackableObjectFactory { get; }
 
-        public ObjectChangeTracker Tracker => _tracker;
+        public ObjectChangeTracker Tracker { get; }
         IObjectChangeTracker IObjectPropertyChangeTracking.Tracker => Tracker;
-        public object TargetObject => _targetObject;
+        public object TargetObject { get; }
         public PropertyInfo Property { get; private set; }
         public string PropertyName => Property.Name;
         private bool CollectionItemsAreTrackable { get; set; }
@@ -91,7 +89,16 @@ namespace TrackerDog
             get
             {
                 if (!IsCollection)
-                    return CurrentValue != OldValue;
+                {
+                    if (CurrentValue == null && OldValue == null)
+                        return false;
+                    else
+                    {
+                        var result = CurrentValue?.Equals(OldValue);
+
+                        return result != null && !(bool)result;
+                    }
+                }
                 else
                 {
                     IEnumerable<object> oldCollection = OldCollectionValue.Cast<object>();

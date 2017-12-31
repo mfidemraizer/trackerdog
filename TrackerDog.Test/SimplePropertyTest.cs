@@ -27,7 +27,8 @@ namespace TrackerDog.Test
                     .TrackThisType<Contact>(t => t.IncludeProperty(c => c.Name))
                     .TrackThisType<EnhancedContact>(t => t.IncludeProperty(c => c.Default))
                     .TrackThisType<ClassWithReadOnlyPropertyThrowingException>()
-                    .TrackThisType<ClassSettingPropertiesDuringConstructionTime>(t => t.IncludeProperty(c => c.Text));
+                    .TrackThisType<ClassSettingPropertiesDuringConstructionTime>(t => t.IncludeProperty(c => c.Text))
+                    .TrackThisType<ClassWithIntegers>();
 
             TrackableObjectFactory = Configuration.CreateTrackableObjectFactory();
         }
@@ -92,6 +93,11 @@ namespace TrackerDog.Test
             }
 
             public virtual string Text { get; set; }
+        }
+
+        public class ClassWithIntegers
+        {
+            public virtual int Foo { get; set; }
         }
 
         [TestMethod]
@@ -307,6 +313,7 @@ namespace TrackerDog.Test
             IObjectChangeTracker changeTracker = a.GetChangeTracker();
             a.AcceptChanges();
 
+
             Assert.AreEqual(0, changeTracker.ChangedProperties.Count);
             Assert.AreEqual(2, changeTracker.UnchangedProperties.Count);
             Assert.AreEqual(changedValue, a.Text);
@@ -445,6 +452,22 @@ namespace TrackerDog.Test
             ClassSettingPropertiesDuringConstructionTime some = TrackableObjectFactory.CreateOf<ClassSettingPropertiesDuringConstructionTime>();
 
             Assert.AreEqual("hello world", some.Text);
+        }
+
+        [TestMethod]
+        public void AffectTheSameValueObjectStayInUnchangedState()
+        {
+            const int initialValue = 0;
+            var a = TrackableObjectFactory.CreateFrom(new ClassWithIntegers { Foo = initialValue });
+            IObjectChangeTracker changeTracker = a.GetChangeTracker();
+            Assert.AreEqual(0, changeTracker.ChangedProperties.Count);
+            Assert.AreEqual(1, changeTracker.UnchangedProperties.Count);
+
+            a.Foo = 2;
+            a.Foo = initialValue;
+
+            Assert.AreEqual(0, changeTracker.ChangedProperties.Count);
+            Assert.AreEqual(1, changeTracker.UnchangedProperties.Count);
         }
     }
 }

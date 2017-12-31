@@ -39,8 +39,8 @@ using TrackerDog;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 #if !NETSTANDARD1_3
-[assembly: AssemblyVersion("2.2.1.0")]
-[assembly: AssemblyFileVersion("2.2.1.0")]
+[assembly: AssemblyVersion("2.2.4.0")]
+[assembly: AssemblyFileVersion("2.2.4.0")]
 #endif
 
 #if !SIGNEDRELEASE
